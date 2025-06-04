@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import * as jwt_decode from 'jwt-decode'; // ✅ CORRECTO
+import { jwtDecode } from 'jwt-decode'; // ✅ CORRECTA
 
 interface LoginResponse {
   token: string;
@@ -12,6 +12,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
+
   private API_URL = 'http://localhost:8080/api/auth';
 
   constructor(private _http: HttpClient) {}
@@ -36,10 +37,10 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return [];
     try {
-      const decoded = jwt_decode.default(token) as { roles: string[] };
-      return decoded.roles || [];
+      const decoded: any = jwtDecode(token); // ✅ CORRECTO
+      return decoded?.roles || [];
     } catch (e) {
-      console.error('Error al decodificar token:', e);
+      console.error('Error decoding token:', e);
       return [];
     }
   }
@@ -47,8 +48,5 @@ export class AuthService {
   hasRole(role: string): boolean {
     return this.getRoles().includes(role);
   }
-
-  getSessionInfo(): Observable<any> {
-    return this._http.get<any>(`${this.API_URL}/session-info`);
-  }
 }
+
