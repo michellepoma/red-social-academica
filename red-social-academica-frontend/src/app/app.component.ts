@@ -9,12 +9,7 @@ import { RouterOutlet } from '@angular/router';
     RouterOutlet
   ],
   template: `
-    <!-- Navbar Global -->
-    <nav class="navbar navbar-light bg-light mb-4">
-      <div class="container">
-        <a class="navbar-brand" href="#">Mi Red Social</a>
-      </div>
-    </nav>
+
 
     <!-- Aquí aparece el LoginComponent, SignupComponent, HomeComponent, etc. -->
     <router-outlet></router-outlet>

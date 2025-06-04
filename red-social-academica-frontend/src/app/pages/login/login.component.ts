@@ -1,16 +1,17 @@
 // src/app/pages/login/login.component.ts
-import { Component }              from '@angular/core';
-import { CommonModule }           from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router }                 from '@angular/router';
-import { AuthService }            from '../../services/auth.service';
+import { RouterModule, Router } from '@angular/router'; // ✅ IMPORTA RouterModule aquí
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule // ✅ AGREGA ESTO AQUÍ
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -23,7 +24,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    public router: Router    // <-- “public” para que la plantilla pueda usarlo
+    public router: Router
   ) {
     this.form = this.fb.group({
       username: ['', Validators.required],
@@ -45,7 +46,6 @@ export class LoginComponent {
         this.router.navigate(['/home']);
       },
       error: err => {
-        // El backend podría devolver err.error.message, etc.
         this.errorMsg = err.error?.message || 'Credenciales inválidas';
         this.loading = false;
       }

@@ -1,24 +1,26 @@
 // src/app/pages/signup/signup.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
   form: FormGroup;
-  loading = false;
-  errorMsg = '';
+  cargando = false;
+  mensajeError = '';
 
   constructor(
     private fb: FormBuilder,
@@ -26,53 +28,52 @@ export class SignupComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      username:        ['', Validators.required],
-      ru:              ['', Validators.required],
-      email:           ['', [Validators.required, Validators.email]],
-      password:        ['', Validators.required],
+      username: ['', Validators.required],
+      ru: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      lastName: ['', Validators.required],
+      career: ['', Validators.required],
+      birthdate: ['', Validators.required],
+      bio: [''],
+      password: ['', Validators.required],
       passwordConfirm: ['', Validators.required],
-      name:            ['', Validators.required],
-      lastName:        ['', Validators.required],
-      profilePictureUrl: [''],
-      bio:             [''],
-      career:          ['', Validators.required],
-      birthdate:       ['', Validators.required]
     });
   }
 
   submit(): void {
     if (this.form.invalid) {
-      this.errorMsg = 'Completa todos los campos obligatorios.';
+      this.mensajeError = 'Por favor completa todos los campos obligatorios.';
       return;
     }
+
     if (this.form.value.password !== this.form.value.passwordConfirm) {
-      this.errorMsg = 'Las contraseñas no coinciden.';
+      this.mensajeError = 'Las contraseñas no coinciden.';
       return;
     }
 
-    this.loading = true;
-    this.errorMsg = '';
+    this.cargando = true;
+    this.mensajeError = '';
 
-    const payload = {
-      username:        this.form.value.username,
-      ru:              this.form.value.ru,
-      email:           this.form.value.email,
-      password:        this.form.value.password,
-      passwordConfirm: this.form.value.passwordConfirm,
-      name:            this.form.value.name,
-      lastName:        this.form.value.lastName,
-      profilePictureUrl: this.form.value.profilePictureUrl,
-      bio:             this.form.value.bio,
-      career:          this.form.value.career,
-      birthdate:       this.form.value.birthdate
-    };
+    const payload = this.form.value;
 
     this.auth.signup(payload).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: err => {
-        this.errorMsg = err.error?.message || 'Error al registrar usuario';
-        this.loading = false;
-      }
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        const detalles = err.error?.detalles || err.error;
+
+        if (typeof detalles === 'object') {
+          this.mensajeError = Object.entries(detalles)
+            .map(([campo, mensaje]) => `${campo}: ${mensaje}`)
+            .join(' | ');
+        } else {
+          this.mensajeError = detalles || 'Error desconocido en el registro.';
+        }
+
+        this.cargando = false;
+      },
     });
   }
 }

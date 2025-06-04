@@ -1,4 +1,101 @@
-/* src/app/pages/login/login.component.scss */
-.login-page {
-  margin-top: 50px;
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-card {
+  width: 380px;
+  background: white;
+  padding: 32px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  .logo {
+    color: #1877f2;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #606770;
+    margin-bottom: 24px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-control {
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #ccd0d5;
+    border-radius: 6px;
+
+    &:focus {
+      border-color: #1877f2;
+      outline: none;
+    }
+  }
+
+  .btn-primary {
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #166fe5;
+    }
+
+    &:disabled {
+      background-color: #a3cef2;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-secondary {
+    margin-top: 16px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #42b72a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #36a420;
+    }
+  }
+
+  .forgot {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #1877f2;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .error-msg {
+    margin-top: 8px;
+    color: red;
+    font-size: 14px;
+  }
 }
