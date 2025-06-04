@@ -1,0 +1,16 @@
+/* navbar.component.scss */
+
+.navbar {
+  background-color: #003366 !important;  /* Azul intenso */
+}
+
+.navbar .navbar-brand,
+.navbar .btn-link,
+.navbar .dropdown-item {
+  color: #ffffff !important;  /* Texto blanco */
+}
+
+/* Si quieres que el icono también sea blanco */
+.navbar .bi-person-circle {
+  color: #ffffff;
+}

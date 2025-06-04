@@ -1,0 +1,9 @@
+<!-- Ruta: src/app/pages/admin/admin.component.html -->
+
+<div class="admin-container">
+  <h2>🔒 Panel de Administración</h2>
+  <p>¡Sólo los administradores pueden ver esta página!</p>
+  <button class="btn btn-danger" (click)="authService.logout()">
+    Cerrar sesión
+  </button>
+</div>
