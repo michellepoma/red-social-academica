@@ -10,13 +10,13 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+ private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token'); // asegúrate que exista
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
   }
-
   getAllUsers(): Observable<any[]> {
     return this.http.get<any>(`${this.API_URL}/listar`, {
       headers: this.getAuthHeaders()
@@ -25,9 +25,13 @@ export class UserService {
     );
   }
 
-  darDeBaja(username: string): Observable<any> {
-    return this.http.put(`${this.API_URL}/${username}/baja`, {}, {
-      headers: this.getAuthHeaders()
-    });
-  }
+darDeBaja(username: string): Observable<any> {
+  return this.http.put(`/api/admin/usuarios/${username}/baja`, null);
+}
+
+
+
+
+
+
 }

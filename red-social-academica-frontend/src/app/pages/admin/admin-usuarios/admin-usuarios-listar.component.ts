@@ -20,13 +20,31 @@ export class AdminUsuariosListarComponent implements OnInit {
       error: (err) => console.error('Error al obtener usuarios:', err)
     });
   }
-
-  darDeBaja(username: string): void {
-    if (confirm(`¿Deseas dar de baja a ${username}?`)) {
-      this.userService.darDeBaja(username).subscribe({
-        next: () => this.ngOnInit(),
-        error: (err) => alert('Error al dar de baja: ' + (err.error?.message || err.message))
-      });
+obtenerUsuarios(): void {
+  this.userService.getAllUsers().subscribe({
+    next: res => {
+      this.usuarios = res;
+    },
+    error: err => {
+      console.error('Error al obtener usuarios:', err);
     }
-  }
+  });
+}
+
+
+darDeBaja(username: string): void {
+  if (!confirm(`¿Estás seguro de dar de baja a ${username}?`)) return;
+
+  this.userService.darDeBaja(username).subscribe({
+    next: res => {
+      alert(`${username} ha sido dado de baja correctamente`);
+      this.obtenerUsuarios(); // recargar la lista
+    },
+    error: err => {
+      alert(`Error al dar de baja a ${username}: ${err.message}`);
+      console.error(err);
+    }
+  });
+}
+
 }

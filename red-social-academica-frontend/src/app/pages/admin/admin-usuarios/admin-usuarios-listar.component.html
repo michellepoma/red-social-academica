@@ -13,12 +13,14 @@
     </thead>
     <tbody>
     <tr *ngFor="let u of usuarios">
-      <td>{{ u.name }} {{ u.lastName }}</td>
+      <td>{{ u.name }}</td>
       <td>{{ u.username }}</td>
       <td>{{ u.email }}</td>
-      <td>{{ u.roles?.join(', ') }}</td>
+      <td>{{ u.rol }}</td>
       <td>
-        <button class="btn btn-sm btn-danger" (click)="darDeBaja(u.username)">Dar de Baja</button>
+        <button class="btn btn-danger" (click)="darDeBaja(u.username)">
+          Dar de Baja
+        </button>
       </td>
     </tr>
     </tbody>
