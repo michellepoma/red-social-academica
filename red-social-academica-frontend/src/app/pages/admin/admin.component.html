@@ -1,9 +1,26 @@
-<!-- Ruta: src/app/pages/admin/admin.component.html -->
+<!-- src/app/pages/admin/admin.component.html -->
+<div class="admin-container d-flex">
+  <!-- Menú lateral (solo para ADMIN) -->
+  <aside *ngIf="auth.hasRole('ADMIN')" class="bg-light p-3" style="min-width: 250px; height: 100vh;">
+    <h5 class="mb-4">👑 Panel Admin</h5>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="usuarios/listar" routerLinkActive="active">📄 Listar Usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="usuarios/crear" routerLinkActive="active">➕ Crear Usuario</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="usuarios/buscar" routerLinkActive="active">🔍 Buscar Usuario</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="usuarios/por-rol/ADMIN" routerLinkActive="active">👥 Ver Admins</a>
+      </li>
+    </ul>
+  </aside>
 
-<div class="admin-container">
-  <h2>🔒 Panel de Administración</h2>
-  <p>¡Sólo los administradores pueden ver esta página!</p>
-  <button class="btn btn-danger" (click)="authService.logout()">
-    Cerrar sesión
-  </button>
+  <!-- Contenido principal -->
+  <main class="p-4 w-100">
+    <router-outlet></router-outlet>
+  </main>
 </div>

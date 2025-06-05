@@ -1,26 +1,16 @@
 // src/app/pages/admin/admin.component.ts
-import { Component }    from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [ CommonModule, RouterOutlet ],
-  template: `
-    <div class="container mt-4">
-      <h2>Panel de Administración</h2>
-      <hr />
-      <!-- Aquí anidamos las rutas hijas de “admin” -->
-      <router-outlet></router-outlet>
-    </div>
-  `,
-  styles: [
-    `
-    .container {
-      max-width: 1000px;
-    }
-    `
-  ]
+  imports: [CommonModule, RouterModule],
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent { }
+export class AdminComponent {
+  constructor(public auth: AuthService) {}
+}

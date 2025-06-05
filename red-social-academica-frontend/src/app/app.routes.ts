@@ -33,13 +33,13 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     children: [
-      { path: 'usuarios/listar',           component: AdminUsuariosListarComponent },
-      { path: 'usuarios/crear',            component: AdminUsuariosCrearComponent },
+      { path: 'usuarios/listar', component: AdminUsuariosListarComponent },
+      { path: 'usuarios/crear', component: AdminUsuariosCrearComponent },
       { path: 'usuarios/editar/:username', component: AdminUsuariosEditarComponent },
-      { path: 'usuarios/baja/:username',   component: AdminUsuariosBajaComponent },
+      { path: 'usuarios/baja/:username', component: AdminUsuariosBajaComponent },
       { path: 'usuarios/perfil/:username', component: AdminUsuariosPerfilComponent },
-      { path: 'usuarios/por-rol/:role',    component: AdminUsuariosPorRolComponent },
-      { path: 'usuarios/buscar',           component: AdminUsuariosBuscarComponent },
+      { path: 'usuarios/por-rol/:role', component: AdminUsuariosPorRolComponent },
+      { path: 'usuarios/buscar', component: AdminUsuariosBuscarComponent },
       { path: '', redirectTo: 'usuarios/listar', pathMatch: 'full' }
     ]
   },

@@ -1,8 +1,17 @@
-/* Ruta: src/app/pages/admin/admin.component.scss */
-
+// src/app/pages/admin/admin.component.scss
 .admin-container {
-  margin: 2rem;
-  h2 {
-    margin-bottom: 1rem;
+  aside {
+    border-right: 1px solid #dee2e6;
+
+    .nav-link {
+      color: #333;
+      font-weight: 500;
+      &.active {
+        color: #007bff;
+      }
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
   }
 }
