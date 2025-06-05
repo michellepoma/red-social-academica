@@ -38,11 +38,6 @@
               "src/styles.scss"
             ],
 
-
-
-
-
-
             "scripts": []
           },
           "configurations": {
@@ -71,6 +66,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"
@@ -81,6 +79,8 @@
           },
           "defaultConfiguration": "development"
         },
+
+
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
