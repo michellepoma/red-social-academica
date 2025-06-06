@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+providedIn: 'root'
 })
 export class UserService {
-  private API_URL = '/api/admin/usuarios'; // Proxy lo redirige a localhost:8080
+private API_URL = '/api/admin/usuarios';
 
-  constructor(private http: HttpClient) {}
+constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -18,12 +18,10 @@ export class UserService {
     });
   }
 
-  getAllUsers(): Observable<any[]> {
-    return this.http.get<any>(`${this.API_URL}/listar`, {
+  getUsuariosPaginado(page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/listar?page=${page}&size=${size}`, {
       headers: this.getAuthHeaders()
-    }).pipe(
-      map(response => response.content || []) // Maneja paginación
-    );
+    });
   }
 
   darDeBaja(username: string): Observable<any> {
@@ -31,4 +29,17 @@ export class UserService {
       headers: this.getAuthHeaders()
     });
   }
+
+  getUsuarioPorUsername(username: string): Observable<any> {
+    return this.http.get(`${this.API_URL}/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  editarUsuario(username: string, data: any): Observable<any> {
+    return this.http.put(`${this.API_URL}/${username}`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
+

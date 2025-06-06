@@ -1,0 +1,36 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 12px;
+
+  input, textarea {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  label {
+    font-weight: bold;
+    margin-top: 8px;
+  }
+
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+
+  button {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:disabled {
+      background-color: #ccc;
+    }
+  }
+}

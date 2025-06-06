@@ -1,0 +1,31 @@
+<h2>Editar Usuario</h2>
+
+<form [formGroup]="form" (ngSubmit)="editar()" class="formulario">
+  <label>Nombre:</label>
+  <input type="text" formControlName="name" />
+
+  <label>Apellido:</label>
+  <input type="text" formControlName="lastName" />
+
+  <label>Username:</label>
+  <input type="text" formControlName="username" [disabled]="true" />
+
+  <label>Email:</label>
+  <input type="email" formControlName="email" />
+
+  <label>Carrera:</label>
+  <input type="text" formControlName="career" />
+
+  <label>Bio:</label>
+  <textarea formControlName="bio"></textarea>
+
+  <label>URL de Foto de Perfil:</label>
+  <input type="text" formControlName="profilePictureUrl" />
+
+  <label>Fecha de nacimiento:</label>
+  <input type="date" formControlName="birthdate" />
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+</form>
