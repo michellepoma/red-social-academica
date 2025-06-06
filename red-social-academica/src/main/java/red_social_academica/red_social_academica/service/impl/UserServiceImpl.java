@@ -119,7 +119,7 @@ public class UserServiceImpl implements IUserService {
             throw new SecurityException("Solo los administradores pueden usar esta función");
         }
 
-        User user = userRepository.findByUsernameAndActivoTrue(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado o ya eliminado"));
 
         marcarUsuarioComoBaja(user, "eliminado por administrador", getCurrentUsername());
