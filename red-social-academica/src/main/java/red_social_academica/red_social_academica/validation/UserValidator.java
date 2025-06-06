@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class UserValidator {
@@ -53,6 +54,10 @@ public class UserValidator {
         List<String> dominiosBloqueados = List.of("spam.com", "bloqueado.edu", "correo.com");
         if (dominiosBloqueados.contains(dominio)) {
             errores.put("email", "El dominio del correo no está permitido");
+        }
+
+        if (!Objects.equals(user.getPassword(), user.getPasswordConfirm())) {
+            throw new BusinessException("Las contraseñas no coinciden");
         }
 
         if (!errores.isEmpty()) {

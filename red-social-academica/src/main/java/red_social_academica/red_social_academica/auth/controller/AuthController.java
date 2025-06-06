@@ -92,10 +92,6 @@ public class AuthController {
         // Validaciones personalizadas
         userValidator.validarCreacion(userCreateDTO);
 
-        if (!userCreateDTO.getPassword().equals(userCreateDTO.getPasswordConfirm())) {
-            throw new BusinessException("Las contraseñas no coinciden");
-        }
-
         // Crear entidad User
         User user = new User();
         user.setUsername(userCreateDTO.getUsername());

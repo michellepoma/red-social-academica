@@ -14,9 +14,9 @@ public class OpenApiConfig {
     public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Sistema de Registro Universitario API")
+                        .title("Sistema de Red Social Academica API")
                         .version("1.0")
-                        .description("Documentación de la API de Seguridad y Gestión Universitaria"))
+                        .description("Documentación de la API de Seguridad y Gestión Red Social"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", 

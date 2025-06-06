@@ -65,9 +65,6 @@ public class User extends AuditableEntity {
     private String password;
 
     @Transient
-    @Column(name = "password_confirm")
-    @Schema(description = "Confirmación de contraseña", example = "segura123")
-    @NotBlank(message = "Debes confirmar tu contraseña")
     private String passwordConfirm;
 
     @Column(name = "profile_picture_url")
