@@ -1,0 +1,22 @@
+<!-- src/app/layout/navbar/navbar.component.html -->
+<nav class="navbar">
+  <ul class="nav">
+    <li class="nav-item">
+      <a routerLink="/home" class="nav-link">Inicio</a>
+    </li>
+
+    <!-- Sólo si el usuario es ADMIN, muestro Enlace “Panel Admin” -->
+    <li
+      class="nav-item"
+      *ngIf="authService.hasRole('ROLE_ADMIN')">
+      <a routerLink="/admin" class="nav-link">Panel Admin</a>
+    </li>
+
+    <!-- Si es usuario “público” (ROLE_PUBLIC), quizás muestro aviso -->
+    <li
+      class="nav-item"
+      *ngIf="authService.hasRole('ROLE_PUBLIC')">
+      <span class="nav-link text-warning">Cuenta pendiente de activación</span>
+    </li>
+  </ul>
+</nav>

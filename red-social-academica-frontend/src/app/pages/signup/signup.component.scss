@@ -1,0 +1,40 @@
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 95vh;
+  background: #f3f3f3;
+}
+
+.signup-card {
+  background: white;
+  padding: 2rem;
+  width: 500px;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  padding: 0.6rem;
+  font-size: 1rem;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+.alert-danger {
+  background: #ffe6e6;
+  color: #b00020;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}

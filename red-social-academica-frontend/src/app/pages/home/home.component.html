@@ -1,0 +1,27 @@
+<!-- src/app/pages/home/home.component.html -->
+<div class="container mt-5">
+  <h1>Bienvenido a Home</h1>
+  <p>
+    Tus roles son:
+    <strong *ngIf="authService.getRoles().length > 0">
+      {{ authService.getRoles().join(', ') }}
+    </strong>
+    <span *ngIf="authService.getRoles().length === 0">Sin rol</span>
+  </p>
+
+  <!-- Ejemplo de secciones según rol -->
+  <div *ngIf="authService.hasRole('ROLE_USER')" class="alert alert-info">
+    <strong>Sección para ROLE_USER</strong>
+    <p>Aquí ves contenido para usuarios normales.</p>
+  </div>
+
+  <div *ngIf="authService.hasRole('ROLE_ADMIN')" class="alert alert-warning">
+    <strong>Sección para ROLE_ADMIN</strong>
+    <p>Aquí ves contenido para administradores.</p>
+  </div>
+
+  <div *ngIf="authService.hasRole('ROLE_PUBLIC')" class="alert alert-secondary">
+    <strong>Sección para ROLE_PUBLIC</strong>
+    <p>Aquí ves contenido para usuarios públicos.</p>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1 class="logo">YuntaNET</h1>
+    <p class="subtitle">
+      Conecta con compañeros,
+      comparte conocimientos.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <input
+        type="text"
+        formControlName="username"
+        class="form-control"
+        placeholder="Correo electrónico o teléfono"
+      />
+      <input
+        type="password"
+        formControlName="password"
+        class="form-control"
+        placeholder="Contraseña"
+      />
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loading || form.invalid"
+      >
+        {{ loading ? 'Ingresando...' : 'Iniciar sesión' }}
+      </button>
+
+      <div *ngIf="errorMsg" class="error-msg">
+        {{ errorMsg }}
+      </div>
+    </form>
+
+    <hr />
+
+    <button class="btn-secondary" [routerLink]="['/signup']">
+      Crear cuenta nueva
+    </button>
+  </div>
+</div>
+
