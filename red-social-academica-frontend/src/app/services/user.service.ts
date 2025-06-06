@@ -10,28 +10,25 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
- private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // asegúrate que exista
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
+
   getAllUsers(): Observable<any[]> {
     return this.http.get<any>(`${this.API_URL}/listar`, {
       headers: this.getAuthHeaders()
     }).pipe(
-      map(response => response.content || []) // <-- Corrige el acceso
+      map(response => response.content || []) // Maneja paginación
     );
   }
 
-darDeBaja(username: string): Observable<any> {
-  return this.http.put(`/api/admin/usuarios/${username}/baja`, null);
-}
-
-
-
-
-
-
+  darDeBaja(username: string): Observable<any> {
+    return this.http.put(`${this.API_URL}/${username}/baja`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }

@@ -15,36 +15,32 @@ export class AdminUsuariosListarComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
+    this.obtenerUsuarios();
+  }
+
+  obtenerUsuarios(): void {
     this.userService.getAllUsers().subscribe({
-      next: (res: any[]) => this.usuarios = res,
-      error: (err) => console.error('Error al obtener usuarios:', err)
+      next: (res: any[]) => {
+        this.usuarios = res;
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios:', err);
+      }
     });
   }
-obtenerUsuarios(): void {
-  this.userService.getAllUsers().subscribe({
-    next: res => {
-      this.usuarios = res;
-    },
-    error: err => {
-      console.error('Error al obtener usuarios:', err);
-    }
-  });
-}
 
+  darDeBaja(username: string): void {
+    if (!confirm(`¿Estás seguro de dar de baja a ${username}?`)) return;
 
-darDeBaja(username: string): void {
-  if (!confirm(`¿Estás seguro de dar de baja a ${username}?`)) return;
-
-  this.userService.darDeBaja(username).subscribe({
-    next: res => {
-      alert(`${username} ha sido dado de baja correctamente`);
-      this.obtenerUsuarios(); // recargar la lista
-    },
-    error: err => {
-      alert(`Error al dar de baja a ${username}: ${err.message}`);
-      console.error(err);
-    }
-  });
-}
-
+    this.userService.darDeBaja(username).subscribe({
+      next: () => {
+        alert(`${username} ha sido dado de baja correctamente`);
+        this.obtenerUsuarios(); // Recarga la lista actualizada
+      },
+      error: (err) => {
+        console.error(`Error al dar de baja a ${username}:`, err);
+        alert(`Error al dar de baja a ${username}: ${err.message || 'ver consola'}`);
+      }
+    });
+  }
 }
