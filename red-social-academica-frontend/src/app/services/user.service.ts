@@ -41,5 +41,11 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
+  crearUsuario(usuario: any): Observable<any> {
+    return this.http.post('/api/admin/usuarios/crear', usuario, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
 }
 

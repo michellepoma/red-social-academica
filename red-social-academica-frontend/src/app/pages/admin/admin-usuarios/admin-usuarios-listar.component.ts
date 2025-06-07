@@ -2,8 +2,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // ✅ IMPORTANTE
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { UserService } from '../../../services/user.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
 selector: 'app-admin-usuarios-listar',
@@ -12,7 +13,7 @@ templateUrl: './admin-usuarios-listar.component.html',
 styleUrls: ['./admin-usuarios-listar.component.scss'],
 imports: [
 CommonModule,
-RouterModule // ✅ NECESARIO PARA USAR [routerLink]
+RouterModule // ✅ Necesario para usar [routerLink]
 ]
 })
 export class AdminUsuariosListarComponent implements OnInit {
@@ -21,21 +22,21 @@ paginaActual: number = 0;
 tamanioPagina: number = 5;
 totalPaginas: number = 0;
 
-constructor(private userService: UserService) {}
+constructor(
+    private userService: UserService,
+    private router: Router
+  ) {
+    // ✅ Detectar cambio de navegación y recargar usuarios
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.obtenerUsuarios();
+      });
+  }
 
   ngOnInit(): void {
     this.obtenerUsuarios();
   }
-actualizarLista(): void {
-  this.userService.getUsuariosPaginado(this.paginaActual, this.tamanioPagina).subscribe({
-    next: res => {
-      this.usuarios = res.content;
-      this.totalPaginas = res.totalPages;
-    },
-    error: () => console.error('Error al cargar usuarios')
-  });
-}
-
 
   obtenerUsuarios(): void {
     this.userService.getUsuariosPaginado(this.paginaActual, this.tamanioPagina).subscribe({

@@ -1,0 +1,72 @@
+<div class="container">
+  <h2>Crear Nuevo Usuario</h2>
+  <form [formGroup]="form" (ngSubmit)="crearUsuario()" class="formulario">
+    <div>
+      <label>Nombre:</label>
+      <input type="text" formControlName="name" required />
+    </div>
+
+    <div>
+      <label>Apellido:</label>
+      <input type="text" formControlName="lastName" required />
+    </div>
+
+    <div>
+      <label>Usuario:</label>
+      <input type="text" formControlName="username" required />
+    </div>
+
+    <div>
+      <label>Email:</label>
+      <input type="email" formControlName="email" required />
+    </div>
+
+    <div>
+      <label>RUT:</label>
+      <input type="text" formControlName="ru" required />
+    </div>
+
+    <div>
+      <label>Carrera:</label>
+      <input type="text" formControlName="career" required />
+    </div>
+
+    <div>
+      <label>Bio:</label>
+      <textarea formControlName="bio"></textarea>
+    </div>
+
+    <div>
+      <label>Fecha de nacimiento:</label>
+      <input type="date" formControlName="birthdate" required />
+    </div>
+
+    <div>
+      <label>Foto de perfil (URL):</label>
+      <input type="text" formControlName="profilePictureUrl" />
+    </div>
+
+    <div>
+      <label>Contraseña:</label>
+      <input type="password" formControlName="password" required />
+    </div>
+
+    <div>
+      <label>Confirmar contraseña:</label>
+      <input type="password" formControlName="passwordConfirm" required />
+    </div>
+
+    <div>
+      <label>Rol:</label>
+      <select formControlName="rol">
+        <option value="ROLE_PUBLIC">Público</option>
+        <option value="ROLE_ADMIN">Administrador</option>
+      </select>
+    </div>
+
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+
+    <button type="submit" [disabled]="form.invalid">Guardar</button>
+  </form>
+</div>
