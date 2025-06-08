@@ -28,15 +28,12 @@ public interface IUserService {
     UserDTO obtenerPorUsername(String username);
 
     /**
-     * Obtiene una lista paginada de usuarios por rol.
+     * <<<<<<< HEAD
      * 
-     * @param role     tipo de rol (ej: ROLE_PUBLIC, ROLE_ADMIN)
-     * @param pageable paginación
-     * @return Página de usuarios.
-     */
-    Page<UserDTO> obtenerPorRol(String role, Pageable pageable);
-
-    /**
+     * 
+     * 
+     * =======
+     * >>>>>>> 99b1a09d6a12f832e7de49287f0d2668f188a25a
      * Busca usuarios por texto en nombre completo o email, filtrado por rol.
      * 
      * @param texto    texto de búsqueda.

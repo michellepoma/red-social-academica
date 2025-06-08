@@ -43,24 +43,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByRoles_Nombre(Role.NombreRol nombre);
 
-    List<User> findAllByRoles_NombreAndActivoTrue(Role.NombreRol nombre);
-
     Page<User> findAllByRoles_Nombre(Role.NombreRol nombre, Pageable pageable);
 
-    Page<User> findAllByRoles_NombreAndActivoTrue(Role.NombreRol nombre, Pageable pageable);
-
     // === BÚSQUEDAS PERSONALIZADAS ===
-
+    
     @Query("""
-            SELECT u FROM User u
-            WHERE
-              LOWER(u.name) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-              LOWER(u.lastName) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-              LOWER(u.email) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-              LOWER(u.username) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-              LOWER(u.roles) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-              (LOWER(:texto) = 'activo' AND u.activo = true) OR
-              (LOWER(:texto) = 'inactivo' AND u.activo = false)
+              SELECT DISTINCT u FROM User u
+              LEFT JOIN u.roles r
+              WHERE
+                LOWER(u.username) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+                LOWER(u.name) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+                LOWER(u.lastName) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+                LOWER(u.email) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+                LOWER(CAST(r.nombre AS string)) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+                (:texto = 'activo' AND u.activo = true) OR
+                (:texto = 'inactivo' AND u.activo = false)
             """)
     Page<User> searchAllFields(@Param("texto") String texto, Pageable pageable);
 
@@ -97,4 +94,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @NonNull
     Optional<User> findById(@NonNull Long id);
+
 }

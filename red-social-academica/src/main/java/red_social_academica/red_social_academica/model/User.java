@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import red_social_academica.red_social_academica.auth.model.Role;
@@ -20,7 +21,7 @@ import red_social_academica.red_social_academica.auth.model.Role;
 @AllArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = "username")
-@ToString(of = {"id", "username", "name", "lastName"})
+@ToString(of = { "id", "username", "name", "lastName" })
 public class User extends AuditableEntity {
 
     @Id
@@ -51,7 +52,7 @@ public class User extends AuditableEntity {
     @NotBlank(message = "El nombre de usuario es obligatorio")
     @Size(min = 3, max = 30, message = "El nombre de usuario debe tener entre 3 y 30 caracteres")
     private String username;
-    
+
     @Column(unique = true, nullable = false)
     @Schema(description = "Registro universitario unico", example = "1822345")
     @NotBlank(message = "El registro universitario es obligatorio")
@@ -85,11 +86,7 @@ public class User extends AuditableEntity {
     private boolean activo = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     // Relaciones
@@ -98,10 +95,8 @@ public class User extends AuditableEntity {
     private Set<Post> posts = new HashSet<>();
 
     @Builder.Default
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "friends",
-            joinColumns = @JoinColumn(name = "friend_id"),
-            inverseJoinColumns = @JoinColumn(name = "aux_friend_id"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "aux_friend_id"))
     private Set<User> friends = new HashSet<>();
 
     @Builder.Default
@@ -139,11 +134,12 @@ public class User extends AuditableEntity {
     }
 
     public boolean canInvite(String email) {
-        if (this.email.equals(email)) return false;
+        if (this.email.equals(email))
+            return false;
 
         return friends.stream().noneMatch(f -> f.getEmail().equals(email)) &&
-               auxFriends.stream().noneMatch(f -> f.getEmail().equals(email)) &&
-               sendedInvitations.stream().noneMatch(i -> i.esDelUsuario(email)) &&
-               receivedInvitations.stream().noneMatch(i -> i.esDelUsuario(email));
+                auxFriends.stream().noneMatch(f -> f.getEmail().equals(email)) &&
+                sendedInvitations.stream().noneMatch(i -> i.esDelUsuario(email)) &&
+                receivedInvitations.stream().noneMatch(i -> i.esDelUsuario(email));
     }
 }
