@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @Service
@@ -151,18 +152,25 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "usersByRoleCache", key = "#roleStr + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
-    public Page<UserDTO> obtenerPorRol(String roleStr, Pageable pageable) {
-        Role.NombreRol roleEnum = Role.NombreRol.valueOf(roleStr);
-        return userRepository.findAllByRoles_NombreAndActivoTrue(roleEnum, pageable)
-                .map(this::convertToDTO);
-    }
-
-    @Override
     @Cacheable(value = "usersBySearchCache", key = "#texto + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<UserDTO> buscarPorNombreYCorreo(String texto, Pageable pageable) {
-        return userRepository.searchAllFields(texto, pageable)
-                .map(this::convertToDTO);
+        texto = texto.trim().toLowerCase();
+        Page<User> paginaUsuarios = userRepository.searchAllFields(texto, pageable);
+
+        // Filtro adicional si el texto es "activo" o "inactivo"
+        if (texto.equalsIgnoreCase("activo")) {
+            paginaUsuarios = new PageImpl<>(
+                    paginaUsuarios.stream().filter(User::isActivo).toList(),
+                    pageable,
+                    paginaUsuarios.getTotalElements());
+        } else if (texto.equalsIgnoreCase("inactivo")) {
+            paginaUsuarios = new PageImpl<>(
+                    paginaUsuarios.stream().filter(u -> !u.isActivo()).toList(),
+                    pageable,
+                    paginaUsuarios.getTotalElements());
+        }
+
+        return paginaUsuarios.map(this::convertToDTO);
     }
 
     @Override
