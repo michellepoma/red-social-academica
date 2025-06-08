@@ -17,6 +17,8 @@ import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin
 import { AdminUsuariosBuscarComponent } from './pages/admin/admin-usuarios/admin-usuarios-buscar.component';
 import { AdminUsuariosPorRolComponent } from './pages/admin/admin-usuarios/admin-usuarios-por-rol.component';
 
+
+import { AmigosComponent } from './pages/usuario/amigos.component';
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
 
@@ -28,6 +30,10 @@ export const routes: Routes = [
 { path: 'signup', component: SignupComponent },
 { path: 'home', component: HomeUsuarioComponent },
 { path: 'perfil', component: UsuarioPerfilComponent },
+{ path: 'amigos', component: AmigosComponent },
+
+
+
 
 // Home exclusivo para administrador
 { path: 'admin/home', component: HomeAdminComponent },
@@ -44,7 +50,8 @@ children: [
 { path: 'usuarios/baja/:username', component: AdminUsuariosBajaComponent },
 { path: 'usuarios/perfil/:username', component: AdminUsuariosPerfilComponent },
 { path: 'usuarios/buscar', component: AdminUsuariosBuscarComponent },
-{ path: 'usuarios/por-rol', component: AdminUsuariosPorRolComponent }
+{ path: 'usuarios/por-rol', component: AdminUsuariosPorRolComponent },
+
 ]
 }
 ,
