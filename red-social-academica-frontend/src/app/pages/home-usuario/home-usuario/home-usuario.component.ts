@@ -14,6 +14,7 @@ styleUrls: ['./home-usuario.component.scss']
 export class HomeUsuarioComponent implements OnInit {
 usuario: any = null;
 amigos: any[] = [];
+invitaciones: any[] = [];
 cargando = true;
 
 busquedaUsername: string = '';
@@ -31,6 +32,7 @@ constructor(
         this.usuario = res;
         this.cargando = false;
         this.cargarAmigos();
+        this.cargarInvitaciones();
       },
       error: (err) => {
         console.error('Error al cargar perfil:', err);
@@ -47,6 +49,13 @@ constructor(
       error: (err) => {
         console.error('Error al cargar amigos:', err);
       }
+    });
+  }
+
+  cargarInvitaciones(): void {
+    this.perfilService.getInvitacionesPendientes().subscribe({
+      next: (res) => this.invitaciones = res,
+      error: () => this.invitaciones = []
     });
   }
 
@@ -87,20 +96,39 @@ constructor(
     });
   }
 
-  enviarInvitacion(destinatario: string): void {
-    const remitente = this.usuario?.username;
-    if (!remitente || !destinatario) return;
+enviarInvitacion(destinatario: string): void {
+  const remitente = this.usuario?.username;
+  if (!remitente || !destinatario) {
+    alert('Datos inválidos');
+    return;
+  }
 
-    this.perfilService.enviarInvitacion(remitente, destinatario).subscribe({
+  this.perfilService.enviarInvitacion(remitente, destinatario).subscribe({
+    next: () => {
+      alert('Invitación enviada correctamente.');
+      this.resultadoBusqueda = null;
+      this.busquedaUsername = '';
+    },
+    error: (err) => {
+      console.error('Error al enviar invitación:', err);
+      alert('No se pudo enviar la invitación. Verifica si ya está enviada o si el usuario existe.');
+    }
+  });
+}
+
+
+
+  aceptarInvitacion(invitationId: number): void {
+    const username = this.usuario?.username;
+    if (!username) return;
+
+    this.perfilService.aceptarInvitacion(invitationId, username).subscribe({
       next: () => {
-        alert('Invitación enviada.');
-        this.resultadoBusqueda = null;
-        this.busquedaUsername = '';
+        alert('Invitación aceptada.');
+        this.cargarInvitaciones();
+        this.cargarAmigos();
       },
-      error: (err) => {
-        console.error('Error al enviar invitación:', err);
-        alert('No se pudo enviar la invitación.');
-      }
+      error: () => alert('Error al aceptar invitación.')
     });
   }
 }

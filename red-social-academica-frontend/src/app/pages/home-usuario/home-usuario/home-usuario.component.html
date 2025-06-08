@@ -29,15 +29,15 @@
     />
     <button class="btn btn-primary ms-2" (click)="buscarUsuario()">Buscar</button>
 
-    <div *ngIf="resultadoBusqueda" class="mt-3 border rounded p-3">
+    <div *ngIf="resultadoBusqueda" class="mt-3">
       <p><strong>Usuario:</strong> {{ resultadoBusqueda.username }}</p>
       <p><strong>Email:</strong> {{ resultadoBusqueda.email }}</p>
-      <button
-        class="btn btn-success btn-sm"
-        (click)="enviarInvitacion(resultadoBusqueda.username)">
+      <button class="btn btn-success btn-sm"
+              (click)="enviarInvitacion(resultadoBusqueda.username)">
         Enviar invitación
       </button>
     </div>
+
 
     <div *ngIf="busquedaFallida && !resultadoBusqueda" class="mt-3 text-danger">
       No se encontró el usuario buscado.
@@ -47,4 +47,21 @@
 
 <ng-template #cargando>
   <p class="text-center mt-5">Cargando datos del usuario...</p>
+</ng-template>
+
+<hr />
+<h4>Invitaciones pendientes</h4>
+
+<ul *ngIf="invitaciones.length > 0; else sinInvitaciones">
+  <li *ngFor="let invitacion of invitaciones">
+    <strong>{{ invitacion.senderUsername }}</strong>
+    <button class="btn btn-success btn-sm ms-2"
+            (click)="aceptarInvitacion(invitacion.id)">
+      Aceptar
+    </button>
+  </li>
+</ul>
+
+<ng-template #sinInvitaciones>
+  <p>No tienes invitaciones pendientes.</p>
 </ng-template>

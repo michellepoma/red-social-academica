@@ -31,11 +31,10 @@ constructor(private http: HttpClient) {}
   }
 
   getUsuarioPorUsername(username: string): Observable<any> {
-  return this.http.get(`/api/usuarios/${username}`, {
-    headers: this.getAuthHeaders()
-  });
-}
-
+    return this.http.get(`/api/usuarios/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 
   editarUsuario(username: string, data: any): Observable<any> {
     return this.http.put(`${this.API_URL}/${username}`, data, {
@@ -68,33 +67,47 @@ constructor(private http: HttpClient) {}
   }
 
   getPerfil(): Observable<any> {
-  return this.http.get<any>(`/api/usuarios/me`, {
-    headers: this.getAuthHeaders()
-  });
-}
+    return this.http.get<any>(`/api/usuarios/me`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 
-eliminarMiCuenta(): Observable<any> {
-  return this.http.put(`/api/usuarios/me/baja`, null, {
-    headers: this.getAuthHeaders()
-  });
-}
-getAmigos(): Observable<any[]> {
-  return this.http.get<any[]>('/api/usuarios/me/amigos', {
-    headers: this.getAuthHeaders()
-  });
-}
-getPerfilPublico(username: string): Observable<any> {
-  return this.http.get(`/api/usuarios/${username}`, {
-    headers: this.getAuthHeaders()
-  });
-}
-enviarInvitacion(senderUsername: string, receiverUsername: string): Observable<any> {
+  eliminarMiCuenta(): Observable<any> {
+    return this.http.put(`/api/usuarios/me/baja`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getAmigos(): Observable<any[]> {
+    return this.http.get<any[]>('/api/usuarios/me/amigos', {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getPerfilPublico(username: string): Observable<any> {
+    return this.http.get(`/api/usuarios/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+ enviarInvitacion(senderUsername: string, receiverUsername: string): Observable<any> {
   const url = `/api/invitaciones/${senderUsername}`;
-  const body = { receiverUsername };
+  const body = { receiverUsername };  // 👈 exactamente este formato
   return this.http.post(url, body, {
     headers: this.getAuthHeaders()
   });
 }
 
 
+  aceptarInvitacion(invitationId: number, username: string): Observable<any> {
+    return this.http.put(`/api/invitaciones/${invitationId}/aceptar/${username}`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getInvitacionesPendientes(): Observable<any[]> {
+    return this.http.get<any[]>('/api/invitaciones/pendientes', {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
