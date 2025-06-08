@@ -31,10 +31,11 @@ constructor(private http: HttpClient) {}
   }
 
   getUsuarioPorUsername(username: string): Observable<any> {
-    return this.http.get(`${this.API_URL}/${username}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  return this.http.get(`/api/usuarios/${username}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
 
   editarUsuario(username: string, data: any): Observable<any> {
     return this.http.put(`${this.API_URL}/${username}`, data, {
@@ -79,6 +80,18 @@ eliminarMiCuenta(): Observable<any> {
 }
 getAmigos(): Observable<any[]> {
   return this.http.get<any[]>('/api/usuarios/me/amigos', {
+    headers: this.getAuthHeaders()
+  });
+}
+getPerfilPublico(username: string): Observable<any> {
+  return this.http.get(`/api/usuarios/${username}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+enviarInvitacion(senderUsername: string, receiverUsername: string): Observable<any> {
+  const url = `/api/invitaciones/${senderUsername}`;
+  const body = { receiverUsername };
+  return this.http.post(url, body, {
     headers: this.getAuthHeaders()
   });
 }

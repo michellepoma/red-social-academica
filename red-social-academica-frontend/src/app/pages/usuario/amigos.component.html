@@ -1,0 +1,20 @@
+<div class="container mt-4">
+  <h2>Mis Amigos</h2>
+
+  <div *ngIf="cargando">
+    Cargando amigos...
+  </div>
+
+  <div *ngIf="!cargando && amigos.length === 0">
+    No tienes amigos todavía.
+  </div>
+
+  <ul *ngIf="amigos.length > 0" class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let amigo of amigos">
+      {{ amigo.username }} ({{ amigo.email }})
+      <a [routerLink]="['/usuarios/perfil-publico', amigo.username]" class="btn btn-sm btn-outline-primary">
+        Ver perfil
+      </a>
+    </li>
+  </ul>
+</div>
