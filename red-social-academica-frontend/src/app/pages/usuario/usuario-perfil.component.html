@@ -1,0 +1,11 @@
+<div *ngIf="perfil; else errorTemplate" class="perfil-container">
+  <h2>Mi perfil</h2>
+  <p><strong>Usuario:</strong> {{ perfil.username }}</p>
+  <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+  <p><strong>Correo:</strong> {{ perfil.email }}</p>
+  <p><strong>Rol:</strong> {{ perfil.rol }}</p>
+</div>
+
+<ng-template #errorTemplate>
+  <p *ngIf="error" class="error-msg">{{ error }}</p>
+</ng-template>

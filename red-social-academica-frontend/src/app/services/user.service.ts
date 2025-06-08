@@ -49,7 +49,7 @@ constructor(private http: HttpClient) {}
   }
 
   getTodosLosUsuarios(): Observable<any> {
-    return this.http.get(`/api/admin/usuarios`, {
+    return this.http.get(`${this.API_URL}`, {
       headers: this.getAuthHeaders()
     });
   }
@@ -59,5 +59,17 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
-}
 
+  listarUsuariosPorRol(rol: string, page: number = 0, size: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/rol/${rol}?page=${page}&size=${size}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  // ✅ Método necesario para cargar el perfil del usuario actual (usuario logueado)
+  getPerfil(): Observable<any> {
+    return this.http.get<any>(`/api/usuarios/perfil`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+}

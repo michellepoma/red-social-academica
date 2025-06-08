@@ -23,7 +23,6 @@
             "polyfills": [
               "zone.js"
             ],
-
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -37,7 +36,6 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.scss"
             ],
-
             "scripts": []
           },
           "configurations": {
@@ -59,10 +57,12 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
+
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -79,8 +79,6 @@
           },
           "defaultConfiguration": "development"
         },
-
-
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },

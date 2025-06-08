@@ -33,17 +33,17 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getRoles(): string[] {
-    const token = this.getToken();
-    if (!token) return [];
-    try {
-      const decoded: any = jwtDecode(token); // ✅ CORRECTO
-      return decoded?.roles || [];
-    } catch (e) {
-      console.error('Error decoding token:', e);
-      return [];
-    }
+ getRoles(): string[] {
+  const token = this.getToken();
+  if (!token) return [];
+  try {
+    const decoded: any = jwtDecode(token);
+    return decoded?.roles || [];
+  } catch (e) {
+    return [];
   }
+}
+
 
   hasRole(role: string): boolean {
     return this.getRoles().includes(role);

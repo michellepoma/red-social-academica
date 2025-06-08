@@ -4,15 +4,15 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-selector: 'app-admin-navbar',
+selector: 'app-navbar-usuario',
 standalone: true,
-templateUrl: './admin-navbar.component.html',
-styleUrls: ['./admin-navbar.component.scss'],
+templateUrl: './navbar-usuario.component.html',
+styleUrls: ['./navbar-usuario.component.scss'],
 imports: [CommonModule]
 })
-export class AdminNavbarComponent {
+export class NavbarUsuarioComponent {
 constructor(
-    public auth: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {}
 
@@ -20,8 +20,5 @@ constructor(
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
-
-  esAdmin(): boolean {
-    return this.auth.hasRole('ROLE_ADMIN');
-  }
 }
+

@@ -1,0 +1,10 @@
+<!-- src/app/pages/usuario/navbar-usuario/navbar-usuario.component.html -->
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand">Red Social Académica</a>
+    <span *ngIf="authService.getRoles() && authService.getRoles().length > 0" class="text-muted">
+      Roles: {{ authService.getRoles().join(', ') }}
+    </span>
+    <button class="btn btn-outline-danger btn-sm" (click)="logout()">Cerrar Sesión</button>
+  </div>
+</nav>

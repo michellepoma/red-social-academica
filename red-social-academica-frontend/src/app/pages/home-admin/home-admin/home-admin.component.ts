@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
-import { NavbarUsuarioComponent } from '../usuario/navbar-usuario/navbar-usuario.component';
+import { AdminNavbarComponent } from 'src/app/pages/admin/admin-navbar/admin-navbar.component';
 
 @Component({
-selector: 'app-home',
+selector: 'app-home-admin',
 standalone: true,
-templateUrl: './home.component.html',
-styleUrls: ['./home.component.scss'],
-imports: [CommonModule, NavbarUsuarioComponent]
+templateUrl: './home-admin.component.html',
+styleUrls: ['./home-admin.component.scss'],
+imports: [CommonModule, AdminNavbarComponent]
 })
-export class HomeComponent implements OnInit {
+export class HomeAdminComponent implements OnInit {
 roles: string[] = [];
 
 constructor(
@@ -22,8 +22,8 @@ constructor(
   ngOnInit(): void {
     this.roles = this.authService.getRoles() || [];
 
-    if (this.roles.includes('ROLE_ADMIN')) {
-      this.router.navigate(['/admin/usuarios/listar']);
+    if (!this.roles.includes('ROLE_ADMIN')) {
+      this.router.navigate(['/home']);
     }
   }
 }
