@@ -54,11 +54,16 @@ constructor(private http: HttpClient) {}
     });
   }
 
-  buscarUsuarios(texto: string, page: number): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/buscar?texto=${texto}&page=${page}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+buscarUsuarios(texto: string, page: number, size: number): Observable<any> {
+  return this.http.get<any>(`${this.API_URL}/buscar`, {
+    params: {
+      texto,
+      page,
+      size
+    },
+    headers: this.getAuthHeaders()
+  });
+}
 
   listarUsuariosPorRol(rol: string, page: number = 0, size: number = 10): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/rol/${rol}?page=${page}&size=${size}`, {

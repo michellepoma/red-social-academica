@@ -1,49 +1,61 @@
 <div class="container mt-4">
-  <h2 style="font-size: 1.8rem; display: flex; align-items: center; gap: 0.5rem;">
-    <span>📋</span> Lista de Usuarios
+  <h2 class="mb-3" style="font-size: 1.8rem; display: flex; align-items: center; gap: 0.5rem;">
+    <span>🔍</span> Buscar Usuarios
   </h2>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Usuario</th>
-      <th>Email</th>
-      <th>Roles</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let usuario of usuarios">
-      <td>{{ (usuario.name || '') + ' ' + (usuario.lastName || '') }}</td>
-      <td>{{ usuario.username }}</td>
-      <td>{{ usuario.email }}</td>
-      <td>{{ usuario.roles?.[0] || 'Sin rol' }}</td>
-      <td>
-          <span [ngClass]="usuario.activo ? 'estado-activo' : 'estado-inactivo'">
-            {{ usuario.activo ? 'Activo' : 'Inactivo' }}
-          </span>
-      </td>
-      <td>
-        <div class="acciones">
-          <button class="btn-editar" [routerLink]="['/admin/usuarios/editar', usuario.username]">✏️ Editar</button>
-          <button
-            [disabled]="!usuario.activo"
-            (click)="darDeBaja(usuario.username)"
-            [ngClass]="usuario.activo ? 'btn-baja' : 'btn-inactivo'">
-            {{ usuario.activo ? '❌ Dar de Baja' : 'Inactivo' }}
-          </button>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="form-group d-flex gap-2 mb-4">
+    <input [(ngModel)]="textoBusqueda" placeholder="Ingrese nombre, email o estado (activo/inactivo)"
+      class="form-control" />
+    <button (click)="buscar()" class="btn btn-primary">Buscar</button>
+    <button (click)="limpiarBusqueda()" class="btn btn-secondary" *ngIf="textoBusqueda.trim()">Limpiar</button>
+  </div>
 
-  <div class="paginacion">
-    <button (click)="anteriorPagina()" [disabled]="paginaActual === 0">⬅️ Anterior</button>
-    <span><strong>Página {{ paginaActual + 1 }} de {{ totalPaginas }}</strong></span>
-    <button (click)="siguientePagina()" [disabled]="paginaActual + 1 >= totalPaginas">Siguiente ➡️</button>
+  <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
+
+  <div *ngIf="usuarios.length > 0">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ (usuario.name || '') + ' ' + (usuario.lastName || '') }}</td>
+          <td>{{ usuario.username }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.roles?.[0] || 'Sin rol' }}</td>
+          <td>
+            <span [style.color]="usuario.activo ? 'green' : 'red'">
+              {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <a [routerLink]="['/admin/usuarios/perfil', usuario.username]" class="btn btn-sm btn-info me-2">👁 Ver</a>
+            <a [routerLink]="['/admin/usuarios/editar', usuario.username]" class="btn btn-sm btn-warning me-2">✏️
+              Editar</a>
+            <button 
+              (click)="darDeBaja(usuario.username)"
+              [disabled]="!usuario.activo"
+              [ngClass]="usuario.activo ? 'btn-baja' : 'btn-inactivo'">
+              {{ usuario.activo ? '❌ Dar de Baja' : 'Usuario Inactivo' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <button (click)="anteriorPagina()" [disabled]="paginaActual === 0" class="btn btn-outline-secondary">⬅
+        Anterior</button>
+      <span><strong>Página {{ paginaActual + 1 }} de {{ totalPaginas }}</strong></span>
+      <button (click)="siguientePagina()" [disabled]="paginaActual + 1 >= totalPaginas"
+        class="btn btn-outline-secondary">Siguiente ➡</button>
+    </div>
   </div>
 </div>
-

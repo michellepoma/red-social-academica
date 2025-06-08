@@ -15,6 +15,7 @@ export class AdminUsuariosBuscarComponent implements OnInit {
 textoBusqueda: string = '';
 usuarios: any[] = [];
 paginaActual: number = 0;
+tamanioPagina: number = 10;
 totalPaginas: number = 0;
 mensaje: string = '';
 
@@ -29,7 +30,7 @@ constructor(private userService: UserService) {}
       return;
     }
 
-    this.userService.buscarUsuarios(this.textoBusqueda, this.paginaActual).subscribe({
+    this.userService.buscarUsuarios(this.textoBusqueda, this.paginaActual, this.tamanioPagina).subscribe({
       next: (res: any) => {
         this.usuarios = res.content;
         this.totalPaginas = res.totalPages;
