@@ -1,0 +1,49 @@
+.busqueda-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input.form-control {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+}
+
+button.btn {
+  padding: 8px 15px;
+  font-size: 16px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.paginacion {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mensaje {
+  color: red;
+  font-weight: bold;
+}

@@ -1,20 +1,14 @@
-// src/app/pages/admin/admin-usuarios/admin-usuarios-listar.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
 selector: 'app-admin-usuarios-listar',
 standalone: true,
 templateUrl: './admin-usuarios-listar.component.html',
 styleUrls: ['./admin-usuarios-listar.component.scss'],
-imports: [
-CommonModule,
-RouterModule // ✅ Necesario para usar [routerLink]
-]
+imports: [CommonModule, RouterModule]
 })
 export class AdminUsuariosListarComponent implements OnInit {
 usuarios: any[] = [];
@@ -22,17 +16,7 @@ paginaActual: number = 0;
 tamanioPagina: number = 5;
 totalPaginas: number = 0;
 
-constructor(
-    private userService: UserService,
-    private router: Router
-  ) {
-    // ✅ Detectar cambio de navegación y recargar usuarios
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.obtenerUsuarios();
-      });
-  }
+constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.obtenerUsuarios();

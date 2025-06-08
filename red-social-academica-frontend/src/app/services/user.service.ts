@@ -41,11 +41,23 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
+
   crearUsuario(usuario: any): Observable<any> {
-    return this.http.post('/api/admin/usuarios/crear', usuario, {
+    return this.http.post(`${this.API_URL}/crear`, usuario, {
       headers: this.getAuthHeaders()
     });
   }
 
+  getTodosLosUsuarios(): Observable<any> {
+    return this.http.get(`/api/admin/usuarios`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  buscarUsuarios(texto: string, page: number): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/buscar?texto=${texto}&page=${page}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
 

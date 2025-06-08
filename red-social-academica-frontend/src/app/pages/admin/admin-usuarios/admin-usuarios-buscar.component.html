@@ -1,0 +1,49 @@
+<div class="busqueda-container">
+  <h2>🔍 Buscar Usuarios</h2>
+
+  <div class="form-group">
+    <input [(ngModel)]="textoBusqueda" placeholder="Ingrese texto a buscar" class="form-control" />
+    <button (click)="buscar()" class="btn btn-primary">Buscar</button>
+  </div>
+
+  <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+
+  <div *ngIf="usuarios.length > 0">
+    <table class="tabla">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.username }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.rol }}</td>
+        <td>
+            <span [style.color]="usuario.activo ? 'green' : 'red'">
+              {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+        </td>
+        <td>
+          <a [routerLink]="['/admin/usuarios/perfil', usuario.username]" class="btn btn-sm btn-info">👁 Ver</a>
+          <a [routerLink]="['/admin/usuarios/editar', usuario.username]" class="btn btn-sm btn-warning">✏️ Editar</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="paginacion">
+      <button (click)="paginaAnterior()" [disabled]="paginaActual === 0">⬅ Anterior</button>
+      <span>Página {{ paginaActual + 1 }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="paginaActual + 1 >= totalPaginas">Siguiente ➡</button>
+    </div>
+  </div>
+</div>
+
