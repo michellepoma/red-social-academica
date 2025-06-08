@@ -161,7 +161,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Cacheable(value = "usersBySearchCache", key = "#texto + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<UserDTO> buscarPorNombreYCorreo(String texto, Pageable pageable) {
-        return userRepository.searchByEmailAndName(texto, pageable)
+        return userRepository.searchAllFields(texto, pageable)
                 .map(this::convertToDTO);
     }
 

@@ -20,49 +20,69 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // === BASICOS (con y sin activo) ===
 
     Optional<User> findByUsername(String username);
+
     Optional<User> findByUsernameAndActivoTrue(String username);
 
     Optional<User> findByEmail(String email);
+
     Optional<User> findByEmailAndActivoTrue(String email);
 
     boolean existsByUsername(String username);
+
     boolean existsByUsernameAndActivoTrue(String username);
 
     boolean existsByEmail(String email);
+
     boolean existsByEmailAndActivoTrue(String email);
 
     boolean existsByRu(String ru);
+
     boolean existsByRuAndActivoTrue(String ru);
 
     // === FILTROS POR ROL ===
 
     List<User> findAllByRoles_Nombre(Role.NombreRol nombre);
+
     List<User> findAllByRoles_NombreAndActivoTrue(Role.NombreRol nombre);
 
     Page<User> findAllByRoles_Nombre(Role.NombreRol nombre, Pageable pageable);
+
     Page<User> findAllByRoles_NombreAndActivoTrue(Role.NombreRol nombre, Pageable pageable);
 
     // === BÚSQUEDAS PERSONALIZADAS ===
 
     @Query("""
-        SELECT u FROM User u
-        WHERE u.activo = true AND 
-              (LOWER(CONCAT(u.name, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :searchText, '%')) 
-               OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchText, '%')))
-        """)
-    Page<User> searchByEmailAndName(@Param("searchText") String searchText,
-                                          Pageable pageable);
+            SELECT u FROM User u
+            WHERE
+              LOWER(u.name) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+              LOWER(u.lastName) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+              LOWER(u.email) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+              LOWER(u.username) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+              LOWER(u.roles) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+              (LOWER(:texto) = 'activo' AND u.activo = true) OR
+              (LOWER(:texto) = 'inactivo' AND u.activo = false)
+            """)
+    Page<User> searchAllFields(@Param("texto") String texto, Pageable pageable);
 
     @Query("""
-        SELECT u FROM User u 
-        WHERE u.activo = true AND
-              (:career IS NULL OR u.career = :career) AND
-              (:search IS NULL OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%')) 
-               OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%')))
-        """)
+            SELECT u FROM User u
+            WHERE u.activo = true AND
+                  (LOWER(CONCAT(u.name, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :searchText, '%'))
+                   OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchText, '%')))
+            """)
+    Page<User> searchByEmailAndName(@Param("searchText") String searchText,
+            Pageable pageable);
+
+    @Query("""
+            SELECT u FROM User u
+            WHERE u.activo = true AND
+                  (:career IS NULL OR u.career = :career) AND
+                  (:search IS NULL OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%'))
+                   OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%')))
+            """)
     Page<User> searchByCareerAndName(@Param("career") String career,
-                                     @Param("search") String search,
-                                     Pageable pageable);
+            @Param("search") String search,
+            Pageable pageable);
 
     // === RELACIONES DE AMISTAD (filtrando activos) ===
 
