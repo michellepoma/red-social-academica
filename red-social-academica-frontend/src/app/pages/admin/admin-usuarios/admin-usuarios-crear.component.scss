@@ -1,5 +1,5 @@
 .container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 20px auto;
   padding: 2rem;
   border-radius: 12px;
@@ -7,37 +7,72 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.formulario div {
-  margin-bottom: 15px;
-}
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-input, textarea, select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
+  .row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 
-button {
-  padding: 10px 20px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
+  .field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
 
-.error {
-  color: red;
-  margin-top: 10px;
-}
+    input, textarea, select {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-.success {
-  color: green;
-  margin-top: 10px;
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+  }
+
+  .full-width {
+    flex: 1 1 100%;
+  }
+
+  .error {
+    color: #d32f2f;
+    font-weight: 600;
+  }
+
+  .success {
+    color: #388e3c;
+    font-weight: 600;
+  }
+
+  button {
+    align-self: flex-start;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+
+    &:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+  }
 }

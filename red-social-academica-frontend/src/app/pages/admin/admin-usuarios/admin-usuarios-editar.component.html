@@ -1,29 +1,52 @@
 <h2>Editar Usuario</h2>
 
 <form [formGroup]="form" (ngSubmit)="editar()" class="formulario">
-  <label>Nombre:</label>
-  <input type="text" formControlName="name" />
+  <div class="row">
+    <div class="field">
+      <label>Nombre:</label>
+      <input type="text" formControlName="name" />
+    </div>
+    <div class="field">
+      <label>Apellido:</label>
+      <input type="text" formControlName="lastName" />
+    </div>
+  </div>
 
-  <label>Apellido:</label>
-  <input type="text" formControlName="lastName" />
+  <div class="row">
+    <div class="field">
+      <label>Username:</label>
+      <input type="text" formControlName="username" [disabled]="true" />
+    </div>
+    <div class="field">
+      <label>Email:</label>
+      <input type="email" formControlName="email" />
+    </div>
+  </div>
 
-  <label>Username:</label>
-  <input type="text" formControlName="username" [disabled]="true" />
+  <div class="row">
+    <div class="field">
+      <label>Carrera:</label>
+      <input type="text" formControlName="career" />
+    </div>
+    <div class="field">
+      <label>Fecha de nacimiento:</label>
+      <input type="date" formControlName="birthdate" />
+    </div>
+  </div>
 
-  <label>Email:</label>
-  <input type="email" formControlName="email" />
+  <div class="row">
+    <div class="field full-width">
+      <label>URL de Foto de Perfil:</label>
+      <input type="text" formControlName="profilePictureUrl" />
+    </div>
+  </div>
 
-  <label>Carrera:</label>
-  <input type="text" formControlName="career" />
-
-  <label>Bio:</label>
-  <textarea formControlName="bio"></textarea>
-
-  <label>URL de Foto de Perfil:</label>
-  <input type="text" formControlName="profilePictureUrl" />
-
-  <label>Fecha de nacimiento:</label>
-  <input type="date" formControlName="birthdate" />
+  <div class="row">
+    <div class="field full-width">
+      <label>Bio:</label>
+      <textarea formControlName="bio"></textarea>
+    </div>
+  </div>
 
   <div *ngIf="error" class="error">{{ error }}</div>
 

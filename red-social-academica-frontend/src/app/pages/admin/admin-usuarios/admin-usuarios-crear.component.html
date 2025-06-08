@@ -1,67 +1,77 @@
 <div class="container">
   <h2>Crear Nuevo Usuario</h2>
   <form [formGroup]="form" (ngSubmit)="crearUsuario()" class="formulario">
-    <div>
-      <label>Nombre:</label>
-      <input type="text" formControlName="name" required />
+
+    <div class="row">
+      <div class="field">
+        <label>Nombre:</label>
+        <input type="text" formControlName="name" required />
+      </div>
+      <div class="field">
+        <label>Apellido:</label>
+        <input type="text" formControlName="lastName" required />
+      </div>
     </div>
 
-    <div>
-      <label>Apellido:</label>
-      <input type="text" formControlName="lastName" required />
+    <div class="row">
+      <div class="field">
+        <label>Usuario:</label>
+        <input type="text" formControlName="username" required />
+      </div>
+      <div class="field">
+        <label>Email:</label>
+        <input type="email" formControlName="email" required />
+      </div>
     </div>
 
-    <div>
-      <label>Usuario:</label>
-      <input type="text" formControlName="username" required />
+    <div class="row">
+      <div class="field">
+        <label>RUT:</label>
+        <input type="text" formControlName="ru" required />
+      </div>
+      <div class="field">
+        <label>Carrera:</label>
+        <input type="text" formControlName="career" required />
+      </div>
     </div>
 
-    <div>
-      <label>Email:</label>
-      <input type="email" formControlName="email" required />
+    <div class="row">
+      <div class="field full-width">
+        <label>Bio:</label>
+        <textarea formControlName="bio"></textarea>
+      </div>
     </div>
 
-    <div>
-      <label>RUT:</label>
-      <input type="text" formControlName="ru" required />
+    <div class="row">
+      <div class="field">
+        <label>Fecha de nacimiento:</label>
+        <input type="date" formControlName="birthdate" required />
+      </div>
+      <div class="field">
+        <label>Foto de perfil (URL):</label>
+        <input type="text" formControlName="profilePictureUrl" />
+      </div>
     </div>
 
-    <div>
-      <label>Carrera:</label>
-      <input type="text" formControlName="career" required />
+    <div class="row">
+      <div class="field">
+        <label>Contraseña:</label>
+        <input type="password" formControlName="password" required />
+      </div>
+      <div class="field">
+        <label>Confirmar contraseña:</label>
+        <input type="password" formControlName="passwordConfirm" required />
+      </div>
     </div>
 
-    <div>
-      <label>Bio:</label>
-      <textarea formControlName="bio"></textarea>
-    </div>
-
-    <div>
-      <label>Fecha de nacimiento:</label>
-      <input type="date" formControlName="birthdate" required />
-    </div>
-
-    <div>
-      <label>Foto de perfil (URL):</label>
-      <input type="text" formControlName="profilePictureUrl" />
-    </div>
-
-    <div>
-      <label>Contraseña:</label>
-      <input type="password" formControlName="password" required />
-    </div>
-
-    <div>
-      <label>Confirmar contraseña:</label>
-      <input type="password" formControlName="passwordConfirm" required />
-    </div>
-
-    <div>
-      <label>Rol:</label>
-      <select formControlName="rol">
-        <option value="ROLE_PUBLIC">Público</option>
-        <option value="ROLE_ADMIN">Administrador</option>
-      </select>
+    <div class="row">
+      <div class="field full-width">
+        <label>Rol:</label>
+        <select formControlName="rol">
+          <option value="ROLE_PUBLIC">Público</option>
+          <option value="ROLE_ADMIN">Administrador</option>
+        </select>
+      </div>
     </div>
 
     <div *ngIf="error" class="error">{{ error }}</div>
