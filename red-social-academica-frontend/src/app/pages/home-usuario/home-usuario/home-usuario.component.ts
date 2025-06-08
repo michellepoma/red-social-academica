@@ -12,6 +12,7 @@ styleUrls: ['./home-usuario.component.scss']
 })
 export class HomeUsuarioComponent implements OnInit {
 usuario: any = null;
+amigos: any[] = [];
 cargando = true;
 
 constructor(
@@ -24,10 +25,22 @@ constructor(
       next: (res) => {
         this.usuario = res;
         this.cargando = false;
+        this.cargarAmigos();
       },
       error: (err) => {
         console.error('Error al cargar perfil:', err);
         this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  cargarAmigos(): void {
+    this.perfilService.getAmigos().subscribe({
+      next: (res) => {
+        this.amigos = res;
+      },
+      error: (err) => {
+        console.error('Error al cargar amigos:', err);
       }
     });
   }

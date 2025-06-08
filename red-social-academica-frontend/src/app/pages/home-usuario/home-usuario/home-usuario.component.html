@@ -13,3 +13,15 @@
 <ng-template #cargando>
   <p class="text-center mt-5">Cargando datos del usuario...</p>
 </ng-template>
+<hr />
+<h4>Amigos</h4>
+
+<ul *ngIf="amigos.length > 0; else sinAmigos">
+  <li *ngFor="let amigo of amigos">
+    {{ amigo.username }} ({{ amigo.email }})
+  </li>
+</ul>
+
+<ng-template #sinAmigos>
+  <p>No tienes amigos registrados aún.</p>
+</ng-template>

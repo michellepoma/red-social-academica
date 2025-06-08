@@ -77,5 +77,11 @@ eliminarMiCuenta(): Observable<any> {
     headers: this.getAuthHeaders()
   });
 }
+getAmigos(): Observable<any[]> {
+  return this.http.get<any[]>('/api/usuarios/me/amigos', {
+    headers: this.getAuthHeaders()
+  });
+}
+
 
 }
