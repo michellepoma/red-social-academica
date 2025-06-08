@@ -46,7 +46,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache"}, key = "#root.target.getCurrentUsername()")
+    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache",
+            "friendsCache" }, key = "#root.target.getCurrentUsername()")
     public UserDTO actualizarPerfil(UserUpdateDTO dto) {
         String usernameActual = getCurrentUsername();
 
@@ -62,7 +63,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache"}, key = "#root.target.getCurrentUsername()")
+    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache",
+            "friendsCache" }, key = "#root.target.getCurrentUsername()")
     public UserDTO eliminarUsuario() {
         String usernameActual = getCurrentUsername();
         User user = userRepository.findByUsernameAndActivoTrue(usernameActual)
@@ -77,7 +79,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache"}, allEntries = true)
+    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache",
+            "allUsersCache" }, allEntries = true)
     public UserDTO crearUsuarioComoAdmin(UserCreateAdminDTO dto) {
         userValidator.validarCreacion(dto);
         validarContrasenasIguales(dto.getPassword(), dto.getPasswordConfirm());
@@ -95,7 +98,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache"}, key = "#username")
+    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache",
+            "allUsersCache" }, key = "#username", allEntries = true)
+
     public UserDTO actualizarUsuarioComoAdmin(String username, UserUpdateDTO dto) {
         if (!isAdmin()) {
             throw new SecurityException("Solo los administradores pueden usar esta función");
@@ -113,7 +118,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache"}, key = "#username")
+    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache", "friendsCache",
+            "allUsersCache" }, key = "#username", allEntries = true)
     public UserDTO eliminarUsuarioComoAdmin(String username) {
         if (!isAdmin()) {
             throw new SecurityException("Solo los administradores pueden usar esta función");
