@@ -1,6 +1,7 @@
 package red_social_academica.red_social_academica.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(of = {"id", "title", "date"})
+@ToString(of = { "id", "title", "date" })
 @EqualsAndHashCode(callSuper = true, of = "id")
 public class Post extends AuditableEntity {
 
@@ -30,6 +31,7 @@ public class Post extends AuditableEntity {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "El título no puede estar vacío")
     private String title;
 
     @Column(length = 1000)
