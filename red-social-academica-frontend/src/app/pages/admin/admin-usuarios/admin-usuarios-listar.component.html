@@ -36,16 +36,25 @@
             </span>
           </td>
           <td>
-            <a [routerLink]="['/admin/usuarios/perfil', usuario.username]" class="btn btn-sm btn-info me-2">👁 Ver</a>
-            <a [routerLink]="['/admin/usuarios/editar', usuario.username]" class="btn btn-sm btn-warning me-2">✏️
-              Editar</a>
-            <button 
-              (click)="darDeBaja(usuario.username)"
-              [disabled]="!usuario.activo"
-              [ngClass]="usuario.activo ? 'btn-baja' : 'btn-inactivo'">
-              {{ usuario.activo ? '❌ Dar de Baja' : 'Usuario Inactivo' }}
+            <a [routerLink]="['/admin/usuarios/perfil', usuario.username]" class="btn btn-sm me-2"
+              [ngClass]="usuario.activo ? 'btn-info' : 'btn-inactivo'" [class.disabled]="!usuario.activo" tabindex="-1"
+              [attr.aria-disabled]="!usuario.activo" (click)="usuario.activo ? null : $event.preventDefault()">
+              👁 Ver
+            </a>
+
+            <a [routerLink]="['/admin/usuarios/editar', usuario.username]" class="btn btn-sm me-2"
+              [ngClass]="usuario.activo ? 'btn-warning' : 'btn-inactivo'" [class.disabled]="!usuario.activo"
+              tabindex="-1" [attr.aria-disabled]="!usuario.activo"
+              (click)="usuario.activo ? null : $event.preventDefault()">
+              ✏️ Editar
+            </a>
+
+            <button (click)="darDeBaja(usuario.username)" [disabled]="!usuario.activo"
+              [ngClass]="usuario.activo ? 'btn-baja' : 'btn-inactivo'" class="btn btn-sm">
+              {{ usuario.activo ? '❌ Baja' : 'Inactivo' }}
             </button>
           </td>
+
         </tr>
       </tbody>
     </table>

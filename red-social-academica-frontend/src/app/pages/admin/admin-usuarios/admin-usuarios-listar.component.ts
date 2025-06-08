@@ -34,7 +34,8 @@ export class AdminUsuariosListarComponent implements OnInit {
   }
 
   buscar(): void {
-    this.userService.buscarUsuarios(this.textoBusqueda, this.paginaActual, this.tamanioPagina).subscribe({
+    const textoNormalizado = this.textoBusqueda.trim().toUpperCase();
+    this.userService.buscarUsuarios(textoNormalizado, this.paginaActual, this.tamanioPagina).subscribe({
     next: (res: any) => {
       this.usuarios = res.content;
       this.totalPaginas = res.totalPages;
