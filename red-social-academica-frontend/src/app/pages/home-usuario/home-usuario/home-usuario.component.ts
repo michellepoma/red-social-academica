@@ -1,30 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from 'src/app/services/auth.service';
-import { NavbarUsuarioComponent } from 'src/app/pages/usuario/navbar-usuario/navbar-usuario.component';
+import { RouterModule, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
 selector: 'app-home-usuario',
 standalone: true,
+imports: [CommonModule, RouterModule],
 templateUrl: './home-usuario.component.html',
-styleUrls: ['./home-usuario.component.scss'],
-imports: [CommonModule, NavbarUsuarioComponent]
+styleUrls: ['./home-usuario.component.scss']
 })
 export class HomeUsuarioComponent implements OnInit {
-roles: string[] = [];
+usuario: any = null;
+cargando = true;
 
 constructor(
-    public authService: AuthService,
+    private perfilService: UserService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-  const roles = this.authService.getRoles();
-
-  if (roles.includes('ROLE_ADMIN')) {
-    this.router.navigate(['/admin/usuarios/listar']);
+    this.perfilService.getPerfil().subscribe({
+      next: (res) => {
+        this.usuario = res;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar perfil:', err);
+        this.router.navigate(['/login']);
+      }
+    });
   }
-}
 
+  logout(): void {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
+  darDeBaja(): void {
+    if (confirm('¿Estás seguro de que deseas darte de baja?')) {
+      this.perfilService.eliminarMiCuenta().subscribe({
+        next: () => {
+          alert('Cuenta desactivada correctamente.');
+          this.logout();
+        },
+        error: (err) => {
+          console.error('Error al darse de baja:', err);
+          alert('No se pudo desactivar la cuenta.');
+        }
+      });
+    }
+  }
 }

@@ -1,6 +1,15 @@
-<app-navbar-usuario></app-navbar-usuario>
+<div *ngIf="usuario; else cargando">
+  <div class="container mt-5">
+    <h2>Bienvenido, {{ usuario.username }}</h2>
+    <p><strong>Email:</strong> {{ usuario.email }}</p>
+    <p><strong>Estado:</strong> {{ usuario.estado }}</p>
+    <p><strong>Roles:</strong> {{ usuario.roles?.join(', ') }}</p>
 
-<div class="container mt-5">
-  <h1>Bienvenido a la Red Social Académica</h1>
-  <p>Roles: <strong>{{ authService.getRoles().join(', ') }}</strong></p>
+    <button class="btn btn-outline-danger" (click)="darDeBaja()">Dar de baja mi cuenta</button>
+    <button class="btn btn-secondary ms-2" (click)="logout()">Cerrar Sesión</button>
+  </div>
 </div>
+
+<ng-template #cargando>
+  <p class="text-center mt-5">Cargando datos del usuario...</p>
+</ng-template>

@@ -66,10 +66,16 @@ constructor(private http: HttpClient) {}
     });
   }
 
-  // ✅ Método necesario para cargar el perfil del usuario actual (usuario logueado)
   getPerfil(): Observable<any> {
-    return this.http.get<any>(`/api/usuarios/perfil`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  return this.http.get<any>(`/api/usuarios/me`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+eliminarMiCuenta(): Observable<any> {
+  return this.http.put(`/api/usuarios/me/baja`, null, {
+    headers: this.getAuthHeaders()
+  });
+}
+
 }
