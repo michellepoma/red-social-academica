@@ -5,6 +5,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { HomeUsuarioComponent } from './pages/home-usuario/home-usuario/home-usuario.component';
 import { UsuarioPerfilComponent } from './pages/usuario/usuario-perfil.component';
+import { AmigosComponent } from './pages/usuario/amigos.component';
+
+// Guardas de acceso
+import { AuthGuard } from './guards/auth.guard'; // ✅
 
 // Componentes administrativos
 import { HomeAdminComponent } from './pages/home-admin/home-admin/home-admin.component';
@@ -15,10 +19,8 @@ import { AdminUsuariosEditarComponent } from './pages/admin/admin-usuarios/admin
 import { AdminUsuariosBajaComponent } from './pages/admin/admin-usuarios/admin-usuarios-baja.component';
 import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin-usuarios-perfil.component';
 
-import { AmigosComponent } from './pages/usuario/amigos.component';
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
-
 
 export const routes: Routes = [
 { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,31 +32,46 @@ export const routes: Routes = [
 { path: 'perfil', component: UsuarioPerfilComponent },
 { path: 'amigos', component: AmigosComponent },
 
-
-
-
-// Home exclusivo para administrador
-{ path: 'admin/home', component: HomeAdminComponent },
-
-// Panel de administración
+// Rutas de usuario protegidas con AuthGuard
 {
-path: 'admin',
-component: AdminComponent,
+path: 'usuario',
+canActivate: [AuthGuard],
 children: [
-{ path: '', redirectTo: 'usuarios/listar', pathMatch: 'full' },
-{ path: 'usuarios/listar', component: AdminUsuariosListarComponent },
-{ path: 'usuarios/crear', component: AdminUsuariosCrearComponent },
-{ path: 'usuarios/editar/:username', component: AdminUsuariosEditarComponent },
-{ path: 'usuarios/baja/:username', component: AdminUsuariosBajaComponent },
-{ path: 'usuarios/perfil/:username', component: AdminUsuariosPerfilComponent },
+{
+path: 'invitaciones',
+loadComponent: () => import('./pages/usuario/invitaciones/invitar.component').then(m => m.InvitarComponent)
+      },
+      {
+        path: 'invitaciones/recibidas',
+        loadComponent: () => import('./pages/usuario/invitaciones/invitaciones-recibidas.component').then(m => m.InvitacionesRecibidasComponent)
+      },
+      {
+        path: 'invitaciones/enviadas',
+        loadComponent: () => import('./pages/usuario/invitaciones/invitaciones-enviadas.component').then(m => m.InvitacionesEnviadasComponent)
+      }
+    ]
+  },
 
-]
-}
-,
+  // Home exclusivo para administrador
+  { path: 'admin/home', component: HomeAdminComponent },
 
-// Ruta para acceso denegado
-{ path: 'no-auth', component: NoAutorizadoComponent },
+  // Panel de administración
+  {
+    path: 'admin',
+    component: AdminComponent,
+    children: [
+      { path: '', redirectTo: 'usuarios/listar', pathMatch: 'full' },
+      { path: 'usuarios/listar', component: AdminUsuariosListarComponent },
+      { path: 'usuarios/crear', component: AdminUsuariosCrearComponent },
+      { path: 'usuarios/editar/:username', component: AdminUsuariosEditarComponent },
+      { path: 'usuarios/baja/:username', component: AdminUsuariosBajaComponent },
+      { path: 'usuarios/perfil/:username', component: AdminUsuariosPerfilComponent }
+    ]
+  },
 
-// Ruta por defecto (cualquier otra)
-{ path: '**', redirectTo: 'no-auth' }
+  // Ruta para acceso denegado
+  { path: 'no-auth', component: NoAutorizadoComponent },
+
+  // Ruta por defecto (cualquier otra)
+  { path: '**', redirectTo: 'no-auth' }
 ];

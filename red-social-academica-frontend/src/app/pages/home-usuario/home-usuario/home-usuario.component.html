@@ -1,5 +1,4 @@
 <div class="home-layout">
-  <!-- Barra lateral izquierda -->
   <aside class="sidebar">
     <h3>Menú</h3>
     <p class="username">{{ usuario?.username }}</p>
@@ -13,16 +12,14 @@
     </nav>
 
     <hr>
-
     <button class="btn-rojo" (click)="darDeBaja()">Dar de baja</button>
     <button class="btn-negro" (click)="logout()">Cerrar sesión</button>
   </aside>
 
-  <!-- Contenido principal -->
   <main class="contenido">
     <h2>Bienvenido, {{ usuario?.username }}</h2>
 
-    <!-- Sección de Amigos -->
+    <!-- Amigos -->
     <section *ngIf="seccion === 'amigos'">
       <h3>Amigos</h3>
       <ul>
@@ -32,17 +29,15 @@
       </ul>
     </section>
 
-    <!-- Sección de Búsqueda de usuarios -->
+    <!-- Buscar -->
     <section *ngIf="seccion === 'buscar'">
       <h3>Buscar usuario</h3>
-      <div class="buscar-usuario">
-        <input [(ngModel)]="busquedaUsername" placeholder="Username a buscar" />
-        <button class="btn" (click)="buscarUsuario()">Buscar</button>
-      </div>
+      <input [(ngModel)]="busquedaUsername" placeholder="Username a buscar" />
+      <button (click)="buscarUsuario()">Buscar</button>
 
       <div *ngIf="resultadoBusqueda">
         <p><strong>{{ resultadoBusqueda.username }}</strong> ({{ resultadoBusqueda.email }})</p>
-        <button class="btn btn-verde" (click)="enviarInvitacion(resultadoBusqueda.username)">
+        <button (click)="enviarInvitacion(resultadoBusqueda.username)">
           Enviar invitación
         </button>
       </div>
@@ -50,13 +45,14 @@
       <p *ngIf="busquedaFallida" class="error">Usuario no encontrado.</p>
     </section>
 
-    <!-- Sección de Invitaciones -->
+    <!-- Invitaciones -->
     <section *ngIf="seccion === 'invitaciones'">
       <h3>Invitaciones pendientes</h3>
       <ul *ngIf="invitaciones.length > 0; else sinInv">
         <li *ngFor="let inv of invitaciones">
-          <strong>{{ inv.senderUsername }}</strong> te ha enviado una invitación.
+          <strong>{{ inv.senderName || inv.senderUsername }}</strong> te ha enviado una invitación.
           <button (click)="aceptarInvitacion(inv.id)">Aceptar</button>
+          <button (click)="rechazarInvitacion(inv.id)">Rechazar</button>
         </li>
       </ul>
       <ng-template #sinInv>
@@ -64,7 +60,7 @@
       </ng-template>
     </section>
 
-    <!-- Sección de Notificaciones -->
+    <!-- Notificaciones -->
     <section *ngIf="seccion === 'notificaciones'">
       <h3>Notificaciones</h3>
       <p>(Aquí puedes mostrar notificaciones futuras)</p>

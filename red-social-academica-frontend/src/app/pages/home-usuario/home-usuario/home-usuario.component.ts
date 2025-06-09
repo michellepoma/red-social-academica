@@ -19,8 +19,7 @@ resultadoBusqueda: any = null;
 busquedaUsername: string = '';
 busquedaFallida: boolean = false;
 cargando = true;
-
-seccion: string = 'amigos'; // 👈 para navegación lateral
+seccion: string = 'amigos';
 
 constructor(
     private perfilService: UserService,
@@ -55,10 +54,7 @@ constructor(
     if (!username) return;
 
     this.perfilService.getInvitacionesPendientes(username).subscribe({
-      next: (res) => {
-        console.log("Invitaciones recibidas:", res);
-        this.invitaciones = res;
-      },
+      next: (res) => this.invitaciones = res,
       error: () => {
         console.error('Error al cargar invitaciones pendientes');
         this.invitaciones = [];
@@ -115,10 +111,11 @@ constructor(
         alert('Invitación enviada correctamente.');
         this.resultadoBusqueda = null;
         this.busquedaUsername = '';
+        this.cargarInvitaciones(); // ⬅ recarga por si se autoenvía
       },
       error: (err) => {
         console.error('Error al enviar invitación:', err);
-        alert('No se pudo enviar la invitación. Verifica si ya está enviada o si el usuario existe.');
+        alert('No se pudo enviar la invitación.');
       }
     });
   }
@@ -135,8 +132,25 @@ constructor(
       },
       error: (err) => {
         console.error('Error al aceptar invitación:', err);
-        alert('Error al aceptar invitación.');
+        alert('No se pudo aceptar la invitación.');
+      }
+    });
+  }
+
+  rechazarInvitacion(invitationId: number): void {
+    const username = this.usuario?.username;
+    if (!username) return;
+
+    this.perfilService.rechazarInvitacion(invitationId, username).subscribe({
+      next: () => {
+        alert('Invitación rechazada.');
+        this.invitaciones = this.invitaciones.filter(inv => inv.id !== invitationId);
+      },
+      error: (err) => {
+        console.error('Error al rechazar invitación:', err);
+        alert('No se pudo rechazar la invitación.');
       }
     });
   }
 }
+

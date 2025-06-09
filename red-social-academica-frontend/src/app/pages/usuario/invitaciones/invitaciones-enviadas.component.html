@@ -1,0 +1,10 @@
+// ================================
+// invitaciones-enviadas.component.html
+// ================================
+<h3>Invitaciones Enviadas</h3>
+<ul>
+  <li *ngFor="let inv of enviadas">
+    Para: <strong>{{ inv.receiverName }}</strong>
+    <button (click)="cancelar(inv.id)">Cancelar</button>
+  </li>
+</ul>

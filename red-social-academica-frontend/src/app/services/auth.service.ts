@@ -57,6 +57,18 @@ export class AuthService {
     // Redirige al login o página pública
     this.router.navigate(['/login']);
   }
+isAuthenticated(): boolean {
+  const token = this.getToken();
+  if (!token) return false;
+
+  try {
+    const { exp } = jwtDecode<any>(token);
+    return exp * 1000 > Date.now(); // Verifica que no esté expirado
+  } catch {
+    return false;
+  }
+}
+
 
 }
 

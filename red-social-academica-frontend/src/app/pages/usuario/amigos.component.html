@@ -1,20 +1,16 @@
-<div class="container mt-4">
-  <h2>Mis Amigos</h2>
+<div class="amigos-container">
+  <h2>Mis amigos</h2>
 
-  <div *ngIf="cargando">
-    Cargando amigos...
-  </div>
+  <button (click)="recargar()">🔄 Actualizar lista</button>
 
-  <div *ngIf="!cargando && amigos.length === 0">
-    No tienes amigos todavía.
-  </div>
+  <div *ngIf="cargando">Cargando amigos...</div>
+  <div *ngIf="error">Hubo un error al cargar tus amigos.</div>
 
-  <ul *ngIf="amigos.length > 0" class="list-group">
-    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let amigo of amigos">
-      {{ amigo.username }} ({{ amigo.email }})
-      <a [routerLink]="['/usuarios/perfil-publico', amigo.username]" class="btn btn-sm btn-outline-primary">
-        Ver perfil
-      </a>
+  <ul *ngIf="!cargando && !error && amigos.length > 0">
+    <li *ngFor="let amigo of amigos">
+      <strong>{{ amigo.username }}</strong> - {{ amigo.email }}
     </li>
   </ul>
+
+  <p *ngIf="!cargando && !error && amigos.length === 0">Aún no tienes amigos agregados.</p>
 </div>
