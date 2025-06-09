@@ -1,67 +1,73 @@
-<div *ngIf="usuario; else cargando">
-  <div class="container mt-5">
-    <h2>Bienvenido, {{ usuario.username }}</h2>
-    <p><strong>Email:</strong> {{ usuario.email }}</p>
-    <p><strong>Estado:</strong> {{ usuario.estado }}</p>
-    <p><strong>Roles:</strong> {{ usuario.roles?.join(', ') }}</p>
+<div class="home-layout">
+  <!-- Barra lateral izquierda -->
+  <aside class="sidebar">
+    <h3>Menú</h3>
+    <p class="username">{{ usuario?.username }}</p>
+    <p class="email">{{ usuario?.email }}</p>
 
-    <button class="btn btn-outline-danger" (click)="darDeBaja()">Dar de baja mi cuenta</button>
-    <button class="btn btn-secondary ms-2" (click)="logout()">Cerrar Sesión</button>
+    <nav class="menu">
+      <button (click)="verSeccion('amigos')">👥 Amigos</button>
+      <button (click)="verSeccion('buscar')">🔍 Buscar</button>
+      <button (click)="verSeccion('invitaciones')">📨 Invitaciones</button>
+      <button (click)="verSeccion('notificaciones')">🔔 Notificaciones</button>
+    </nav>
 
-    <hr />
-    <h4>Amigos</h4>
-    <ul *ngIf="amigos.length > 0; else sinAmigos">
-      <li *ngFor="let amigo of amigos">
-        {{ amigo.username }} ({{ amigo.email }})
-      </li>
-    </ul>
-    <ng-template #sinAmigos>
-      <p>No tienes amigos registrados aún.</p>
-    </ng-template>
+    <hr>
 
-    <hr />
-    <h4>Buscar usuario</h4>
-    <input
-      type="text"
-      [(ngModel)]="busquedaUsername"
-      class="form-control w-50 d-inline"
-      placeholder="Username a buscar"
-    />
-    <button class="btn btn-primary ms-2" (click)="buscarUsuario()">Buscar</button>
+    <button class="btn-rojo" (click)="darDeBaja()">Dar de baja</button>
+    <button class="btn-negro" (click)="logout()">Cerrar sesión</button>
+  </aside>
 
-    <div *ngIf="resultadoBusqueda" class="mt-3">
-      <p><strong>Usuario:</strong> {{ resultadoBusqueda.username }}</p>
-      <p><strong>Email:</strong> {{ resultadoBusqueda.email }}</p>
-      <button class="btn btn-success btn-sm"
-              (click)="enviarInvitacion(resultadoBusqueda.username)">
-        Enviar invitación
-      </button>
-    </div>
+  <!-- Contenido principal -->
+  <main class="contenido">
+    <h2>Bienvenido, {{ usuario?.username }}</h2>
 
+    <!-- Sección de Amigos -->
+    <section *ngIf="seccion === 'amigos'">
+      <h3>Amigos</h3>
+      <ul>
+        <li *ngFor="let amigo of amigos">
+          {{ amigo.username }} ({{ amigo.email }})
+        </li>
+      </ul>
+    </section>
 
-    <div *ngIf="busquedaFallida && !resultadoBusqueda" class="mt-3 text-danger">
-      No se encontró el usuario buscado.
-    </div>
-  </div>
+    <!-- Sección de Búsqueda de usuarios -->
+    <section *ngIf="seccion === 'buscar'">
+      <h3>Buscar usuario</h3>
+      <div class="buscar-usuario">
+        <input [(ngModel)]="busquedaUsername" placeholder="Username a buscar" />
+        <button class="btn" (click)="buscarUsuario()">Buscar</button>
+      </div>
+
+      <div *ngIf="resultadoBusqueda">
+        <p><strong>{{ resultadoBusqueda.username }}</strong> ({{ resultadoBusqueda.email }})</p>
+        <button class="btn btn-verde" (click)="enviarInvitacion(resultadoBusqueda.username)">
+          Enviar invitación
+        </button>
+      </div>
+
+      <p *ngIf="busquedaFallida" class="error">Usuario no encontrado.</p>
+    </section>
+
+    <!-- Sección de Invitaciones -->
+    <section *ngIf="seccion === 'invitaciones'">
+      <h3>Invitaciones pendientes</h3>
+      <ul *ngIf="invitaciones.length > 0; else sinInv">
+        <li *ngFor="let inv of invitaciones">
+          <strong>{{ inv.senderUsername }}</strong> te ha enviado una invitación.
+          <button (click)="aceptarInvitacion(inv.id)">Aceptar</button>
+        </li>
+      </ul>
+      <ng-template #sinInv>
+        <p>No tienes invitaciones pendientes.</p>
+      </ng-template>
+    </section>
+
+    <!-- Sección de Notificaciones -->
+    <section *ngIf="seccion === 'notificaciones'">
+      <h3>Notificaciones</h3>
+      <p>(Aquí puedes mostrar notificaciones futuras)</p>
+    </section>
+  </main>
 </div>
-
-<ng-template #cargando>
-  <p class="text-center mt-5">Cargando datos del usuario...</p>
-</ng-template>
-
-<hr />
-<h4>Invitaciones pendientes</h4>
-
-<ul *ngIf="invitaciones.length > 0; else sinInvitaciones">
-  <li *ngFor="let invitacion of invitaciones">
-    <strong>{{ invitacion.senderUsername }}</strong>
-    <button class="btn btn-success btn-sm ms-2"
-            (click)="aceptarInvitacion(invitacion.id)">
-      Aceptar
-    </button>
-  </li>
-</ul>
-
-<ng-template #sinInvitaciones>
-  <p>No tienes invitaciones pendientes.</p>
-</ng-template>

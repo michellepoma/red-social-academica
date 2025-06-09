@@ -1,3 +1,66 @@
-.container {
-  text-align: center;
+.home-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  padding: 1rem;
+  background-color: #f1f1f1;
+  border-right: 1px solid #ccc;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .username {
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+  }
+
+  .email {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+
+  .menu button {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    text-align: left;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+
+  .btn-rojo {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    width: 100%;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+
+  .btn-negro {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+}
+
+.contenido {
+  flex: 1;
+  padding: 2rem;
+
+  section {
+    margin-bottom: 2rem;
+  }
 }

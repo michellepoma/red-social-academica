@@ -10,6 +10,7 @@ private API_URL = '/api/admin/usuarios';
 
 constructor(private http: HttpClient) {}
 
+  // --- Autenticación común ---
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
@@ -18,6 +19,7 @@ constructor(private http: HttpClient) {}
     });
   }
 
+  // --- Gestión de usuarios (admin) ---
   getUsuariosPaginado(page: number, size: number): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/listar?page=${page}&size=${size}`, {
       headers: this.getAuthHeaders()
@@ -66,6 +68,7 @@ constructor(private http: HttpClient) {}
     });
   }
 
+  // --- Perfil del usuario autenticado ---
   getPerfil(): Observable<any> {
     return this.http.get<any>(`/api/usuarios/me`, {
       headers: this.getAuthHeaders()
@@ -90,24 +93,48 @@ constructor(private http: HttpClient) {}
     });
   }
 
- enviarInvitacion(senderUsername: string, receiverUsername: string): Observable<any> {
-  const url = `/api/invitaciones/${senderUsername}`;
-  const body = { receiverUsername };  // 👈 exactamente este formato
-  return this.http.post(url, body, {
+  // --- Invitaciones ---
+  enviarInvitacion(senderUsername: string, receiverUsername: string): Observable<any> {
+    const url = `/api/invitaciones/${senderUsername}`;
+    const body = { receiverUsername };
+    return this.http.post(url, body, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+aceptarInvitacion(invitationId: number, username: string): Observable<any> {
+  const headers = this.getAuthHeaders().set('username', username);
+  return this.http.put(`/api/invitaciones/${invitationId}/aceptar`, null, { headers });
+}
+
+
+
+  rechazarInvitacion(invitationId: number, username: string): Observable<any> {
+    const headers = this.getAuthHeaders().set('username', username);
+    return this.http.put(`/api/invitaciones/${invitationId}/rechazar`, null, { headers });
+  }
+
+ getInvitacionesRecibidas(username: string): Observable<any[]> {
+  return this.http.get<any[]>(`/api/invitaciones/recibidas/${username}`, {
     headers: this.getAuthHeaders()
   });
 }
 
 
-  aceptarInvitacion(invitationId: number, username: string): Observable<any> {
-    return this.http.put(`/api/invitaciones/${invitationId}/aceptar/${username}`, null, {
+  getInvitacionesPendientes(username: string): Observable<any[]> {
+  return this.http.get<any[]>(`/api/invitaciones/pendientes/recibidas/${username}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+  getInvitacionesEnviadas(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`/api/invitaciones/enviadas/${username}`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  getInvitacionesPendientes(): Observable<any[]> {
-    return this.http.get<any[]>('/api/invitaciones/pendientes', {
-      headers: this.getAuthHeaders()
-    });
+  cancelarInvitacion(invitationId: number, senderUsername: string): Observable<any> {
+    const headers = this.getAuthHeaders().set('username', senderUsername);
+    return this.http.put(`/api/invitaciones/${invitationId}/cancelar`, null, { headers });
   }
 }

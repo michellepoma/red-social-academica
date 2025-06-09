@@ -15,11 +15,12 @@ export class HomeUsuarioComponent implements OnInit {
 usuario: any = null;
 amigos: any[] = [];
 invitaciones: any[] = [];
+resultadoBusqueda: any = null;
+busquedaUsername: string = '';
+busquedaFallida: boolean = false;
 cargando = true;
 
-busquedaUsername: string = '';
-resultadoBusqueda: any = null;
-busquedaFallida: boolean = false;
+seccion: string = 'amigos'; // 👈 para navegación lateral
 
 constructor(
     private perfilService: UserService,
@@ -34,28 +35,34 @@ constructor(
         this.cargarAmigos();
         this.cargarInvitaciones();
       },
-      error: (err) => {
-        console.error('Error al cargar perfil:', err);
-        this.router.navigate(['/login']);
-      }
+      error: () => this.router.navigate(['/login'])
     });
+  }
+
+  verSeccion(nombre: string): void {
+    this.seccion = nombre;
   }
 
   cargarAmigos(): void {
     this.perfilService.getAmigos().subscribe({
-      next: (res) => {
-        this.amigos = res;
-      },
-      error: (err) => {
-        console.error('Error al cargar amigos:', err);
-      }
+      next: (res) => this.amigos = res,
+      error: (err) => console.error('Error al cargar amigos:', err)
     });
   }
 
   cargarInvitaciones(): void {
-    this.perfilService.getInvitacionesPendientes().subscribe({
-      next: (res) => this.invitaciones = res,
-      error: () => this.invitaciones = []
+    const username = this.usuario?.username;
+    if (!username) return;
+
+    this.perfilService.getInvitacionesPendientes(username).subscribe({
+      next: (res) => {
+        console.log("Invitaciones recibidas:", res);
+        this.invitaciones = res;
+      },
+      error: () => {
+        console.error('Error al cargar invitaciones pendientes');
+        this.invitaciones = [];
+      }
     });
   }
 
@@ -96,27 +103,25 @@ constructor(
     });
   }
 
-enviarInvitacion(destinatario: string): void {
-  const remitente = this.usuario?.username;
-  if (!remitente || !destinatario) {
-    alert('Datos inválidos');
-    return;
-  }
-
-  this.perfilService.enviarInvitacion(remitente, destinatario).subscribe({
-    next: () => {
-      alert('Invitación enviada correctamente.');
-      this.resultadoBusqueda = null;
-      this.busquedaUsername = '';
-    },
-    error: (err) => {
-      console.error('Error al enviar invitación:', err);
-      alert('No se pudo enviar la invitación. Verifica si ya está enviada o si el usuario existe.');
+  enviarInvitacion(destinatario: string): void {
+    const remitente = this.usuario?.username;
+    if (!remitente || !destinatario) {
+      alert('Datos inválidos');
+      return;
     }
-  });
-}
 
-
+    this.perfilService.enviarInvitacion(remitente, destinatario).subscribe({
+      next: () => {
+        alert('Invitación enviada correctamente.');
+        this.resultadoBusqueda = null;
+        this.busquedaUsername = '';
+      },
+      error: (err) => {
+        console.error('Error al enviar invitación:', err);
+        alert('No se pudo enviar la invitación. Verifica si ya está enviada o si el usuario existe.');
+      }
+    });
+  }
 
   aceptarInvitacion(invitationId: number): void {
     const username = this.usuario?.username;
@@ -125,10 +130,13 @@ enviarInvitacion(destinatario: string): void {
     this.perfilService.aceptarInvitacion(invitationId, username).subscribe({
       next: () => {
         alert('Invitación aceptada.');
-        this.cargarInvitaciones();
+        this.invitaciones = this.invitaciones.filter(inv => inv.id !== invitationId);
         this.cargarAmigos();
       },
-      error: () => alert('Error al aceptar invitación.')
+      error: (err) => {
+        console.error('Error al aceptar invitación:', err);
+        alert('Error al aceptar invitación.');
+      }
     });
   }
 }
