@@ -5,8 +5,10 @@
     <p class="email">{{ usuario?.email }}</p>
 
     <nav class="menu">
-      <button (click)="verSeccion('amigos')">👥 Amigos</button>
       <button (click)="verSeccion('buscar')">🔍 Buscar</button>
+      <button (click)="verSeccion('amigos')">👥 Amigos</button>
+      <button (click)="verSeccion('publicaciones')">📝 Publicaciones</button>
+      <button (click)="verSeccion('comentarios')">📤 Mis comentarios</button>
       <button (click)="verSeccion('invitaciones')">📨 Invitaciones</button>
       <button (click)="verSeccion('notificaciones')">🔔 Notificaciones</button>
     </nav>
