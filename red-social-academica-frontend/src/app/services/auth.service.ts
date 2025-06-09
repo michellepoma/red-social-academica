@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode'; // ✅ CORRECTA
+import { Router } from '@angular/router';
+
 
 interface LoginResponse {
   token: string;
@@ -15,7 +17,7 @@ export class AuthService {
 
   private API_URL = 'http://localhost:8080/api/auth';
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient, private router: Router) {}
 
   login(payload: { username: string; password: string }): Observable<LoginResponse> {
     return this._http.post<LoginResponse>(`${this.API_URL}/login`, payload);
@@ -33,20 +35,28 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
- getRoles(): string[] {
-  const token = this.getToken();
-  if (!token) return [];
-  try {
-    const decoded: any = jwtDecode(token);
-    return decoded?.roles || [];
-  } catch (e) {
-    return [];
+  getRoles(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded?.roles || [];
+    } catch (e) {
+      return [];
+    }
   }
-}
 
 
   hasRole(role: string): boolean {
     return this.getRoles().includes(role);
   }
+  logout(): void {
+    // Elimina el token del almacenamiento local
+    localStorage.removeItem('token');
+
+    // Redirige al login o página pública
+    this.router.navigate(['/login']);
+  }
+
 }
 

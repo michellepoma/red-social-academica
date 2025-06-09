@@ -106,25 +106,7 @@ public class UserAdminController {
         return ResponseEntity.ok(eliminado);
     }
 
-    @Operation(summary = "Listar usuarios por rol")
-    @GetMapping("/rol/{role}")
-    public ResponseEntity<Page<UserDTO>> obtenerPorRol(
-            @PathVariable String role,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        long inicio = System.currentTimeMillis();
-        logger.info("[ADMIN][USUARIO] Inicio obtenerPorRol: {}", inicio);
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<UserDTO> usuarios = userService.obtenerPorRol(role, pageable);
-
-        long fin = System.currentTimeMillis();
-        logger.info("[ADMIN][USUARIO] Fin obtenerPorRol: {} (Duración: {} ms)", fin, (fin - inicio));
-
-        return ResponseEntity.ok(usuarios);
-    }
-
-    @Operation(summary = "Buscar usuarios por nombre o email")
+    @Operation(summary = "Buscar usuarios por nombre, email, rol, estado activo/inactivo, username")
     @GetMapping("/buscar")
     public ResponseEntity<Page<UserDTO>> buscarPorNombreYCorreo(
             @RequestParam String texto,
@@ -138,6 +120,7 @@ public class UserAdminController {
 
         long fin = System.currentTimeMillis();
         logger.info("[ADMIN][USUARIO] Fin buscarPorNombreYCorreo: {} (Duración: {} ms)", fin, (fin - inicio));
+        System.out.println("Resultados:");
 
         return ResponseEntity.ok(resultados);
     }

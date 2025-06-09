@@ -9,32 +9,34 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * Interfaz para la gestión de usuarios en la red social académica.
- * Define las operaciones principales de acceso, modificación y búsqueda de perfiles.
+ * Define las operaciones principales de acceso, modificación y búsqueda de
+ * perfiles.
  */
 
 public interface IUserService {
     // === Creacion (admin) ===
     UserDTO crearUsuarioComoAdmin(UserCreateAdminDTO dto);
+
     // === Lectura ===
 
     /**
      * Devuelve los datos de perfil de un usuario por username.
+     * 
      * @param username nombre de usuario.
      * @return DTO con datos del usuario.
      */
     UserDTO obtenerPorUsername(String username);
 
     /**
-     * Obtiene una lista paginada de usuarios por rol.
-     * @param role tipo de rol (ej: ROLE_PUBLIC, ROLE_ADMIN)
-     * @param pageable paginación
-     * @return Página de usuarios.
-     */
-    Page<UserDTO> obtenerPorRol(String role, Pageable pageable);
-
-    /**
+     * <<<<<<< HEAD
+     * 
+     * 
+     * 
+     * =======
+     * >>>>>>> 99b1a09d6a12f832e7de49287f0d2668f188a25a
      * Busca usuarios por texto en nombre completo o email, filtrado por rol.
-     * @param texto texto de búsqueda.
+     * 
+     * @param texto    texto de búsqueda.
      * @param pageable paginación
      * @return Página de resultados.
      */
@@ -42,6 +44,7 @@ public interface IUserService {
 
     /**
      * Obtiene la lista de amigos de un usuario.
+     * 
      * @param username del usuario.
      * @return Lista de amigos.
      */
@@ -49,6 +52,7 @@ public interface IUserService {
 
     /**
      * Obtiene la lista paginada de amigos de un usuario.
+     * 
      * @param username del usuario.
      * @param pageable paginación
      * @return Página de amigos.
@@ -59,6 +63,7 @@ public interface IUserService {
 
     /**
      * Actualiza el perfil del usuario autenticado.
+     * 
      * @param userUpdateDTO nuevos datos del perfil.
      * @return Usuario actualizado.
      */
@@ -68,7 +73,8 @@ public interface IUserService {
 
     /**
      * Actualiza el perfil de un usuario como administrador.
-     * @param username nombre de usuario a actualizar.
+     * 
+     * @param username      nombre de usuario a actualizar.
      * @param userUpdateDTO nuevos datos del perfil.
      * @return Usuario actualizado.
      */
@@ -78,12 +84,14 @@ public interface IUserService {
 
     /**
      * Elimina (desactiva) al usuario autenticado.
+     * 
      * @return DTO del usuario eliminado.
      */
     UserDTO eliminarUsuario();
 
     /**
      * Elimina (desactiva) un usuario como administrador.
+     * 
      * @param username nombre de usuario a eliminar.
      * @return DTO del usuario eliminado.
      */
@@ -93,6 +101,7 @@ public interface IUserService {
 
     /**
      * Verifica si un usuario existe por su username.
+     * 
      * @param username nombre de usuario
      * @return true si existe
      */
@@ -100,6 +109,7 @@ public interface IUserService {
 
     /**
      * Verifica si un usuario existe por su email.
+     * 
      * @param email del usuario
      * @return true si existe
      */

@@ -1,4 +1,3 @@
-// src/app/pages/admin/admin.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -13,4 +12,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class AdminComponent {
   constructor(public auth: AuthService) {}
+
+  logout(): void {
+    this.auth.logout();
+  }
 }

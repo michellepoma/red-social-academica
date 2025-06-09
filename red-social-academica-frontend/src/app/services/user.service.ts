@@ -8,7 +8,7 @@ providedIn: 'root'
 export class UserService {
 private API_URL = '/api/admin/usuarios';
 
-constructor(private http: HttpClient) {}
+constructor(private http: HttpClient) { }
 
   // --- Autenticación común ---
   private getAuthHeaders(): HttpHeaders {
@@ -56,14 +56,13 @@ constructor(private http: HttpClient) {}
     });
   }
 
-  buscarUsuarios(texto: string, page: number): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/buscar?texto=${texto}&page=${page}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
-
-  listarUsuariosPorRol(rol: string, page: number = 0, size: number = 10): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/rol/${rol}?page=${page}&size=${size}`, {
+  buscarUsuarios(texto: string, page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/buscar`, {
+      params: {
+        texto,
+        page,
+        size
+      },
       headers: this.getAuthHeaders()
     });
   }
@@ -71,6 +70,12 @@ constructor(private http: HttpClient) {}
   // --- Perfil del usuario autenticado ---
   getPerfil(): Observable<any> {
     return this.http.get<any>(`/api/usuarios/me`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getPerfilUsuario(username: string): Observable<any> {
+    return this.http.get<any>(`/api/admin/usuarios/${username}`, {
       headers: this.getAuthHeaders()
     });
   }
@@ -102,30 +107,27 @@ constructor(private http: HttpClient) {}
     });
   }
 
-aceptarInvitacion(invitationId: number, username: string): Observable<any> {
-  const headers = this.getAuthHeaders().set('username', username);
-  return this.http.put(`/api/invitaciones/${invitationId}/aceptar`, null, { headers });
-}
-
-
+  aceptarInvitacion(invitationId: number, username: string): Observable<any> {
+    const headers = this.getAuthHeaders().set('username', username);
+    return this.http.put(`/api/invitaciones/${invitationId}/aceptar`, null, { headers });
+  }
 
   rechazarInvitacion(invitationId: number, username: string): Observable<any> {
     const headers = this.getAuthHeaders().set('username', username);
     return this.http.put(`/api/invitaciones/${invitationId}/rechazar`, null, { headers });
   }
 
- getInvitacionesRecibidas(username: string): Observable<any[]> {
-  return this.http.get<any[]>(`/api/invitaciones/recibidas/${username}`, {
-    headers: this.getAuthHeaders()
-  });
-}
-
+  getInvitacionesRecibidas(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`/api/invitaciones/recibidas/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 
   getInvitacionesPendientes(username: string): Observable<any[]> {
-  return this.http.get<any[]>(`/api/invitaciones/pendientes/recibidas/${username}`, {
-    headers: this.getAuthHeaders()
-  });
-}
+    return this.http.get<any[]>(`/api/invitaciones/pendientes/recibidas/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 
   getInvitacionesEnviadas(username: string): Observable<any[]> {
     return this.http.get<any[]>(`/api/invitaciones/enviadas/${username}`, {

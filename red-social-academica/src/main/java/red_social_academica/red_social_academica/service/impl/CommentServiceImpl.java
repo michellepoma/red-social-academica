@@ -37,7 +37,7 @@ public class CommentServiceImpl implements ICommentService {
     private CommentValidator commentValidator;
 
     public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,
-                               UserRepository userRepository, CommentValidator commentValidator) {
+            UserRepository userRepository, CommentValidator commentValidator) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.userRepository = userRepository;
@@ -47,7 +47,8 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional
     @CachePut(value = "comentario", key = "#result.id")
-    @CacheEvict(value = {"comentariosDePost", "comentariosDeUsuario"}, allEntries = true)
+    @CacheEvict(value = { "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
+
     public CommentDTO crearComentario(String username, CommentCreateDTO dto) {
         commentValidator.validarCreacion(dto);
 
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional
     @CachePut(value = "comentario", key = "#commentId")
-    @CacheEvict(value = {"comentariosDePost", "comentariosDeUsuario"}, allEntries = true)
+    @CacheEvict(value = { "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
     public CommentDTO actualizarComentarioPropio(Long commentId, CommentUpdateDTO dto) {
         String actual = getCurrentUsername();
 
@@ -82,7 +83,7 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional
     @CachePut(value = "comentario", key = "#commentId")
-    @CacheEvict(value = {"comentariosDePost", "comentariosDeUsuario"}, allEntries = true)
+    @CacheEvict(value = { "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
     public CommentDTO actualizarComentarioComoAdmin(Long commentId, CommentUpdateDTO dto) {
         if (!isAdmin()) {
             throw new SecurityException("Acceso restringido a administradores");
@@ -97,7 +98,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"comentario", "comentariosDePost", "comentariosDeUsuario"}, allEntries = true)
+    @CacheEvict(value = { "comentario", "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
     public CommentDTO eliminarComentarioPropio(Long commentId, String motivoBaja) {
         String actual = getCurrentUsername();
 
@@ -114,7 +115,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"comentario", "comentariosDePost", "comentariosDeUsuario"}, allEntries = true)
+    @CacheEvict(value = { "comentario", "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
     public CommentDTO eliminarComentarioComoAdmin(Long commentId, String motivoBaja) {
         if (!isAdmin()) {
             throw new SecurityException("Solo administradores pueden eliminar comentarios ajenos");

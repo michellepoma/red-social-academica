@@ -24,13 +24,20 @@ constructor(
     private router: Router
   ) {
     this.form = this.fb.group({
-      username: ['', Validators.required],
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      correo: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      rol: ['', Validators.required]
-    });
+    name: ['', Validators.required],
+    lastName: ['', Validators.required],
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    ru: ['', Validators.required],
+    career: ['', Validators.required],
+    bio: [''],
+    birthdate: ['', Validators.required],
+    profilePictureUrl: [''],
+    password: ['', Validators.required],
+    passwordConfirm: ['', Validators.required],
+    rol: ['', Validators.required]
+  });
+
   }
 
   ngOnInit(): void {}

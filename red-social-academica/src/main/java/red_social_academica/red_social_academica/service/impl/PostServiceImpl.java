@@ -33,16 +33,11 @@ public class PostServiceImpl implements IPostService {
     @Autowired
     private PostValidator postValidator;
 
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
-
     // === CREAR ===
 
     @Override
     @Transactional
-    @CacheEvict(value = {"postPorId", "top10Posts"}, allEntries = true)
+    @CacheEvict(value = { "postPorId", "top10Posts" }, allEntries = true)
     public PostDTO crearPost(String username, PostCreateDTO dto) {
         postValidator.validarCreacion(dto);
         User user = userRepository.findByUsernameAndActivoTrue(username)
@@ -101,7 +96,7 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"postPorId", "top10Posts"}, key = "#postId", allEntries = true)
+    @CacheEvict(value = { "postPorId", "top10Posts" }, key = "#postId", allEntries = true)
     public PostDTO eliminarPostPropio(Long postId, String motivo) {
         String actual = getCurrentUsername();
         Post post = postRepository.findByIdAndActivoTrue(postId)
@@ -123,7 +118,7 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"postPorId", "top10Posts"}, key = "#postId", allEntries = true)
+    @CacheEvict(value = { "postPorId", "top10Posts" }, key = "#postId", allEntries = true)
     public PostDTO eliminarPostComoAdmin(Long postId, String motivo) {
         if (!isAdmin()) {
             throw new SecurityException("Solo administradores pueden eliminar cualquier post");

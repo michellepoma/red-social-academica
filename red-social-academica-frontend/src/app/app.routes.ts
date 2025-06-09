@@ -14,13 +14,11 @@ import { AdminUsuariosCrearComponent } from './pages/admin/admin-usuarios/admin-
 import { AdminUsuariosEditarComponent } from './pages/admin/admin-usuarios/admin-usuarios-editar.component';
 import { AdminUsuariosBajaComponent } from './pages/admin/admin-usuarios/admin-usuarios-baja.component';
 import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin-usuarios-perfil.component';
-import { AdminUsuariosBuscarComponent } from './pages/admin/admin-usuarios/admin-usuarios-buscar.component';
-import { AdminUsuariosPorRolComponent } from './pages/admin/admin-usuarios/admin-usuarios-por-rol.component';
-
 
 import { AmigosComponent } from './pages/usuario/amigos.component';
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
+
 
 export const routes: Routes = [
 { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -49,8 +47,6 @@ children: [
 { path: 'usuarios/editar/:username', component: AdminUsuariosEditarComponent },
 { path: 'usuarios/baja/:username', component: AdminUsuariosBajaComponent },
 { path: 'usuarios/perfil/:username', component: AdminUsuariosPerfilComponent },
-{ path: 'usuarios/buscar', component: AdminUsuariosBuscarComponent },
-{ path: 'usuarios/por-rol', component: AdminUsuariosPorRolComponent },
 
 ]
 }
