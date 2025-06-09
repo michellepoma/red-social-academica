@@ -5,13 +5,13 @@
     <p class="email">{{ usuario?.email }}</p>
 
     <nav class="menu">
-      <button (click)="verSeccion('buscar')">🔍 Buscar</button>
-      <button (click)="verSeccion('amigos')">👥 Amigos</button>
-      <button (click)="verSeccion('publicaciones')">📝 Publicaciones</button>
-      <button (click)="verSeccion('comentarios')">📤 Mis comentarios</button>
-      <button (click)="verSeccion('invitaciones')">📨 Invitaciones</button>
-      <button (click)="verSeccion('notificaciones')">🔔 Notificaciones</button>
-      <button routerLink="/publicaciones/propias">📱 Mis Publicaciones</button>
+      <button routerLink="/usuario/buscar">🔍 Buscar</button>
+      <button routerLink="/usuario/amigos">👥 Amigos</button>
+      <button routerLink="/usuario/publicaciones">📝 Publicaciones</button>
+      <button routerLink="/usuario/comentarios">📤 Mis comentarios</button>
+      <button routerLink="/usuario/invitaciones">📨 Invitaciones</button>
+      <button routerLink="/usuario/notificaciones">🔔 Notificaciones</button>
+      <button routerLink="/usuario/publicaciones/propias">📱 Mis Publicaciones</button>
     </nav>
 
     <hr />
@@ -20,125 +20,7 @@
   </aside>
 
   <main class="contenido">
-    <h2>Bienvenido, {{ usuario?.name || ""}} {{ usuario?.lastName || ""}}</h2>
-
-    <!-- Amigos -->
-    <section *ngIf="seccion === 'amigos'">
-      <h3>Amigos</h3>
-      <ul>
-        <li *ngFor="let amigo of amigos">
-          {{ amigo.username }} ({{ amigo.email }})
-        </li>
-      </ul>
-    </section>
-
-    <!-- Buscar -->
-    <section *ngIf="seccion === 'buscar'">
-      <h3>Buscar usuario</h3>
-      <input [(ngModel)]="busquedaUsername" placeholder="Username a buscar" />
-      <button (click)="buscarUsuario()">Buscar</button>
-
-      <div *ngIf="resultadoBusqueda">
-        <p><strong>{{ resultadoBusqueda.username }}</strong> ({{ resultadoBusqueda.email }})</p>
-        <button (click)="enviarInvitacion(resultadoBusqueda.username)">
-          Enviar invitación
-        </button>
-      </div>
-
-      <p *ngIf="busquedaFallida" class="error">Usuario no encontrado.</p>
-    </section>
-
-    <!-- Publicaciones -->
-    <section *ngIf="seccion === 'publicaciones'">
-      <h3>Publicaciones</h3>
-      <p>(Aquí puedes mostrar publicaciones del usuario o generales)</p>
-    </section>
-
-    <!-- Mis comentarios -->
-    <section *ngIf="seccion === 'comentarios'">
-      <h3>Mis comentarios</h3>
-
-      <!-- Formulario nuevo comentario -->
-      <div class="nuevo-comentario">
-        <h4>Nuevo comentario</h4>
-        <label>
-          Post ID:
-          <input type="number" [(ngModel)]="nuevoComentario.postId" />
-        </label>
-        <label>
-          Contenido:
-          <input type="text" [(ngModel)]="nuevoComentario.content" />
-        </label>
-        <button (click)="crearComentario()">Publicar</button>
-      </div>
-
-      <hr />
-
-      <!-- Lista de comentarios -->
-      <div *ngIf="comentariosPropios.length > 0; else sinComentarios">
-        <ul>
-          <li *ngFor="let c of comentariosPropios">
-            <div *ngIf="comentarioEditando?.id !== c.id">
-              <p><strong>Post #{{ c.postId }}</strong>: {{ c.content }}</p>
-              <button (click)="editarComentario(c)">Editar</button>
-              <button (click)="eliminarComentario(c.id)">Eliminar</button>
-            </div>
-
-            <!-- Edición -->
-            <div *ngIf="comentarioEditando?.id === c.id">
-              <input [(ngModel)]="comentarioEditando.content" />
-              <button (click)="guardarEdicionComentario()">Guardar</button>
-              <button (click)="cancelarEdicion()">Cancelar</button>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <ng-template #sinComentarios>
-        <p>No has publicado comentarios aún.</p>
-      </ng-template>
-
-      <hr />
-
-      <!-- Ver comentarios de un post -->
-      <div class="ver-post-comentarios">
-        <h4>Ver comentarios de un post</h4>
-        <label>
-          Post ID:
-          <input type="number" [(ngModel)]="postIdParaVerComentarios" />
-        </label>
-        <button (click)="verComentariosDePost()">Buscar</button>
-
-        <div *ngIf="comentariosDePost.length > 0">
-          <ul>
-            <li *ngFor="let c of comentariosDePost">
-              <p><strong>{{ c.authorFullName }}</strong>: {{ c.content }}</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-
-
-    <!-- Invitaciones -->
-    <section *ngIf="seccion === 'invitaciones'">
-      <h3>Invitaciones pendientes</h3>
-      <ul *ngIf="invitaciones.length > 0; else sinInv">
-        <li *ngFor="let inv of invitaciones">
-          <strong>{{ inv.senderName || inv.senderUsername }}</strong> te ha enviado una invitación.
-          <button (click)="aceptarInvitacion(inv.id)">Aceptar</button>
-          <button (click)="rechazarInvitacion(inv.id)">Rechazar</button>
-        </li>
-      </ul>
-      <ng-template #sinInv>
-        <p>No tienes invitaciones pendientes.</p>
-      </ng-template>
-    </section>
-
-    <!-- Notificaciones -->
-    <section *ngIf="seccion === 'notificaciones'">
-      <h3>Notificaciones</h3>
-      <p>(Aquí puedes mostrar notificaciones futuras)</p>
-    </section>
+    <h2>Bienvenido, {{ usuario?.name || "" }} {{ usuario?.lastName || "" }}</h2>
+    <router-outlet></router-outlet>
   </main>
 </div>

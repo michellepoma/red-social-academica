@@ -1,9 +1,0 @@
-// ================================
-// invitar.component.html
-// ================================
-<form [formGroup]="form" (ngSubmit)="enviarInvitacion()">
-  <label>Nombre de usuario:</label>
-  <input formControlName="receiverUsername" placeholder="Ej: ana_gomez">
-  <button type="submit">Enviar Invitación</button>
-</form>
-<p *ngIf="mensaje">{{ mensaje }}</p>

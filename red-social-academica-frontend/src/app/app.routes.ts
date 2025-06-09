@@ -21,36 +21,31 @@ import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin
 
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
+import { PendientesComponent } from './pages/usuario/invitaciones/pendientes.component';
 
 export const routes: Routes = [
-{ path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-// Públicas
-{ path: 'login', component: LoginComponent },
-{ path: 'signup', component: SignupComponent },
-{ path: 'home', component: HomeUsuarioComponent },
-{ path: 'perfil', component: UsuarioPerfilComponent },
-{ path: 'amigos', component: AmigosComponent },
+  // Públicas
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'home', component: HomeUsuarioComponent },
+  { path: 'perfil', component: UsuarioPerfilComponent },
+  { path: 'amigos', component: AmigosComponent },
 
-// Rutas de usuario protegidas con AuthGuard
+  // Rutas de usuario protegidas con AuthGuard
 {
-path: 'usuario',
-canActivate: [AuthGuard],
-children: [
-{
-path: 'invitaciones',
-loadComponent: () => import('./pages/usuario/invitaciones/invitar.component').then(m => m.InvitarComponent)
-      },
-      {
-        path: 'invitaciones/recibidas',
-        loadComponent: () => import('./pages/usuario/invitaciones/invitaciones-recibidas.component').then(m => m.InvitacionesRecibidasComponent)
-      },
-      {
-        path: 'invitaciones/enviadas',
-        loadComponent: () => import('./pages/usuario/invitaciones/invitaciones-enviadas.component').then(m => m.InvitacionesEnviadasComponent)
-      }
-    ]
-  },
+  path: 'usuario',
+  component: HomeUsuarioComponent, // <-- Este contiene el sidebar
+  canActivate: [AuthGuard],
+  children: [
+    { path: 'invitaciones', component: PendientesComponent },
+    { path: 'perfil', component: UsuarioPerfilComponent },
+    { path: 'amigos', component: AmigosComponent },
+    { path: '', redirectTo: 'invitaciones', pathMatch: 'full' }
+  ]
+},
+
 
   // Home exclusivo para administrador
   { path: 'admin/home', component: HomeAdminComponent },

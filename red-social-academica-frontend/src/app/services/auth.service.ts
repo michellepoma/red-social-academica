@@ -82,6 +82,18 @@ isAuthenticated(): boolean {
   }
 }
 
+getUsuario(): any {
+  const token = this.getToken();
+  if (!token) return null;
+
+  try {
+    return jwtDecode<any>(token);
+  } catch {
+    return null;
+  }
+}
+
+
 
 }
 
