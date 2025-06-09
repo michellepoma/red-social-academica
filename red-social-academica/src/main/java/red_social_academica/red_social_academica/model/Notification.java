@@ -1,4 +1,5 @@
 package red_social_academica.red_social_academica.model;
+import red_social_academica.red_social_academica.model.User;
 
 import jakarta.persistence.*;
 import lombok.*;

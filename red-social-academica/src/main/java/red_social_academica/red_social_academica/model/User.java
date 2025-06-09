@@ -9,9 +9,13 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import red_social_academica.red_social_academica.model.Comment;
+import red_social_academica.red_social_academica.model.Post;
+import red_social_academica.red_social_academica.model.Notification;
+import red_social_academica.red_social_academica.model.User;
+import red_social_academica.red_social_academica.auth.model.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import red_social_academica.red_social_academica.auth.model.Role;
 
 @Entity
 @Table(name = "app_user") // Renombrada para evitar conflicto con palabra reservada

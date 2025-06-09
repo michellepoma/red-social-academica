@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import red_social_academica.red_social_academica.model.AuditableEntity;
+import red_social_academica.red_social_academica.model.User;
+import red_social_academica.red_social_academica.model.Post;
 
 import java.util.Date;
 

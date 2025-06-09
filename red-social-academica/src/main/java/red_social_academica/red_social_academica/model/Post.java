@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import red_social_academica.red_social_academica.model.User;
+
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -55,6 +57,7 @@ public class Post extends AuditableEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
 
     // Comentarios relacionados a esta publicación
     @Builder.Default

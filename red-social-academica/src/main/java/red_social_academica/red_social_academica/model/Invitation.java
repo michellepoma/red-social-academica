@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import red_social_academica.red_social_academica.model.AuditableEntity;
+import red_social_academica.red_social_academica.model.User;
 
 /**
  * Entidad JPA que representa una invitación de amistad entre dos usuarios.
