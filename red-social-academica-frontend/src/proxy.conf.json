@@ -1,8 +1,15 @@
-{
-  "/api": {
-    "target": "http://localhost:8080",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
-  }
+"projects": {
+"red-social-academica-frontend": {
+...
+"architect": {
+...
+"serve": {
+"builder": "@angular-devkit/build-angular:dev-server",
+"options": {
+"browserTarget": "red-social-academica-frontend:build",
+"proxyConfig": "proxy.conf.json"
+}
+}
+}
+}
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { InvitacionService } from 'src/app/services/invitacion.service';
 
 @Component({
 selector: 'app-home-usuario',
@@ -23,20 +24,23 @@ seccion: string = 'amigos';
 
 constructor(
     private perfilService: UserService,
+    private invitacionService: InvitacionService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.perfilService.getPerfil().subscribe({
-      next: (res) => {
-        this.usuario = res;
-        this.cargando = false;
-        this.cargarAmigos();
-        this.cargarInvitaciones();
-      },
-      error: () => this.router.navigate(['/login'])
-    });
-  }
+ ngOnInit(): void {
+  this.perfilService.getPerfil().subscribe({
+    next: (res) => {
+      this.usuario = res;
+      console.log('Usuario logueado:', this.usuario); // <-- Agregar aquí
+      this.cargando = false;
+      this.cargarAmigos();
+      this.cargarInvitaciones();
+    },
+    error: () => this.router.navigate(['/login'])
+  });
+}
+
 
   verSeccion(nombre: string): void {
     this.seccion = nombre;
@@ -49,18 +53,23 @@ constructor(
     });
   }
 
-  cargarInvitaciones(): void {
-    const username = this.usuario?.username;
-    if (!username) return;
+ cargarInvitaciones(): void {
+  const username = this.usuario?.username;
+  console.log('Username para buscar invitaciones:', username); // <-- Agregar aquí
+  if (!username) return;
 
-    this.perfilService.getInvitacionesPendientes(username).subscribe({
-      next: (res) => this.invitaciones = res,
-      error: () => {
-        console.error('Error al cargar invitaciones pendientes');
-        this.invitaciones = [];
-      }
-    });
-  }
+  this.perfilService.getInvitacionesPendientes(username).subscribe({
+    next: (res) => {
+      console.log('Invitaciones recibidas del backend:', res); // <-- Agregar aquí
+      this.invitaciones = res;
+    },
+    error: () => {
+      console.error('Error al cargar invitaciones pendientes');
+      this.invitaciones = [];
+    }
+  });
+}
+
 
   logout(): void {
     localStorage.removeItem('token');
@@ -111,7 +120,7 @@ constructor(
         alert('Invitación enviada correctamente.');
         this.resultadoBusqueda = null;
         this.busquedaUsername = '';
-        this.cargarInvitaciones(); // ⬅ recarga por si se autoenvía
+        this.cargarInvitaciones();
       },
       error: (err) => {
         console.error('Error al enviar invitación:', err);
@@ -120,22 +129,20 @@ constructor(
     });
   }
 
-  aceptarInvitacion(invitationId: number): void {
-    const username = this.usuario?.username;
-    if (!username) return;
+  aceptarInvitacion(id: number): void {
+  console.log('Intentando aceptar invitación con ID:', id); // 👈
 
-    this.perfilService.aceptarInvitacion(invitationId, username).subscribe({
-      next: () => {
-        alert('Invitación aceptada.');
-        this.invitaciones = this.invitaciones.filter(inv => inv.id !== invitationId);
-        this.cargarAmigos();
-      },
-      error: (err) => {
-        console.error('Error al aceptar invitación:', err);
-        alert('No se pudo aceptar la invitación.');
-      }
-    });
-  }
+  this.invitacionService.aceptarInvitacion(id).subscribe({
+    next: () => {
+      alert('Invitación aceptada.');
+      this.invitaciones = this.invitaciones.filter(inv => inv.id !== id);
+    },
+    error: err => {
+      console.error('Error al aceptar invitación:', err);
+    }
+  });
+}
+
 
   rechazarInvitacion(invitationId: number): void {
     const username = this.usuario?.username;
@@ -146,11 +153,10 @@ constructor(
         alert('Invitación rechazada.');
         this.invitaciones = this.invitaciones.filter(inv => inv.id !== invitationId);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al rechazar invitación:', err);
         alert('No se pudo rechazar la invitación.');
       }
     });
   }
 }
-
