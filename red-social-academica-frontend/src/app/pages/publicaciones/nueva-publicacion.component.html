@@ -1,0 +1,35 @@
+<div class="formulario">
+    <h2>📝 Crear nueva publicación</h2>
+
+    <form [formGroup]="form" (ngSubmit)="crear()">
+        <label>Título:</label>
+        <input formControlName="title" type="text" />
+
+        <label>Texto:</label>
+        <textarea formControlName="text"></textarea>
+
+        <label>URL de imagen (opcional):</label>
+        <input formControlName="imageUrl" type="text" (input)="actualizarPreview()" />
+        <div *ngIf="previewUrl" class="preview">
+            <p>Vista previa:</p>
+            <img [src]="previewUrl" alt="Vista previa" />
+        </div>
+
+
+
+        <label>URL del recurso:</label>
+        <input formControlName="resourceUrl" type="text" />
+
+        <label>Fecha del evento:</label>
+        <input formControlName="eventDate" type="date" />
+
+        <button type="submit" [disabled]="form.invalid">Crear publicación</button>
+    </form>
+
+    <p *ngIf="mensaje" class="success">{{ mensaje }}</p>
+    <div *ngIf="error.length > 0" class="error">
+        <ul>
+            <li *ngFor="let e of error">{{ e }}</li>
+        </ul>
+    </div>
+</div>

@@ -17,11 +17,24 @@ export class AuthService {
 
   private API_URL = 'http://localhost:8080/api/auth';
 
-  constructor(private _http: HttpClient, private router: Router) {}
+  constructor(private _http: HttpClient, private router: Router) { }
 
   login(payload: { username: string; password: string }): Observable<LoginResponse> {
     return this._http.post<LoginResponse>(`${this.API_URL}/login`, payload);
   }
+
+  getUsername(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded?.sub || null; // O usa decoded.username si tu backend lo pone así
+    } catch (e) {
+      return null;
+    }
+  }
+
 
   signup(payload: any): Observable<any> {
     return this._http.post<any>(`${this.API_URL}/signup`, payload);

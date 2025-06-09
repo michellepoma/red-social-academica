@@ -1,0 +1,45 @@
+.formulario {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  label {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  button {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .success {
+    color: green;
+    margin-top: 1rem;
+  }
+
+  .error {
+    color: red;
+    margin-top: 1rem;
+  }
+
+  .preview {
+    margin-top: 1rem;
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  }
+}

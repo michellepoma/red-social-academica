@@ -11,6 +11,7 @@
       <button (click)="verSeccion('comentarios')">📤 Mis comentarios</button>
       <button (click)="verSeccion('invitaciones')">📨 Invitaciones</button>
       <button (click)="verSeccion('notificaciones')">🔔 Notificaciones</button>
+      <button routerLink="/publicaciones/propias">📱 Mis Publicaciones</button>
     </nav>
 
     <hr />
@@ -19,7 +20,7 @@
   </aside>
 
   <main class="contenido">
-    <h2>Bienvenido, {{ usuario?.username }}</h2>
+    <h2>Bienvenido, {{ usuario?.name || ""}} {{ usuario?.lastName || ""}}</h2>
 
     <!-- Amigos -->
     <section *ngIf="seccion === 'amigos'">
