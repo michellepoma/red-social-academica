@@ -15,10 +15,10 @@ import { AdminUsuariosEditarComponent } from './pages/admin/admin-usuarios/admin
 import { AdminUsuariosBajaComponent } from './pages/admin/admin-usuarios/admin-usuarios-baja.component';
 import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin-usuarios-perfil.component';
 
-
 import { AmigosComponent } from './pages/usuario/amigos.component';
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
+
 
 export const routes: Routes = [
 { path: '', redirectTo: 'login', pathMatch: 'full' },
