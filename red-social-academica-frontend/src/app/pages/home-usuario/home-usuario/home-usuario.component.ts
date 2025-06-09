@@ -16,11 +16,18 @@ export class HomeUsuarioComponent implements OnInit {
 usuario: any = null;
 amigos: any[] = [];
 invitaciones: any[] = [];
+comentariosPropios: any[] = [];
 resultadoBusqueda: any = null;
 busquedaUsername: string = '';
 busquedaFallida: boolean = false;
 cargando = true;
 seccion: string = 'amigos';
+
+// Comentarios
+nuevoComentario = { postId: 0, content: '' };
+comentarioEditando: any = null;
+comentariosDePost: any[] = [];
+postIdParaVerComentarios = 0;
 
 constructor(
     private perfilService: UserService,
@@ -28,22 +35,24 @@ constructor(
     private router: Router
   ) {}
 
- ngOnInit(): void {
-  this.perfilService.getPerfil().subscribe({
-    next: (res) => {
-      this.usuario = res;
-      console.log('Usuario logueado:', this.usuario); // <-- Agregar aquí
-      this.cargando = false;
-      this.cargarAmigos();
-      this.cargarInvitaciones();
-    },
-    error: () => this.router.navigate(['/login'])
-  });
-}
-
+  ngOnInit(): void {
+    this.perfilService.getPerfil().subscribe({
+      next: (res) => {
+        this.usuario = res;
+        console.log('Usuario logueado:', this.usuario);
+        this.cargando = false;
+        this.cargarAmigos();
+        this.cargarInvitaciones();
+      },
+      error: () => this.router.navigate(['/login'])
+    });
+  }
 
   verSeccion(nombre: string): void {
     this.seccion = nombre;
+    if (nombre === 'comentarios') {
+      this.cargarMisComentarios();
+    }
   }
 
   cargarAmigos(): void {
@@ -53,23 +62,87 @@ constructor(
     });
   }
 
- cargarInvitaciones(): void {
-  const username = this.usuario?.username;
-  console.log('Username para buscar invitaciones:', username); // <-- Agregar aquí
-  if (!username) return;
+  cargarInvitaciones(): void {
+    const username = this.usuario?.username;
+    console.log('Username para buscar invitaciones:', username);
+    if (!username) return;
 
-  this.perfilService.getInvitacionesPendientes(username).subscribe({
-    next: (res) => {
-      console.log('Invitaciones recibidas del backend:', res); // <-- Agregar aquí
-      this.invitaciones = res;
-    },
-    error: () => {
-      console.error('Error al cargar invitaciones pendientes');
-      this.invitaciones = [];
-    }
-  });
-}
+    this.perfilService.getInvitacionesPendientes(username).subscribe({
+      next: (res) => {
+        console.log('Invitaciones recibidas del backend:', res);
+        this.invitaciones = res;
+      },
+      error: () => {
+        console.error('Error al cargar invitaciones pendientes');
+        this.invitaciones = [];
+      }
+    });
+  }
 
+  cargarMisComentarios(): void {
+    const username = this.usuario?.username;
+    if (!username) return;
+    this.perfilService.getMisComentarios(username).subscribe({
+      next: res => this.comentariosPropios = res,
+      error: err => {
+        console.error('Error al cargar mis comentarios:', err);
+        this.comentariosPropios = [];
+      }
+    });
+  }
+
+  crearComentario(): void {
+    const { postId, content } = this.nuevoComentario;
+    if (!postId || !content.trim()) return;
+    this.perfilService.crearComentario({ postId, content }).subscribe({
+      next: () => {
+        alert('Comentario creado.');
+        this.nuevoComentario = { postId: 0, content: '' };
+        this.cargarMisComentarios();
+      },
+      error: err => console.error('Error al crear comentario:', err)
+    });
+  }
+
+  editarComentario(comentario: any): void {
+    this.comentarioEditando = { ...comentario };
+  }
+
+  guardarEdicionComentario(): void {
+    const { id, content } = this.comentarioEditando;
+    this.perfilService.actualizarComentario(id, { content }).subscribe({
+      next: () => {
+        alert('Comentario actualizado.');
+        this.comentarioEditando = null;
+        this.cargarMisComentarios();
+      },
+      error: err => console.error('Error al editar comentario:', err)
+    });
+  }
+
+  cancelarEdicion(): void {
+    this.comentarioEditando = null;
+  }
+
+  eliminarComentario(id: number): void {
+    const motivo = prompt('Motivo de eliminación:');
+    if (!motivo) return;
+    this.perfilService.eliminarComentario(id, motivo).subscribe({
+      next: () => {
+        alert('Comentario eliminado.');
+        this.cargarMisComentarios();
+      },
+      error: err => console.error('Error al eliminar comentario:', err)
+    });
+  }
+
+  verComentariosDePost(): void {
+    if (!this.postIdParaVerComentarios) return;
+    this.perfilService.getComentariosDePost(this.postIdParaVerComentarios).subscribe({
+      next: res => this.comentariosDePost = res,
+      error: err => console.error('Error al obtener comentarios del post:', err)
+    });
+  }
 
   logout(): void {
     localStorage.removeItem('token');
@@ -130,19 +203,17 @@ constructor(
   }
 
   aceptarInvitacion(id: number): void {
-  console.log('Intentando aceptar invitación con ID:', id); // 👈
-
-  this.invitacionService.aceptarInvitacion(id).subscribe({
-    next: () => {
-      alert('Invitación aceptada.');
-      this.invitaciones = this.invitaciones.filter(inv => inv.id !== id);
-    },
-    error: err => {
-      console.error('Error al aceptar invitación:', err);
-    }
-  });
-}
-
+    console.log('Intentando aceptar invitación con ID:', id);
+    this.invitacionService.aceptarInvitacion(id).subscribe({
+      next: () => {
+        alert('Invitación aceptada.');
+        this.invitaciones = this.invitaciones.filter(inv => inv.id !== id);
+      },
+      error: err => {
+        console.error('Error al aceptar invitación:', err);
+      }
+    });
+  }
 
   rechazarInvitacion(invitationId: number): void {
     const username = this.usuario?.username;

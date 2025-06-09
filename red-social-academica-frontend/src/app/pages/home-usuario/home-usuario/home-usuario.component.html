@@ -13,7 +13,7 @@
       <button (click)="verSeccion('notificaciones')">🔔 Notificaciones</button>
     </nav>
 
-    <hr>
+    <hr />
     <button class="btn-rojo" (click)="darDeBaja()">Dar de baja</button>
     <button class="btn-negro" (click)="logout()">Cerrar sesión</button>
   </aside>
@@ -46,6 +46,78 @@
 
       <p *ngIf="busquedaFallida" class="error">Usuario no encontrado.</p>
     </section>
+
+    <!-- Publicaciones -->
+    <section *ngIf="seccion === 'publicaciones'">
+      <h3>Publicaciones</h3>
+      <p>(Aquí puedes mostrar publicaciones del usuario o generales)</p>
+    </section>
+
+    <!-- Mis comentarios -->
+    <section *ngIf="seccion === 'comentarios'">
+      <h3>Mis comentarios</h3>
+
+      <!-- Formulario nuevo comentario -->
+      <div class="nuevo-comentario">
+        <h4>Nuevo comentario</h4>
+        <label>
+          Post ID:
+          <input type="number" [(ngModel)]="nuevoComentario.postId" />
+        </label>
+        <label>
+          Contenido:
+          <input type="text" [(ngModel)]="nuevoComentario.content" />
+        </label>
+        <button (click)="crearComentario()">Publicar</button>
+      </div>
+
+      <hr />
+
+      <!-- Lista de comentarios -->
+      <div *ngIf="comentariosPropios.length > 0; else sinComentarios">
+        <ul>
+          <li *ngFor="let c of comentariosPropios">
+            <div *ngIf="comentarioEditando?.id !== c.id">
+              <p><strong>Post #{{ c.postId }}</strong>: {{ c.content }}</p>
+              <button (click)="editarComentario(c)">Editar</button>
+              <button (click)="eliminarComentario(c.id)">Eliminar</button>
+            </div>
+
+            <!-- Edición -->
+            <div *ngIf="comentarioEditando?.id === c.id">
+              <input [(ngModel)]="comentarioEditando.content" />
+              <button (click)="guardarEdicionComentario()">Guardar</button>
+              <button (click)="cancelarEdicion()">Cancelar</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ng-template #sinComentarios>
+        <p>No has publicado comentarios aún.</p>
+      </ng-template>
+
+      <hr />
+
+      <!-- Ver comentarios de un post -->
+      <div class="ver-post-comentarios">
+        <h4>Ver comentarios de un post</h4>
+        <label>
+          Post ID:
+          <input type="number" [(ngModel)]="postIdParaVerComentarios" />
+        </label>
+        <button (click)="verComentariosDePost()">Buscar</button>
+
+        <div *ngIf="comentariosDePost.length > 0">
+          <ul>
+            <li *ngFor="let c of comentariosDePost">
+              <p><strong>{{ c.authorFullName }}</strong>: {{ c.content }}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
 
     <!-- Invitaciones -->
     <section *ngIf="seccion === 'invitaciones'">

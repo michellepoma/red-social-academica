@@ -1,0 +1,19 @@
+<div *ngIf="cargando">Cargando comentarios...</div>
+
+<div *ngIf="!cargando && comentarios.length === 0">
+  <p>No hay comentarios todavía.</p>
+</div>
+
+<ul *ngIf="comentarios.length > 0">
+  <li *ngFor="let c of comentarios">
+    <strong>{{ c.authorFullName }}:</strong>
+    <span>{{ c.content }}</span>
+    <button (click)="eliminarComentario(c.id)">🗑️</button>
+  </li>
+</ul>
+
+<hr />
+
+<textarea [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe tu comentario..."></textarea>
+<br />
+<button (click)="enviarComentario()">Comentar</button>

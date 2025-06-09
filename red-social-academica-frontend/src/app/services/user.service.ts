@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,8 +7,9 @@ providedIn: 'root'
 })
 export class UserService {
 private API_URL = '/api/admin/usuarios';
+private BASE_COMMENTS_URL = '/api/comments';
 
-constructor(private http: HttpClient) { }
+constructor(private http: HttpClient) {}
 
   // --- Autenticación común ---
   private getAuthHeaders(): HttpHeaders {
@@ -58,11 +59,7 @@ constructor(private http: HttpClient) { }
 
   buscarUsuarios(texto: string, page: number, size: number): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/buscar`, {
-      params: {
-        texto,
-        page,
-        size
-      },
+      params: { texto, page, size },
       headers: this.getAuthHeaders()
     });
   }
@@ -138,5 +135,46 @@ constructor(private http: HttpClient) { }
   cancelarInvitacion(invitationId: number, senderUsername: string): Observable<any> {
     const headers = this.getAuthHeaders().set('username', senderUsername);
     return this.http.put(`/api/invitaciones/${invitationId}/cancelar`, null, { headers });
+  }
+
+  // --- Comentarios ---
+  getMisComentarios(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_COMMENTS_URL}/usuario/${username}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getMisComentariosPaginado(username: string, page: number = 0, size: number = 10): Observable<any> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<any>(`${this.BASE_COMMENTS_URL}/usuario/${username}/paginado`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getComentariosDePost(postId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_COMMENTS_URL}/post/${postId}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  crearComentario(dto: { postId: number, content: string }): Observable<any> {
+    return this.http.post<any>(this.BASE_COMMENTS_URL, dto, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  actualizarComentario(commentId: number, dto: { content: string }): Observable<any> {
+    return this.http.put<any>(`${this.BASE_COMMENTS_URL}/${commentId}`, dto, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  eliminarComentario(commentId: number, motivo: string): Observable<any> {
+    const params = new HttpParams().set('motivo', motivo);
+    return this.http.put<any>(`${this.BASE_COMMENTS_URL}/${commentId}/baja`, {}, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 }
