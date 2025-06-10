@@ -17,7 +17,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     long countByRecipientUsernameAndReadFalseAndActivoTrue(String username);
 
     // Últimas 10 notificaciones activas para el usuario
-    List<Notification> findTop10ByRecipientUsernameAndActivoTrueOrderByCreatedAtDesc(String username);
+    List<Notification> findTop10ByRecipientUsernameAndReadFalseAndActivoTrueOrderByCreatedAtDesc(String username);
 
     // Obtener por ID solo si está activa
     Optional<Notification> findByIdAndActivoTrue(Long id);

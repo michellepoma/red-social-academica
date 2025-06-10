@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { NotificationDTO } from '../dto/notification.dto';
+
 
 @Injectable({
 providedIn: 'root'
@@ -185,19 +187,16 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
-
-  getUltimasNoLeidas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.NOTIF_URL}/no-leidas/top`, {
-      headers: this.getAuthHeaders()
-    });
-  }
-
+getUltimasNoLeidas(): Observable<any[]> {
+  return this.http.get<any[]>(`/api/notificaciones/no-leidas/top`, {
+    headers: this.getAuthHeaders()
+  });
+}
   contarNoLeidas(): Observable<number> {
-    return this.http.get<number>(`${this.NOTIF_URL}/no-leidas/count`, {
-      headers: this.getAuthHeaders()
-    });
-  }
-
+  return this.http.get<number>(`/api/notificaciones/no-leidas/count`, {
+    headers: this.getAuthHeaders()
+  });
+}
   marcarNotificacionComoLeida(id: number): Observable<any> {
     return this.http.put<any>(`${this.NOTIF_URL}/${id}/leer`, null, {
       headers: this.getAuthHeaders()
@@ -209,11 +208,12 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
-  getCantidadNoLeidas(): Observable<number> {
-  return this.http.get<number>(`/api/notificaciones/no-leidas/count`, {
+getCantidadNoLeidas(): Observable<number> {
+  return this.http.get<number>(`${this.NOTIF_URL}/no-leidas/count`, {
     headers: this.getAuthHeaders()
   });
 }
+
 
 
 }

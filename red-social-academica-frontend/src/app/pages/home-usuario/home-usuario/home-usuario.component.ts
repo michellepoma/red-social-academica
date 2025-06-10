@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user.service'; // ✅ asegurate de importar esto
 import { InvitationService } from 'src/app/services/invitation.service';
+import { NotificationDTO } from 'src/app/dto/notification.dto';
 
 @Component({
 selector: 'app-home-usuario',
@@ -33,8 +34,11 @@ postIdParaVerComentarios = 0;
 notificaciones: any[] = [];
 notificacionesNoLeidas: any[] = [];
 totalNoLeidas: number = 0;
+ultimasNotis: any[] = [];
+cantidadNoLeidas = 0;
 
 constructor(
+    private userService: UserService,
     private perfilService: UserService,
     private invitationService: InvitationService,
     private router: Router
@@ -49,6 +53,8 @@ constructor(
         this.cargarAmigos();
         this.cargarInvitaciones();
         this.cargarNotificaciones();
+        this.cargarResumenNotificaciones();
+
       },
       error: () => this.router.navigate(['/login'])
     });
@@ -250,9 +256,21 @@ eliminarNoti(id: number): void {
   });
 }
 
+ cargarResumenNotificaciones(): void {
+    this.userService.getUltimasNoLeidas().subscribe({
+      next: res => this.ultimasNotis = res.slice(0, 5),
+      error: err => console.error('Error al obtener últimas notificaciones:', err)
+    });
 
-
-
-
-
+    this.userService.getCantidadNoLeidas().subscribe({
+      next: res => this.cantidadNoLeidas = res,
+      error: err => console.error('Error al contar no leídas:', err)
+    });
+  }
 }
+
+
+
+
+
+

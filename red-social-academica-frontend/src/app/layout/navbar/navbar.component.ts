@@ -10,12 +10,25 @@ import { RouterModule } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
-  open = false;
+export class NavbarComponent implements OnInit {
+ultimasNotis: any[] = [];
+cantidadNoLeidas: number = 0;
 
-  constructor(public authService: AuthService) {}
+constructor(private userService: UserService) {}
 
-  toggle() {
-    this.open = !this.open;
+  ngOnInit(): void {
+    this.cargarNotificaciones();
+  }
+
+  cargarNotificaciones(): void {
+    this.userService.getUltimasNoLeidas().subscribe({
+      next: res => this.ultimasNotis = res,
+      error: err => console.error('Error al cargar notificaciones', err)
+    });
+
+    this.userService.contarNoLeidas().subscribe({
+      next: res => this.cantidadNoLeidas = res,
+      error: err => console.error('Error al contar no leídas', err)
+    });
   }
 }
