@@ -29,6 +29,11 @@ comentarioEditando: any = null;
 comentariosDePost: any[] = [];
 postIdParaVerComentarios = 0;
 
+//notificaciones
+notificaciones: any[] = [];
+notificacionesNoLeidas: any[] = [];
+totalNoLeidas: number = 0;
+
 constructor(
     private perfilService: UserService,
     private invitationService: InvitationService,
@@ -43,6 +48,7 @@ constructor(
         this.cargando = false;
         this.cargarAmigos();
         this.cargarInvitaciones();
+        this.cargarNotificaciones();
       },
       error: () => this.router.navigate(['/login'])
     });
@@ -217,4 +223,36 @@ constructor(
       }
     });
   }
+
+cargarNotificaciones(): void {
+  this.perfilService.getNotificaciones().subscribe({
+    next: res => this.notificaciones = res,
+    error: err => console.error('Error al cargar notificaciones:', err)
+  });
+
+  this.perfilService.contarNoLeidas().subscribe({
+    next: res => this.totalNoLeidas = res,
+    error: err => console.error('Error al contar no leídas:', err)
+  });
+}
+
+marcarComoLeida(id: number): void {
+  this.perfilService.marcarNotificacionComoLeida(id).subscribe({
+    next: () => this.cargarNotificaciones(),
+    error: err => console.error('Error al marcar como leída:', err)
+  });
+}
+
+eliminarNoti(id: number): void {
+  this.perfilService.eliminarNotificacion(id).subscribe({
+    next: () => this.cargarNotificaciones(),
+    error: err => console.error('Error al eliminar notificación:', err)
+  });
+}
+
+
+
+
+
+
 }

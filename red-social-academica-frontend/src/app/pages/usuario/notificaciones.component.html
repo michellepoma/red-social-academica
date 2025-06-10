@@ -1,0 +1,14 @@
+<h3>🔔 Notificaciones ({{ totalNoLeidas }} sin leer)</h3>
+<ul *ngIf="notificaciones.length > 0; else sinNotis">
+  <li *ngFor="let n of notificaciones">
+    <span [ngStyle]="{ 'font-weight': n.leida ? 'normal' : 'bold' }">
+      {{ n.mensaje }}
+    </span>
+    <button *ngIf="!n.leida" (click)="marcarComoLeida(n.id)">Marcar como leída</button>
+    <button (click)="eliminarNoti(n.id)">Eliminar</button>
+  </li>
+</ul>
+
+<ng-template #sinNotis>
+  <p>No tenés notificaciones activas.</p>
+</ng-template>

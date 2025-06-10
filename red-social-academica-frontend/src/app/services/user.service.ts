@@ -8,6 +8,8 @@ providedIn: 'root'
 export class UserService {
 private API_URL = '/api/admin/usuarios';
 private BASE_COMMENTS_URL = '/api/comments';
+private NOTIF_URL = '/api/notificaciones';
+
 
 constructor(private http: HttpClient) {}
 
@@ -177,4 +179,41 @@ constructor(private http: HttpClient) {}
       headers: this.getAuthHeaders()
     });
   }
+
+  getNotificaciones(): Observable<any[]> {
+    return this.http.get<any[]>(this.NOTIF_URL, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getUltimasNoLeidas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.NOTIF_URL}/no-leidas/top`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  contarNoLeidas(): Observable<number> {
+    return this.http.get<number>(`${this.NOTIF_URL}/no-leidas/count`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  marcarNotificacionComoLeida(id: number): Observable<any> {
+    return this.http.put<any>(`${this.NOTIF_URL}/${id}/leer`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  eliminarNotificacion(id: number): Observable<any> {
+    return this.http.put<any>(`${this.NOTIF_URL}/${id}/baja`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  getCantidadNoLeidas(): Observable<number> {
+  return this.http.get<number>(`/api/notificaciones/no-leidas/count`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+
 }
