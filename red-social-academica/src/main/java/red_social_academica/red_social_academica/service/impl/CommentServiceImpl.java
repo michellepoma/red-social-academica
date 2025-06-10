@@ -1,5 +1,6 @@
 package red_social_academica.red_social_academica.service.impl;
 
+
 import red_social_academica.red_social_academica.dto.comment.*;
 import red_social_academica.red_social_academica.model.Comment;
 import red_social_academica.red_social_academica.model.Post;
@@ -9,6 +10,8 @@ import red_social_academica.red_social_academica.repository.PostRepository;
 import red_social_academica.red_social_academica.repository.UserRepository;
 import red_social_academica.red_social_academica.service.ICommentService;
 import red_social_academica.red_social_academica.validation.CommentValidator;
+import red_social_academica.red_social_academica.service.INotificationService;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,6 +39,10 @@ public class CommentServiceImpl implements ICommentService {
     @Autowired
     private CommentValidator commentValidator;
 
+    // Inyectá el servicio en la clase
+    @Autowired
+    private INotificationService notificationService;
+
     public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,
             UserRepository userRepository, CommentValidator commentValidator) {
         this.commentRepository = commentRepository;
@@ -48,7 +55,6 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     @CachePut(value = "comentario", key = "#result.id")
     @CacheEvict(value = { "comentariosDePost", "comentariosDeUsuario" }, allEntries = true)
-
     public CommentDTO crearComentario(String username, CommentCreateDTO dto) {
         commentValidator.validarCreacion(dto);
 
@@ -59,8 +65,20 @@ public class CommentServiceImpl implements ICommentService {
                 .orElseThrow(() -> new RuntimeException("Publicacion no encontrada o inactiva"));
 
         Comment comment = mapFromCreateDTO(dto, author, post);
-        return convertToDTO(commentRepository.save(comment));
+        Comment saved = commentRepository.save(comment);
+
+        // ✅ Notificar al dueño del post si NO es el mismo que comenta
+        if (!post.getUser().getUsername().equals(author.getUsername())) {
+            notificationService.crearNotificacion(
+                    post.getUser().getUsername(),
+                    author.getUsername() + " comentó en tu publicación",
+                    "/usuario/publicaciones/comentarios/" + post.getId()
+            );
+        }
+
+        return convertToDTO(saved);
     }
+
 
     @Override
     @Transactional

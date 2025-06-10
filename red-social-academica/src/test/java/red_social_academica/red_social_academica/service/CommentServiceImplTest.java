@@ -46,7 +46,10 @@ class CommentServiceImplTest {
                 .build();
 
         User user = User.builder().id(1L).username(username).name("Ana").lastName("Gómez").activo(true).build();
-        Post post = Post.builder().id(101L).title("Post").activo(true).build();
+
+        // Asignar user al post
+        Post post = Post.builder().id(101L).title("Post").activo(true).user(user).build();
+
         Comment savedComment = Comment.builder()
                 .id(999L)
                 .content(dto.getContent())
