@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostService } from 'src/app/services/post.service';
-import { CommonModule } from '@angular/common'; // 👈 ¡Importante!
+import { CommonModule } from '@angular/common';
+
+import { PostService, Publicacion } from 'src/app/services/post.service';
 
 @Component({
-  selector: 'app-editar-publicacion',
+  selector: 'app-admin-editar-publicacion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], // 👈 Asegúrate de incluir CommonModule
-  templateUrl: './editar-publicacion.component.html',
-  styleUrls: ['./editar-publicacion.component.scss']
+  templateUrl: './admin-editar-publicacion.component.html',
+  imports: [CommonModule, ReactiveFormsModule]
 })
-export class EditarPublicacionComponent implements OnInit {
+export class AdminEditarPublicacionComponent implements OnInit {
   form: FormGroup;
-  mensaje = '';
+  mensaje: string = '';
   error: string[] = [];
   postId!: number;
   previewUrl: string | null = null;
@@ -35,11 +35,11 @@ export class EditarPublicacionComponent implements OnInit {
 
   ngOnInit(): void {
     this.postId = Number(this.route.snapshot.paramMap.get('postId'));
-    this.cargarDatos();
+    this.cargarPublicacion();
   }
 
-  cargarDatos(): void {
-    this.postService.getPostById(this.postId).subscribe({
+  cargarPublicacion(): void {
+    this.postService.obtenerPostPorIdAdmin(this.postId).subscribe({
       next: (post) => {
         this.form.patchValue(post);
         this.previewUrl = post.imageUrl || null;
@@ -58,10 +58,10 @@ export class EditarPublicacionComponent implements OnInit {
   guardar(): void {
     if (this.form.invalid) return;
 
-    this.postService.actualizarPublicacion(this.postId, this.form.value).subscribe({
+    this.postService.actualizarPostAdmin(this.postId, this.form.value).subscribe({
       next: () => {
         this.mensaje = '✅ Publicación actualizada correctamente.';
-        this.router.navigate(['/usuario/publicaciones/propias']);
+        this.router.navigate(['/admin/usuarios/listar']);
       },
       error: (err) => {
         const detalles = err?.error?.detalles;
@@ -75,4 +75,8 @@ export class EditarPublicacionComponent implements OnInit {
       }
     });
   }
+  cancelar(): void {
+  this.router.navigate(['/admin/usuarios/listar']);
+}
+
 }

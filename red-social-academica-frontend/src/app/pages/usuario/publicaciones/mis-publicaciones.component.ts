@@ -109,19 +109,28 @@ export class MisPublicacionesComponent implements OnInit {
   }
   
   verRecientes(): void {
-  this.postService.obtenerPublicacionesRecientes().subscribe({
+  if (!this.username) {
+    this.mensaje = '❌ No se pudo determinar el usuario autenticado.';
+    return;
+  }
+
+  // Traer publicaciones del usuario autenticado
+  this.postService.obtenerPublicacionesDeUsuario(this.username, 0, this.tamanioPagina).subscribe({
     next: (res) => {
-      this.publicaciones = res;
-      this.totalPaginas = 1;
+      // Ordenamos manualmente por fecha descendente si es necesario
+      this.publicaciones = res.content.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      this.totalPaginas = res.totalPages;
       this.paginaActual = 0;
       this.modoRecientes = true;
+      this.mensaje = this.publicaciones.length === 0 ? 'No tienes publicaciones recientes.' : '';
     },
     error: (err) => {
-      console.error('Error al obtener publicaciones recientes:', err);
-      this.mensaje = '❌ Error al obtener publicaciones recientes.';
+      console.error('Error al obtener publicaciones recientes del usuario:', err);
+      this.mensaje = '❌ Error al obtener tus publicaciones recientes.';
     }
   });
 }
+
 
 verPropias(): void {
   this.paginaActual = 0;

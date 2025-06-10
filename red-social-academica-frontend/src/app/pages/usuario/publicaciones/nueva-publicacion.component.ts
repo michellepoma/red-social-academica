@@ -49,7 +49,7 @@ export class NuevaPublicacionComponent {
     this.postService.crearPublicacion(this.form.value).subscribe({
       next: () => {
         this.mensaje = '✅ Publicación creada exitosamente.';
-        this.router.navigate(['/publicaciones/propias']);
+        this.router.navigate(['/usuario/publicaciones/propias']);
       },
       error: (err) => {
         console.error('Error al crear publicación:', err);

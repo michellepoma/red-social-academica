@@ -47,5 +47,17 @@ eliminarComentario(commentId: number, motivo: string): Observable<any> {
   return this.http.put(`${this.baseUrl}/${commentId}/baja?motivo=${encodeURIComponent(motivo)}`, {});
 }
 
+//ADMIN
+// ✔ PUT /api/admin/comments/{commentId}
+actualizarComentarioComoAdmin(commentId: number, content: string): Observable<any> {
+  return this.http.put(`/api/admin/comments/${commentId}`, { content });
+}
+
+// ✔ DELETE /api/admin/comments/{commentId}
+eliminarComentarioComoAdmin(commentId: number): Observable<any> {
+  return this.http.delete(`/api/admin/comments/${commentId}`);
+}
+
+
 
 }

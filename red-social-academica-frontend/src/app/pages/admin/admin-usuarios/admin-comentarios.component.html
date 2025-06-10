@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <h2 class="mb-4">💬 Comentarios del post #{{ postId }}</h2>
+
+  <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
+
+  <div class="list-group">
+    <div
+      *ngFor="let comentario of comentarios"
+      class="list-group-item list-group-item-action flex-column align-items-start"
+    >
+      <div class="d-flex w-100 justify-content-between mb-2">
+        <h6 class="mb-1">
+          👤 {{ comentario.authorFullName }}
+          <span class="text-muted">{{ '@' + comentario.authorUsername }}</span>
+        </h6>
+        <small class="text-muted">{{ comentario.createdAt | date: 'short' }}</small>
+      </div>
+
+      <!-- Edición -->
+      <div *ngIf="comentarioEditandoId === comentario.id">
+        <textarea
+          [(ngModel)]="contenidoEditado"
+          rows="3"
+          class="form-control mb-2"
+        ></textarea>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-success" (click)="guardarEdicion(comentario.id)">💾 Guardar</button>
+          <button class="btn btn-sm btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Lectura -->
+      <div *ngIf="comentarioEditandoId !== comentario.id">
+        <p class="mb-2">{{ comentario.content }}</p>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-warning" (click)="editarComentario(comentario)">✏️ Editar</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminarComentario(comentario.id)">🗑 Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

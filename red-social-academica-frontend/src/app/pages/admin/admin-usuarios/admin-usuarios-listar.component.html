@@ -1,20 +1,33 @@
 <div class="container mt-4">
-  <h2 class="mb-3" style="font-size: 1.8rem; display: flex; align-items: center; gap: 0.5rem;">
+  <h2 class="mb-4 d-flex align-items-center gap-2">
     <span>🔍</span> Buscar Usuarios
   </h2>
 
-  <div class="form-group d-flex gap-2 mb-4">
-    <input [(ngModel)]="textoBusqueda" placeholder="Ingrese nombre, email o estado (activo/inactivo)"
-      class="form-control" />
-    <button (click)="buscar()" class="btn btn-primary">Buscar</button>
-    <button (click)="limpiarBusqueda()" class="btn btn-secondary" *ngIf="textoBusqueda.trim()">Limpiar</button>
+  <div class="row g-2 mb-4 align-items-end">
+    <div class="col-md-9">
+      <input
+        [(ngModel)]="textoBusqueda"
+        placeholder="Ingrese nombre, email o estado (activo/inactivo)"
+        class="form-control"
+      />
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+      <button (click)="buscar()" class="btn btn-primary w-100">Buscar</button>
+      <button
+        (click)="limpiarBusqueda()"
+        class="btn btn-secondary w-100"
+        *ngIf="textoBusqueda.trim()"
+      >
+        Limpiar
+      </button>
+    </div>
   </div>
 
   <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
 
-  <div *ngIf="usuarios.length > 0">
-    <table class="table table-bordered table-hover">
-      <thead class="table-light">
+  <div *ngIf="usuarios.length > 0" class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-light text-center">
         <tr>
           <th>Nombre</th>
           <th>Usuario</th>
@@ -31,40 +44,70 @@
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.roles?.[0] || 'Sin rol' }}</td>
           <td>
-            <span [style.color]="usuario.activo ? 'green' : 'red'">
+            <span class="badge" [class.bg-success]="usuario.activo" [class.bg-danger]="!usuario.activo">
               {{ usuario.activo ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
           <td>
-            <a [routerLink]="['/admin/usuarios/perfil', usuario.username]" class="btn btn-sm me-2"
-              [ngClass]="usuario.activo ? 'btn-info' : 'btn-inactivo'" [class.disabled]="!usuario.activo" tabindex="-1"
-              [attr.aria-disabled]="!usuario.activo" (click)="usuario.activo ? null : $event.preventDefault()">
-              👁 Ver
-            </a>
+            <div class="d-flex flex-wrap gap-1">
+              <a
+                [routerLink]="['/admin/usuarios/perfil', usuario.username]"
+                class="btn btn-sm btn-info"
+                [class.disabled]="!usuario.activo"
+                (click)="usuario.activo ? null : $event.preventDefault()"
+              >
+                👁 Ver
+              </a>
 
-            <a [routerLink]="['/admin/usuarios/editar', usuario.username]" class="btn btn-sm me-2"
-              [ngClass]="usuario.activo ? 'btn-warning' : 'btn-inactivo'" [class.disabled]="!usuario.activo"
-              tabindex="-1" [attr.aria-disabled]="!usuario.activo"
-              (click)="usuario.activo ? null : $event.preventDefault()">
-              ✏️ Editar
-            </a>
+              <a
+                [routerLink]="['/admin/usuarios/editar', usuario.username]"
+                class="btn btn-sm btn-warning"
+                [class.disabled]="!usuario.activo"
+                (click)="usuario.activo ? null : $event.preventDefault()"
+              >
+                ✏️ Editar
+              </a>
 
-            <button (click)="darDeBaja(usuario.username)" [disabled]="!usuario.activo"
-              [ngClass]="usuario.activo ? 'btn-baja' : 'btn-inactivo'" class="btn btn-sm">
-              {{ usuario.activo ? '❌ Baja' : 'Inactivo' }}
-            </button>
+              <button
+                (click)="darDeBaja(usuario.username)"
+                [disabled]="!usuario.activo"
+                class="btn btn-sm btn-danger"
+              >
+                {{ usuario.activo ? '❌ Baja' : 'Inactivo' }}
+              </button>
+
+              <a
+                [routerLink]="['/admin/usuarios/publicaciones', usuario.username]"
+                class="btn btn-sm btn-success"
+                [class.disabled]="!usuario.activo"
+                (click)="usuario.activo ? null : $event.preventDefault()"
+              >
+                📝 Publicaciones
+              </a>
+            </div>
           </td>
-
         </tr>
       </tbody>
     </table>
 
-    <div class="d-flex justify-content-between align-items-center mt-3">
-      <button (click)="anteriorPagina()" [disabled]="paginaActual === 0" class="btn btn-outline-secondary">⬅
-        Anterior</button>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <button
+        (click)="anteriorPagina()"
+        [disabled]="paginaActual === 0"
+        class="btn btn-outline-secondary"
+      >
+        ⬅ Anterior
+      </button>
+
       <span><strong>Página {{ paginaActual + 1 }} de {{ totalPaginas }}</strong></span>
-      <button (click)="siguientePagina()" [disabled]="paginaActual + 1 >= totalPaginas"
-        class="btn btn-outline-secondary">Siguiente ➡</button>
+
+      <button
+        (click)="siguientePagina()"
+        [disabled]="paginaActual + 1 >= totalPaginas"
+        class="btn btn-outline-secondary"
+      >
+        Siguiente ➡
+      </button>
     </div>
   </div>
 </div>

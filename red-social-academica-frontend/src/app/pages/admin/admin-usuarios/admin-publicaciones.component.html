@@ -1,0 +1,86 @@
+<div class="container mt-4">
+    <div class="mb-4 border-bottom pb-3">
+        <h2 class="mb-3">📰 Publicaciones de <strong>{{ username }}</strong></h2>
+
+        <div class="row g-2 align-items-end">
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">🔍 Buscar publicaciones</label>
+                <input [(ngModel)]="textoBusqueda" type="text" placeholder="Ingrese título, contenido o enlace"
+                    class="form-control" />
+            </div>
+
+            <div class="col-md-4 d-flex gap-2">
+                <button (click)="buscar()" class="btn btn-primary w-100">Buscar</button>
+                <button (click)="limpiarBusqueda()" class="btn btn-outline-secondary w-100"
+                    *ngIf="textoBusqueda.trim()">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
+
+    <div class="row g-4">
+        <div class="col-12" *ngFor="let pub of publicacionesPaginadas ?? []">
+            <div class="card shadow-sm border">
+                <div class="row g-0">
+                    <div class="col-md-4" *ngIf="pub.imageUrl">
+                        <img [src]="pub.imageUrl" alt="Imagen" class="img-fluid h-100 object-fit-cover rounded-start" />
+                    </div>
+
+                    <div [class.col-md-8]="pub.imageUrl" [class.col-12]="!pub.imageUrl">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ pub.title }}</h5>
+                            <p class="card-text">{{ pub.text }}</p>
+
+                            <div class="mb-2">
+                                <a *ngIf="pub.resourceUrl" [href]="pub.resourceUrl" target="_blank"
+                                    class="d-block text-decoration-none">
+                                    📎 Ver recurso
+                                </a>
+
+                                <small *ngIf="pub.eventDate" class="text-muted d-block">
+                                    📅 Evento: {{ pub.eventDate | date:'longDate' }}
+                                </small>
+
+                                <small class="text-muted d-block">
+                                    🕓 Publicado: {{ pub.date | date:'short' }}
+                                </small>
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mt-3">
+                                <a class="btn btn-outline-success"
+                                    [routerLink]="['/admin/usuarios/publicaciones', username, 'comentarios', pub.id]">
+                                    💬 Ver comentarios
+                                </a>
+
+                                <button class="btn btn-outline-warning" (click)="editarPublicacion(pub.id)">
+                                    ✏️ Editar
+                                </button>
+
+                                <button class="btn btn-outline-danger" (click)="eliminarPublicacion(pub.id)">
+                                    🗑 Eliminar
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4 border-top pt-3">
+        <button (click)="anteriorPagina()" [disabled]="paginaActual === 0" class="btn btn-outline-secondary">
+            ⬅ Anterior
+        </button>
+
+        <span><strong>Página {{ paginaActual + 1 }} de {{ totalPaginas }}</strong></span>
+
+        <button (click)="siguientePagina()" [disabled]="paginaActual + 1 >= totalPaginas"
+            class="btn btn-outline-secondary">
+            Siguiente ➡
+        </button>
+    </div>
+</div>

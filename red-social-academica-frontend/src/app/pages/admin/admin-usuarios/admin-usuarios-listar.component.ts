@@ -14,7 +14,7 @@ import { UserService } from '../../../services/user.service';
 export class AdminUsuariosListarComponent implements OnInit {
   usuarios: any[] = [];
   paginaActual: number = 0;
-  tamanioPagina: number = 10;
+  tamanioPagina: number = 5;
   totalPaginas: number = 0;
   textoBusqueda: string = '';
   mensaje: string = '';

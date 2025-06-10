@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <h2 class="mb-4">✏️ Editar Publicación</h2>
+
+  <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
+  <div *ngIf="error.length > 0" class="alert alert-danger">
+    <ul class="mb-0">
+      <li *ngFor="let e of error">{{ e }}</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Título</label>
+      <input formControlName="title" type="text" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Contenido</label>
+      <textarea formControlName="text" rows="4" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">URL de imagen</label>
+      <input formControlName="imageUrl" type="text" class="form-control" (blur)="actualizarPreview()" />
+    </div>
+
+    <div *ngIf="previewUrl" class="mb-3">
+      <label class="form-label">Vista previa:</label><br />
+      <img [src]="previewUrl" class="img-fluid rounded" style="max-height: 300px;" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Enlace a recurso</label>
+      <input formControlName="resourceUrl" type="text" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Fecha del evento</label>
+      <input formControlName="eventDate" type="date" class="form-control" />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid" class="btn btn-primary">
+      💾 Guardar cambios
+    </button>
+
+    <button type="button" class="btn btn-outline-secondary ms-2" (click)="cancelar()">Cancelar</button>
+  </form>
+</div>

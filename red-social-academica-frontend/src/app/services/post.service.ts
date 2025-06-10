@@ -65,4 +65,21 @@ export class PostService {
   buscarPublicaciones(texto: string): Observable<Publicacion[]> {
     return this.http.get<Publicacion[]>(`${this.apiUrl}/buscar?texto=${encodeURIComponent(texto)}`);
   }
+
+  //ADMIN
+  // ✔ GET /api/admin/posts/{postId}
+obtenerPostPorIdAdmin(postId: number): Observable<Publicacion> {
+  return this.http.get<Publicacion>(`/api/admin/posts/${postId}`);
+}
+
+// ✔ PUT /api/admin/posts/{postId}
+actualizarPostAdmin(postId: number, data: Partial<Publicacion>): Observable<Publicacion> {
+  return this.http.put<Publicacion>(`/api/admin/posts/${postId}`, data);
+}
+
+// ✔ DELETE /api/admin/posts/{postId}
+eliminarPostAdmin(postId: number): Observable<any> {
+  return this.http.delete(`/api/admin/posts/${postId}`);
+}
+
 }
