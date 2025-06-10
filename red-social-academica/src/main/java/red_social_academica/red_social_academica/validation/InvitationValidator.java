@@ -39,7 +39,7 @@ public class InvitationValidator {
             throw new BusinessException("Ya existe una invitación activa entre estos usuarios.");
         }
 
-        if (sender.getFriends().contains(receiver)) {
+        if (sender.getFriends().contains(receiver) || receiver.getFriends().contains(sender)) {
             throw new BusinessException("Ya eres amigo de este usuario.");
         }
     }

@@ -111,4 +111,22 @@ public class UserController {
         logger.info("[USUARIO] Fin obtenerAmigosPaginados: {} (Duración: {} ms)", fin, (fin - inicio));
         return ResponseEntity.ok(amigos);
     }
+
+    @Operation(summary = "Eliminar una amistad entre dos usuarios")
+    @DeleteMapping("/amigos/{username}")
+    public ResponseEntity<Void> eliminarAmigo(
+            @PathVariable String username,
+            @RequestHeader("username") String actualUsername) {
+
+        long inicio = System.currentTimeMillis();
+        logger.info("[USUARIO] Inicio eliminarAmigo entre {} y {}", actualUsername, username);
+
+        userService.eliminarAmistad(actualUsername, username);
+
+        long fin = System.currentTimeMillis();
+        logger.info("[USUARIO] Fin eliminarAmigo: {} (Duración: {} ms)", fin, (fin - inicio));
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

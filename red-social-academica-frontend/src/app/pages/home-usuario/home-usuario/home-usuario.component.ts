@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { InvitacionService } from 'src/app/services/invitacion.service';
+import { InvitationService } from 'src/app/services/invitation.service';
 
 @Component({
 selector: 'app-home-usuario',
@@ -31,7 +31,7 @@ postIdParaVerComentarios = 0;
 
 constructor(
     private perfilService: UserService,
-    private invitacionService: InvitacionService,
+    private invitationService: InvitationService,
     private router: Router
   ) {}
 
@@ -198,19 +198,6 @@ constructor(
       error: (err) => {
         console.error('Error al enviar invitación:', err);
         alert('No se pudo enviar la invitación.');
-      }
-    });
-  }
-
-  aceptarInvitacion(id: number): void {
-    console.log('Intentando aceptar invitación con ID:', id);
-    this.invitacionService.aceptarInvitacion(id).subscribe({
-      next: () => {
-        alert('Invitación aceptada.');
-        this.invitaciones = this.invitaciones.filter(inv => inv.id !== id);
-      },
-      error: err => {
-        console.error('Error al aceptar invitación:', err);
       }
     });
   }

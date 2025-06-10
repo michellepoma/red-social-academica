@@ -1,0 +1,104 @@
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link" [class.active]="seccion === 'recibidas'" (click)="cambiar('recibidas')">📬 Recibidas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [class.active]="seccion === 'pendientes'" (click)="cambiar('pendientes')">⌛ Pendientes</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [class.active]="seccion === 'enviadas'" (click)="cambiar('enviadas')">📤 Enviadas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [class.active]="seccion === 'nueva'" (click)="cambiar('nueva')">➕ Nueva invitación</a>
+  </li>
+</ul>
+
+<!-- RECIBIDAS -->
+<div *ngIf="seccion === 'recibidas'">
+  <h2>📬 Invitaciones recibidas</h2>
+  <ul *ngIf="invitacionesRecibidas.length > 0; else sinInvitaciones">
+    <li *ngFor="let inv of invitacionesRecibidas">
+      <strong>{{ inv.senderName || inv.senderUsername }}</strong>
+      <span> - Estado: {{ inv.status }}</span>
+
+      <button
+        class="btn btn-success btn-sm me-2 ms-2"
+        [disabled]="!inv.activo || procesando[inv.id]"
+        (click)="aceptar(inv.id)">
+        {{ procesando[inv.id] ? 'Procesando...' : 'Aceptar' }}
+      </button>
+
+      <button
+        class="btn btn-danger btn-sm"
+        [disabled]="!inv.activo || procesando[inv.id]"
+        (click)="rechazar(inv.id)">
+        {{ procesando[inv.id] ? 'Procesando...' : 'Rechazar' }}
+      </button>
+
+      <div *ngIf="inv.status === 'ACEPTADA'" class="text-success mt-1">Invitación aceptada.</div>
+      <div *ngIf="inv.status === 'RECHAZADA'" class="text-danger mt-1">Invitación rechazada.</div>
+    </li>
+  </ul>
+
+  <ng-template #sinInvitaciones>
+    <p>No has recibido invitaciones.</p>
+  </ng-template>
+</div>
+
+<!-- PENDIENTES -->
+<div *ngIf="seccion === 'pendientes'">
+  <h2>⌛ Invitaciones pendientes</h2>
+  <ul *ngIf="invitacionesPendientes.length > 0; else sinPendientes">
+    <li *ngFor="let inv of invitacionesPendientes">
+      <strong>{{ inv.senderName || inv.senderUsername }}</strong>
+    </li>
+  </ul>
+  <ng-template #sinPendientes>
+    <p>No tienes invitaciones pendientes.</p>
+  </ng-template>
+</div>
+
+<!-- ENVIADAS -->
+<div *ngIf="seccion === 'enviadas'">
+  <h2>📤 Invitaciones enviadas</h2>
+  <ul *ngIf="invitacionesEnviadas.length > 0; else sinEnviadas">
+    <li *ngFor="let inv of invitacionesEnviadas">
+      <strong>{{ inv.receiverName || inv.receiverUsername }}</strong>
+      <span> - Estado: {{ inv.status }}</span>
+
+      <button
+        *ngIf="inv.activo"
+        class="btn btn-warning btn-sm ms-2"
+        (click)="cancelar(inv.id)">
+        Cancelar
+      </button>
+    </li>
+  </ul>
+  <ng-template #sinEnviadas>
+    <p>No has enviado invitaciones.</p>
+  </ng-template>
+</div>
+
+<!-- NUEVA INVITACIÓN -->
+<div *ngIf="seccion === 'nueva'">
+  <h2>➕ Enviar nueva invitación</h2>
+  <form (ngSubmit)="enviarInvitacion()">
+    <div class="mb-3">
+      <label for="destinatario" class="form-label">Nombre de usuario destinatario:</label>
+      <input
+        type="text"
+        [(ngModel)]="nuevoDestinatario"
+        name="destinatario"
+        id="destinatario"
+        class="form-control"
+        required>
+    </div>
+    <button class="btn btn-primary">Enviar invitación</button>
+  </form>
+
+  <div *ngIf="errores.length > 0" class="mt-2">
+    <div *ngFor="let err of errores" class="text-danger">
+      {{ err }}
+    </div>
+  </div>
+</div>

@@ -1,48 +1,52 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvitationService {
-
-  private baseUrl = 'http://localhost:8080/api/invitaciones';
+  private baseUrl = '/api/invitaciones'; // Usa proxy si tienes
 
   constructor(private http: HttpClient) {}
 
-  // Enviar una invitación
-  enviarInvitacion(destinatarioUsername: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${destinatarioUsername}`, {});
+  obtenerTodasRecibidas(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/recibidas/${username}`);
   }
 
-  // Aceptar invitación
-  aceptarInvitacion(id: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/aceptar`, {});
+  aceptarInvitacion(id: number, username: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/aceptar`, {}, {
+      headers: new HttpHeaders({ username })
+    });
   }
 
-  // Rechazar invitación
-  rechazarInvitacion(id: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/rechazar`, {});
+  rechazarInvitacion(id: number, username: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/rechazar`, {}, {
+      headers: new HttpHeaders({ username })
+    });
   }
 
-  // Cancelar invitación (opcional)
-  cancelarInvitacion(id: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/cancelar`, {});
+  enviarInvitacion(senderUsername: string, dto: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${senderUsername}`, dto);
   }
 
-  // Obtener invitaciones recibidas pendientes
   obtenerPendientesRecibidas(username: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/pendientes/recibidas/${username}`);
   }
 
-  // Obtener invitaciones enviadas
-  obtenerEnviadas(username: string): Observable<any[]> {
+  obtenerInvitacionesEnviadas(username: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/enviadas/${username}`);
   }
 
-  // Obtener todas las activas (por si sos admin)
-  obtenerActivas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/activas`);
+  cancelarInvitacion(id: number, senderUsername: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/cancelar`, {}, {
+      headers: new HttpHeaders({ username: senderUsername })
+    });
+  }
+
+  obtenerInvitacionesActivas(role: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/activas`, {
+      headers: new HttpHeaders({ role })
+    });
   }
 }

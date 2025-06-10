@@ -117,4 +117,7 @@ public interface IUserService {
 
     Page<UserDTO> listarTodosUsuarios(Pageable pageable);
 
+    void eliminarAmistad(String username1, String username2);
+
+
 }

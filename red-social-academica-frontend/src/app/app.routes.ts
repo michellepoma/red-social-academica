@@ -21,7 +21,6 @@ import { AdminUsuariosPerfilComponent } from './pages/admin/admin-usuarios/admin
 
 // Ruta no autorizada
 import { NoAutorizadoComponent } from './pages/no-autorizado/no-autorizado.component';
-import { PendientesComponent } from './pages/usuario/invitaciones/pendientes.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,13 +35,25 @@ export const routes: Routes = [
   // Rutas de usuario protegidas con AuthGuard
 {
   path: 'usuario',
-  component: HomeUsuarioComponent, // <-- Este contiene el sidebar
+  component: HomeUsuarioComponent,
   canActivate: [AuthGuard],
   children: [
-    { path: 'invitaciones', component: PendientesComponent },
+    // ✅ Redirige /usuario/invitaciones → /usuario/invitaciones/recibidas
+    {
+      path: 'invitaciones',
+      redirectTo: 'invitaciones/recibidas',
+      pathMatch: 'full'
+    },
+    {
+      path: 'invitaciones/recibidas',
+      loadComponent: () =>
+        import('./pages/usuario/invitaciones/invitaciones-recibidas.component').then(
+          m => m.InvitacionesRecibidasComponent
+        )
+    },
     { path: 'perfil', component: UsuarioPerfilComponent },
     { path: 'amigos', component: AmigosComponent },
-    { path: '', redirectTo: 'invitaciones', pathMatch: 'full' }
+    { path: '', redirectTo: 'invitaciones/recibidas', pathMatch: 'full' }
   ]
 },
 

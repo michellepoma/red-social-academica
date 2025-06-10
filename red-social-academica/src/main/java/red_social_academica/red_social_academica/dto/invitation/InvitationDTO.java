@@ -48,4 +48,10 @@ public class InvitationDTO implements Serializable {
 
     @Schema(description = "Indica si la invitacion esta activa", example = "true", accessMode = Schema.AccessMode.READ_ONLY)
     private boolean activo;
+
+    @Schema(description = "Nombre de usuario del remitente", example = "carlos_r")
+    private String senderUsername;
+    @Schema(description = "Nombre de usuario del que recibe", example = "carlos_r")
+    private String receiverUsername;
+
 }

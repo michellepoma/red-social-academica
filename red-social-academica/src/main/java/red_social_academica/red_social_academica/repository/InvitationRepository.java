@@ -17,7 +17,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findBySenderUsernameAndActivoTrue(String username);
 
     // === Invitaciones activas recibidas por un usuario ===
-    List<Invitation> findByReceiverUsernameAndActivoTrue(String username);
+    List<Invitation> findByReceiver_UsernameAndActivoTrue(String username);
 
     // === Buscar invitacion activa entre dos usuarios ===
     Optional<Invitation> findBySenderUsernameAndReceiverUsernameAndActivoTrue(String sender, String receiver);

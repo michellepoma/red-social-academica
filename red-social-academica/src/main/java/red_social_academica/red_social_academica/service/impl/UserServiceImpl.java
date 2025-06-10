@@ -198,6 +198,25 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findByEmailAndActivoTrue(email).isPresent();
     }
 
+    @Override
+    @Transactional
+    @CacheEvict(value = "friendsCache", key = "#username1", allEntries = true)
+    public void eliminarAmistad(String username1, String username2) {
+        User user1 = userRepository.findByUsernameAndActivoTrue(username1)
+                .orElseThrow(() -> new RuntimeException("Usuario 1 no encontrado o inactivo"));
+
+        User user2 = userRepository.findByUsernameAndActivoTrue(username2)
+                .orElseThrow(() -> new RuntimeException("Usuario 2 no encontrado o inactivo"));
+
+        user1.getFriends().remove(user2);
+        user1.getAuxFriends().remove(user2);
+        user2.getFriends().remove(user1);
+        user2.getAuxFriends().remove(user1);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+    }
+
     // === UTILITARIOS PRIVADOS ===
 
     private UserDTO convertToDTO(User user) {
