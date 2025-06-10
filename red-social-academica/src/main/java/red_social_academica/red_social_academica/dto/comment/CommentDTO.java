@@ -36,6 +36,9 @@ public class CommentDTO implements Serializable {
 
     @Schema(description = "Nombre completo del autor", example = "Carlos Fernández")
     private String authorFullName;
+    
+    @Schema(description = "Nombre de usuario del autor", example = "carlos123")
+    private String authorUsername;
 
     @Schema(description = "ID de la publicación comentada", example = "101")
     private Long postId;

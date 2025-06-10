@@ -33,35 +33,66 @@ export const routes: Routes = [
   { path: 'amigos', component: AmigosComponent },
 
   // Rutas de usuario protegidas con AuthGuard
-{
-  path: 'usuario',
-  component: HomeUsuarioComponent,
-  canActivate: [AuthGuard],
-  children: [
-    // ✅ Redirige /usuario/invitaciones → /usuario/invitaciones/recibidas
-    {
-      path: 'invitaciones',
-      redirectTo: 'invitaciones/recibidas',
-      pathMatch: 'full'
-    },
-    {
-      path: 'invitaciones/recibidas',
-      loadComponent: () =>
-        import('./pages/usuario/invitaciones/invitaciones-recibidas.component').then(
-          m => m.InvitacionesRecibidasComponent
-        )
-    },
-    { path: 'perfil', component: UsuarioPerfilComponent },
-    { path: 'amigos', component: AmigosComponent },
-    { path: '', redirectTo: 'invitaciones/recibidas', pathMatch: 'full' }
-  ]
-},
+  {
+    path: 'usuario',
+    component: HomeUsuarioComponent,
+    canActivate: [AuthGuard],
+    children: [
+      // Redirección de invitaciones
+      {
+        path: 'publicaciones',
+        redirectTo: 'publicaciones/propias',
+        pathMatch: 'full'
+      },
+      {
+        path: 'invitaciones',
+        loadComponent: () =>
+          import('./pages/usuario/invitaciones/invitaciones-recibidas.component').then(
+            m => m.InvitacionesRecibidasComponent
+          )
+      },
 
+      // Publicaciones
+      {
+        path: 'publicaciones/propias',
+        loadComponent: () =>
+          import('./pages/usuario/publicaciones/mis-publicaciones.component').then(
+            m => m.MisPublicacionesComponent
+          )
+      },
+      {
+        path: 'publicaciones/nueva',
+        loadComponent: () =>
+          import('./pages/usuario/publicaciones/nueva-publicacion.component').then(
+            m => m.NuevaPublicacionComponent
+          )
+      },
+      {
+        path: 'publicaciones/editar/:id',
+        loadComponent: () =>
+          import('./pages/usuario/publicaciones/editar-publicacion.component').then(
+            m => m.EditarPublicacionComponent
+          )
+      },
+      {
+        path: 'publicaciones/comentarios/:postId',
+        loadComponent: () =>
+          import('./pages/usuario/comentarios/listar-comentarios.component').then(
+            m => m.MisComentariosComponent
+          )
+      },
 
-  // Home exclusivo para administrador
+      // Perfil y amigos
+      { path: 'perfil', component: UsuarioPerfilComponent },
+      { path: 'amigos', component: AmigosComponent },
+
+      // Redirección por defecto
+      { path: '', redirectTo: 'invitaciones/recibidas', pathMatch: 'full' }
+    ]
+  },
+
+  // Rutas de administrador
   { path: 'admin/home', component: HomeAdminComponent },
-
-  // Panel de administración
   {
     path: 'admin',
     component: AdminComponent,
@@ -75,9 +106,9 @@ export const routes: Routes = [
     ]
   },
 
-  // Ruta para acceso denegado
+  // Ruta de acceso denegado
   { path: 'no-auth', component: NoAutorizadoComponent },
 
-  // Ruta por defecto (cualquier otra)
+  // Fallback
   { path: '**', redirectTo: 'no-auth' }
 ];

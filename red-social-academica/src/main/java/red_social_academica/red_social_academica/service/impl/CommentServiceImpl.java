@@ -161,6 +161,7 @@ public class CommentServiceImpl implements ICommentService {
                 .createdAt(comment.getCreatedAt())
                 .authorId(comment.getAuthor().getId())
                 .authorFullName(fullName)
+                .authorUsername(comment.getAuthor().getUsername())
                 .postId(comment.getPost().getId())
                 .fechaAlta(comment.getFechaAlta())
                 .fechaModificacion(comment.getFechaModificacion())

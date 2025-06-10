@@ -1,53 +1,51 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export interface CommentCreateDTO {
-postId: number;
-content: string;
-}
-
-export interface CommentUpdateDTO {
-content: string;
-}
-
-export interface CommentDTO {
-id: number;
-content: string;
-createdAt: string;
-authorId: number;
-authorFullName: string;
-postId: number;
-fechaAlta: string;
-fechaModificacion: string;
-fechaBaja: string;
-motivoBaja: string;
-activo: boolean;
+export interface Comentario {
+  id: number;
+  content: string;
+  createdAt: string; // puede ser Date, pero string es más flexible para formateo
+  authorId: number;
+  authorUsername: string;
+  authorFullName: string;
+  postId: number;
+  fechaAlta: string;
+  fechaModificacion: string;
+  motivoBaja: string | null;
+  fechaBaja: string | null;
+  activo: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
-export class CommentService {
-private baseUrl = '/api/comments'; // Usa proxy.conf.json
+export class ComentarioService {
+  private baseUrl = '/api/comments';
 
-constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  crearComentario(data: CommentCreateDTO): Observable<CommentDTO> {
-    return this.http.post<CommentDTO>(this.baseUrl, data);
+  obtenerComentariosDeUsuario(username: string): Observable<Comentario[]> {
+    return this.http.get<Comentario[]>(`${this.baseUrl}/usuario/${username}`);
   }
 
-  actualizarComentario(id: number, data: CommentUpdateDTO): Observable<CommentDTO> {
-    return this.http.put<CommentDTO>(`${this.baseUrl}/${id}`, data);
+  obtenerComentariosDeUsuarioPaginado(username: string, page = 0, size = 10): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/usuario/${username}/paginado?page=${page}&size=${size}`);
   }
 
-  eliminarComentario(id: number, motivo: string): Observable<CommentDTO> {
-    return this.http.put<CommentDTO>(`${this.baseUrl}/${id}/baja?motivo=${encodeURIComponent(motivo)}`, {});
+  obtenerComentariosPorPost(postId: number): Observable<Comentario[]> {
+    return this.http.get<Comentario[]>(`${this.baseUrl}/post/${postId}`);
   }
 
-  obtenerComentariosPorPost(postId: number): Observable<CommentDTO[]> {
-    return this.http.get<CommentDTO[]>(`${this.baseUrl}/post/${postId}`);
+  crearComentario(dto: { postId: number, content: string }): Observable<any> {
+    return this.http.post(this.baseUrl, dto);
   }
 
-  obtenerComentariosPorUsuario(username: string): Observable<CommentDTO[]> {
-    return this.http.get<CommentDTO[]>(`${this.baseUrl}/usuario/${username}`);
+  actualizarComentario(commentId: number, content: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${commentId}`, { content });
   }
+
+eliminarComentario(commentId: number, motivo: string): Observable<any> {
+  return this.http.put(`${this.baseUrl}/${commentId}/baja?motivo=${encodeURIComponent(motivo)}`, {});
+}
+
+
 }
