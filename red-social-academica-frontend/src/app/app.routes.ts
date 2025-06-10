@@ -7,6 +7,7 @@ import { HomeUsuarioComponent } from './pages/home-usuario/home-usuario/home-usu
 import { UsuarioPerfilComponent } from './pages/usuario/usuario-perfil.component';
 import { AmigosComponent } from './pages/usuario/amigos.component';
 import { NotificacionesComponent } from './pages/usuario/notificaciones.component';
+import { PerfilPublicoComponent } from './pages/usuario/perfil/perfil-publico.component';
 
 // Guardas de acceso
 import { AuthGuard } from './guards/auth.guard'; // ✅
@@ -90,8 +91,24 @@ export const routes: Routes = [
             m => m.MisComentariosComponent
           )
       },
+      {
+        path: 'publicaciones/amigo/:username',
+        loadComponent: () =>
+          import('./pages/usuario/publicaciones/publicaciones-amigo.component').then(
+            m => m.PublicacionesAmigoComponent
+          )
+      },
       { path: 'perfil', component: UsuarioPerfilComponent },
-      { path: 'amigos', component: AmigosComponent },
+      {
+        path: 'perfil/:username',
+        loadComponent: () =>
+          import('./pages/usuario/perfil/perfil-publico.component').then(m => m.PerfilPublicoComponent)
+      },
+      {
+        path: 'amigos',
+        loadComponent: () =>
+          import('./pages/usuario/amigos/amigos.component').then(m => m.AmigosComponent)
+      },
 
       { path: '', redirectTo: 'invitaciones/recibidas', pathMatch: 'full' }
     ]

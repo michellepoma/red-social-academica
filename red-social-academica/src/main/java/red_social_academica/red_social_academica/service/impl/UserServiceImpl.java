@@ -16,6 +16,7 @@ import static red_social_academica.red_social_academica.auth.security.AuthUtils.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +60,6 @@ public class UserServiceImpl implements IUserService {
 
         User user = userRepository.findByUsernameAndActivoTrue(usernameActual)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado o inactivo"));
-
 
         userValidator.validarActualizacion(dto, usernameActual);
 
@@ -214,7 +214,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "friendsCache", key = "#username1", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "friendsCache", key = "#username1"),
+            @CacheEvict(value = "friendsCache", key = "#username2")
+    })
     public void eliminarAmistad(String username1, String username2) {
         User user1 = userRepository.findByUsernameAndActivoTrue(username1)
                 .orElseThrow(() -> new RuntimeException("Usuario 1 no encontrado o inactivo"));

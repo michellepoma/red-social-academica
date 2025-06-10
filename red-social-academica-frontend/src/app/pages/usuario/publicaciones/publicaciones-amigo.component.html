@@ -1,53 +1,31 @@
 <div class="contenedor-publicaciones">
   <div class="header-publicaciones">
-    <h2 class="titulo">📰 Mis Publicaciones</h2>
-    <h5 class="mb-3" style="display: flex; align-items: center; gap: 0.5rem;">
-      <span>🔍</span> Buscar Publicaciones
-    </h5>
-
-    <div class="form-group d-flex gap-2 mb-4">
-      <input [(ngModel)]="textoBusqueda" placeholder="Ingrese un campo a buscar" class="form-control" />
-      <button (click)="buscar()" class="btn btn-primary">Buscar</button>
-      <button (click)="limpiarBusqueda()" class="btn btn-secondary" *ngIf="textoBusqueda.trim()">Limpiar</button>
-    </div>
-
-    <button class="btn btn-outline-success me-2" routerLink="/usuario/publicaciones/nueva">➕ Nueva publicación</button>
-    <button class="btn btn-outline-primary me-2" (click)="verRecientes()">🔁 Ver recientes</button>
-    <button class="btn btn-outline-secondary" (click)="verPropias()">📋 Ver mis publicaciones</button>
+    <h2 class="titulo">📰 Publicaciones de {{'@ '+ username }}</h2>
   </div>
 
-  <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  <div *ngIf="mensaje" class="mensaje text-muted">{{ mensaje }}</div>
 
   <div class="feed">
     <div class="card" *ngFor="let pub of publicaciones ?? []">
-
-      <!-- Mostrar solo si hay imagen -->
       <img *ngIf="pub.imageUrl" [src]="pub.imageUrl" alt="Imagen de la publicación" class="card-img" />
-
       <div class="card-body" [class.solo-texto]="!pub.imageUrl">
         <h3 class="card-title">{{ pub.title }}</h3>
         <p class="card-text">{{ pub.text }}</p>
-
         <a *ngIf="pub.resourceUrl" [href]="pub.resourceUrl" class="card-link" target="_blank">📎 Ver recurso</a>
-
         <p *ngIf="pub.eventDate" class="card-meta">
           📅 Evento: {{ pub.eventDate | date:'longDate' }}
         </p>
-
         <p class="card-meta">🕓 Publicado: {{ pub.date | date:'short' }}</p>
       </div>
-
       <div class="card-actions">
-        <button class="btn btn-warning" [routerLink]="['/usuario/publicaciones/editar', pub.id]">✏️ Editar</button>
-        <button class="btn btn-danger" (click)="darDeBaja(pub.id)">🗑 Eliminar</button>
         <button class="btn btn-success" [routerLink]="['/usuario/publicaciones/comentarios', pub.id]">
           💬 Ver comentarios
         </button>
-
       </div>
     </div>
   </div>
-  <div class="d-flex justify-content-between align-items-center mt-3 paginacion">
+
+  <div class="d-flex justify-content-between align-items-center mt-3 paginacion" *ngIf="totalPaginas > 0">
     <button (click)="anteriorPagina()" [disabled]="paginaActual === 0" class="btn btn-outline-secondary">
       ⬅ Anterior
     </button>
@@ -56,3 +34,4 @@
       Siguiente ➡
     </button>
   </div>
+</div>

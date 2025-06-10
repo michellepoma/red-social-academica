@@ -82,4 +82,9 @@ eliminarPostAdmin(postId: number): Observable<any> {
   return this.http.delete(`/api/admin/posts/${postId}`);
 }
 
+obtenerPublicacionesDeOtroUsuario(username: string, page: number, size: number) {
+  return this.http.get(`/api/posts/usuario/${username}?page=${page}&size=${size}`);
+}
+
+
 }

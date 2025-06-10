@@ -94,11 +94,9 @@ constructor(private http: HttpClient) {}
     });
   }
 
-  getAmigos(): Observable<any[]> {
-    return this.http.get<any[]>('/api/usuarios/me/amigos', {
-      headers: this.getAuthHeaders()
-    });
-  }
+ getAmigos(page: number = 0, size: number = 10) {
+  return this.http.get<any>(`/api/usuarios/me/amigos/page?page=${page}&size=${size}`);
+}
 
   getPerfilPublico(username: string): Observable<any> {
     return this.http.get(`/api/usuarios/${username}`, {
@@ -220,6 +218,13 @@ getCantidadNoLeidas(): Observable<number> {
     headers: this.getAuthHeaders()
   });
 }
+
+
+
+eliminarAmigo(username: string) {
+  return this.http.delete(`/api/usuarios/amigos/${username}`);
+}
+
 
 
 
