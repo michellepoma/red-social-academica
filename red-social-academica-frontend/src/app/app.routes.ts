@@ -42,6 +42,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: 'perfil/editar',
+        loadComponent: () =>
+          import('./pages/usuario/editar-perfil.component').then(m => m.EditarPerfilComponent)
+      },
+      {
         path: 'publicaciones',
         redirectTo: 'publicaciones/propias',
         pathMatch: 'full'

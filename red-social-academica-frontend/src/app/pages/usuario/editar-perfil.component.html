@@ -1,0 +1,96 @@
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="card-title mb-4 text-primary text-center">✏️ Editar Perfil</h2>
+
+        <form (ngSubmit)="guardar()">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">👤 Nombre</label>
+                    <input [(ngModel)]="perfil.name" name="name" class="form-control" placeholder="Ingresa tu nombre" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">👤 Apellido</label>
+                    <input [(ngModel)]="perfil.lastName" name="lastName" class="form-control"
+                        placeholder="Ingresa tu apellido" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">🔑 Nombre de usuario</label>
+                    <input [(ngModel)]="perfil.username" name="username" class="form-control"
+                        placeholder="Nombre de usuario" />
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">📧 Correo</label>
+                <input [(ngModel)]="perfil.email" name="email" type="email" class="form-control"
+                    placeholder="ejemplo@correo.com" />
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">🔒 Nueva contraseña</label>
+                    <input [(ngModel)]="perfil.password" name="password" type="password" class="form-control"
+                        placeholder="Dejar vacío si no deseas cambiarla" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">🔒 Confirmar contraseña</label>
+                    <input [(ngModel)]="perfil.passwordConfirm" name="passwordConfirm" type="password"
+                        class="form-control" placeholder="Confirma tu nueva contraseña" />
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">🎓 Carrera</label>
+                <input [(ngModel)]="perfil.career" name="career" class="form-control"
+                    placeholder="Tu carrera universitaria" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">📝 Bio</label>
+                <textarea [(ngModel)]="perfil.bio" name="bio" class="form-control" rows="3"
+                    placeholder="Cuéntanos algo sobre ti..."></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">🎂 Fecha de nacimiento</label>
+                <input [(ngModel)]="perfil.birthdate" name="birthdate" type="date" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">🖼️ Foto de perfil (URL)</label>
+                <input [(ngModel)]="perfil.profilePictureUrl" name="profilePictureUrl" class="form-control"
+                    placeholder="https://..." />
+
+                <div class="mt-4 d-flex justify-content-center">
+                    <img [src]="perfil.profilePictureUrl || ''" (error)="imagenValida = false" *ngIf="imagenValida"
+                        class="rounded-circle border border-3" style="width: 120px; height: 120px; object-fit: cover;"
+                        alt="Vista previa" />
+
+                    <div *ngIf="!imagenValida"
+                        class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold"
+                        style="width: 120px; height: 120px; font-size: 2rem;">
+                        {{ perfil.name?.charAt(0) || '?' }}
+                    </div>
+                </div>
+            </div>
+
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+            <div *ngIf="mensaje" class="alert alert-success mb-3">{{ mensaje }}</div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    💾 Guardar cambios
+                </button>
+                <a [routerLink]="['/usuario/perfil']" class="btn btn-secondary">
+                    🔙 Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

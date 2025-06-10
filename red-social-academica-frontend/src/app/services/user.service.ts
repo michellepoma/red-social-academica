@@ -37,6 +37,13 @@ constructor(private http: HttpClient) {}
     });
   }
 
+  editarMiPerfil(data: any): Observable<any> {
+  return this.http.put(`/api/usuarios/me`, data, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+
   getUsuarioPorUsername(username: string): Observable<any> {
     return this.http.get(`/api/usuarios/${username}`, {
       headers: this.getAuthHeaders()

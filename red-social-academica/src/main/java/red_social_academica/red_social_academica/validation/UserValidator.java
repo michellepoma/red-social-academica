@@ -3,6 +3,8 @@ package red_social_academica.red_social_academica.validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import red_social_academica.red_social_academica.dto.user.UserCreateDTO;
+import red_social_academica.red_social_academica.dto.user.UserUpdateDTO;
+import red_social_academica.red_social_academica.model.User;
 import red_social_academica.red_social_academica.repository.UserRepository;
 import red_social_academica.red_social_academica.service.IRegistroUniversitarioService;
 import red_social_academica.red_social_academica.validation.exception.BusinessException;
@@ -108,4 +110,40 @@ public class UserValidator {
             throw new BusinessException("El apellido no puede estar vacío");
         }
     }
+
+    public void validarActualizacion(UserUpdateDTO dto, String usernameActual) {
+        Map<String, String> errores = new LinkedHashMap<>();
+
+        // Validar si hay otro usuario con el mismo username
+        User otroUsername = userRepository.findByUsernameAndActivoTrue(dto.getUsername()).orElse(null);
+        if (otroUsername != null && !otroUsername.getUsername().equals(usernameActual)) {
+            errores.put("username", "Ya existe otro usuario con este nombre de usuario");
+        }
+
+        // Validar si hay otro usuario con el mismo email
+        User otroEmail = userRepository.findByEmailAndActivoTrue(dto.getEmail()).orElse(null);
+        if (otroEmail != null && !otroEmail.getUsername().equals(usernameActual)) {
+            errores.put("email", "Ya existe otro usuario con este correo");
+        }
+
+        // Validar dominio de email
+        try {
+            validarDominioEmail(dto.getEmail());
+        } catch (BusinessException e) {
+            errores.put("email", e.getMessage());
+        }
+
+        // Validar coincidencia de contraseñas si se proporciona una
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
+                errores.put("passwordConfirm", "Las contraseñas no coinciden");
+            }
+        }
+
+        // Si hay errores, lanzar excepción
+        if (!errores.isEmpty()) {
+            throw new BusinessException(errores.toString());
+        }
+    }
+
 }

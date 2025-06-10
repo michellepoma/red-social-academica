@@ -3,6 +3,7 @@ package red_social_academica.red_social_academica.service.impl;
 import red_social_academica.red_social_academica.auth.model.Role;
 import red_social_academica.red_social_academica.auth.model.Role.NombreRol;
 import red_social_academica.red_social_academica.auth.repository.RoleRepository;
+import red_social_academica.red_social_academica.auth.security.AuthUtils;
 import red_social_academica.red_social_academica.dto.user.*;
 import red_social_academica.red_social_academica.model.User;
 import red_social_academica.red_social_academica.repository.UserRepository;
@@ -47,15 +48,28 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache",
-            "friendsCache" }, key = "#root.target.getCurrentUsername()")
+    @CacheEvict(value = {
+            "userByUsernameCache",
+            "usersByRoleCache",
+            "usersBySearchCache",
+            "friendsCache"
+    }, key = "T(red_social_academica.red_social_academica.auth.security.AuthUtils).getCurrentUsername()")
     public UserDTO actualizarPerfil(UserUpdateDTO dto) {
         String usernameActual = getCurrentUsername();
 
         User user = userRepository.findByUsernameAndActivoTrue(usernameActual)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado o inactivo"));
 
+
+        userValidator.validarActualizacion(dto, usernameActual);
+
+        // Si el usuario proporciona una nueva contraseña, se codifica y se actualiza
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         updateEntityFromUpdateDTO(dto, user);
+
         user.setFechaModificacion(LocalDate.now());
         user.setUsuarioModificacion(usernameActual);
 
@@ -65,7 +79,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     @CacheEvict(value = { "userByUsernameCache", "usersByRoleCache", "usersBySearchCache",
-            "friendsCache" }, key = "#root.target.getCurrentUsername()")
+            "friendsCache" }, key = "T(red_social_academica.red_social_academica.auth.security.AuthUtils).getCurrentUsername()")
     public UserDTO eliminarUsuario() {
         String usernameActual = getCurrentUsername();
         User user = userRepository.findByUsernameAndActivoTrue(usernameActual)
@@ -260,8 +274,11 @@ public class UserServiceImpl implements IUserService {
     private void updateEntityFromUpdateDTO(UserUpdateDTO dto, User user) {
         user.setName(dto.getName());
         user.setLastName(dto.getLastName());
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
         user.setBio(dto.getBio());
         user.setCareer(dto.getCareer());
+        user.setBirthdate(dto.getBirthdate());
         user.setProfilePictureUrl(dto.getProfilePictureUrl());
     }
 
@@ -287,4 +304,9 @@ public class UserServiceImpl implements IUserService {
         user.setMotivoBaja(motivo);
         user.setUsuarioBaja(quien);
     }
+
+    private String getCurrentUsername() {
+        return AuthUtils.getCurrentUsername();
+    }
+
 }

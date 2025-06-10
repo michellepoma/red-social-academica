@@ -51,4 +51,18 @@ public class UserUpdateDTO implements Serializable {
     @Schema(description = "Fecha de nacimiento", example = "2001-10-12")
     @Past(message = "La fecha de nacimiento debe ser anterior a hoy")
     private LocalDate birthdate;
+
+    @Schema(description = "Correo electrónico del usuario", example = "ana.gomez@universidad.edu")
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El email debe ser válido")
+    @Size(max = 100, message = "El email no puede tener más de 100 caracteres")
+    private String email;
+
+    @Schema(description = "Contraseña para el acceso", example = "segura123")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    private String password;
+
+    @Schema(description = "Confirmación de contraseña", example = "segura123")
+    private String passwordConfirm;
+
 }
