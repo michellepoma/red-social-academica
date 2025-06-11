@@ -2,17 +2,12 @@ package red_social_academica.red_social_academica.controller;
 
 import red_social_academica.red_social_academica.dto.post.*;
 import red_social_academica.red_social_academica.service.IPostService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;

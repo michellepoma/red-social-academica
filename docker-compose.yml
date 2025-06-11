@@ -8,26 +8,45 @@ services:
       POSTGRES_DB: redsocial
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-    ports:
-      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     restart: always
 
-  app:
-    build: .
+  redis:
+    image: redis:alpine
+    container_name: redis_redsocial
+    ports:
+      - "6379:6379"
+    restart: always
+
+  backend:
+    build: ./red-social-academica
     image: red-social-academica
     container_name: red-social-academica-container
     depends_on:
       - db
+      - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/redsocial
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_REDIS_HOST: redis
     ports:
       - "8081:8080"
     restart: always
     entrypoint: ["sh", "-c", "sleep 40 && java -jar app.jar"]
+
+  frontend:
+    build: ./red-social-academica-frontend
+    image: red-social-academica-frontend
+    container_name: frontend_redsocial
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: always
 
 volumes:
   db_data:

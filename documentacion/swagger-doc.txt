@@ -1,0 +1,2789 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sistema de Red Social Academica API",
+    "description": "Documentación de la API de Seguridad y Gestión Red Social",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuarios",
+      "description": "Operaciones para usuarios autenticados"
+    },
+    {
+      "name": "Usuarios (Admin)",
+      "description": "Operaciones administrativas sobre usuarios"
+    },
+    {
+      "name": "Publicaciones (Admin)",
+      "description": "Gestión de publicaciones como administrador"
+    },
+    {
+      "name": "Comentarios",
+      "description": "Operaciones públicas sobre comentarios"
+    },
+    {
+      "name": "Notificaciones",
+      "description": "Gestión de notificaciones del usuario"
+    },
+    {
+      "name": "Publicaciones",
+      "description": "Operaciones públicas sobre publicaciones académicas"
+    },
+    {
+      "name": "Invitaciones",
+      "description": "Gestión de solicitudes de amistad entre usuarios"
+    },
+    {
+      "name": "Admin - Comentarios",
+      "description": "Gestión de comentarios como administrador"
+    }
+  ],
+  "paths": {
+    "/api/usuarios/me": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener mi perfil",
+        "operationId": "obtenerMiPerfil",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar perfil del usuario autenticado",
+        "operationId": "actualizarPerfil",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuarios/me/baja": {
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Eliminar lógicamente mi cuenta",
+        "operationId": "eliminarUsuario",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/{postId}": {
+      "get": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Obtener detalles de una publicación activa por ID",
+        "operationId": "obtenerPostPorId",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Actualizar una publicación propia",
+        "operationId": "actualizarPost",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/{postId}/baja": {
+      "put": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Eliminar lógicamente una publicación propia",
+        "operationId": "eliminarPost",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "motivo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notificaciones/{id}/leer": {
+      "put": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Marcar una notificación como leída",
+        "operationId": "marcarComoLeida",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notificaciones/{id}/baja": {
+      "put": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Eliminar una notificación (lógicamente)",
+        "operationId": "eliminarNotificacion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/{invitationId}/rechazar": {
+      "put": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Rechazar una invitación",
+        "operationId": "rechazarInvitacion",
+        "parameters": [
+          {
+            "name": "invitationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/{invitationId}/cancelar": {
+      "put": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Cancelar una invitación enviada (por el remitente)",
+        "operationId": "cancelarInvitacion",
+        "parameters": [
+          {
+            "name": "invitationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/{invitationId}/aceptar": {
+      "put": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Aceptar una invitación",
+        "operationId": "aceptarInvitacion",
+        "parameters": [
+          {
+            "name": "invitationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/{commentId}": {
+      "put": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Actualizar tu propio comentario",
+        "operationId": "actualizarComentario",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/{commentId}/baja": {
+      "put": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Eliminar lógicamente tu comentario",
+        "operationId": "eliminarComentario",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "motivo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{username}": {
+      "get": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Obtener perfil de cualquier usuario por username",
+        "operationId": "obtenerPorUsername_1",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Actualizar datos de un usuario como administrador",
+        "operationId": "actualizarUsuarioComoAdmin",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{username}/baja": {
+      "put": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Dar de baja a un usuario como administrador",
+        "operationId": "eliminarUsuarioComoAdmin",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/posts/{postId}": {
+      "get": {
+        "tags": [
+          "Publicaciones (Admin)"
+        ],
+        "summary": "Obtener detalles de una publicación activa por ID",
+        "operationId": "obtenerPostPorId_1",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Publicaciones (Admin)"
+        ],
+        "summary": "Actualizar cualquier publicación como administrador",
+        "operationId": "actualizarPostComoAdmin",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Publicaciones (Admin)"
+        ],
+        "summary": "Eliminar cualquier publicación como administrador",
+        "operationId": "eliminarPostComoAdmin",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "motivo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/comments/{commentId}": {
+      "put": {
+        "tags": [
+          "Admin - Comentarios"
+        ],
+        "summary": "Actualizar cualquier comentario como admin",
+        "operationId": "actualizarComentarioComoAdmin",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin - Comentarios"
+        ],
+        "summary": "Eliminar cualquier comentario como admin",
+        "operationId": "eliminarComentarioComoAdmin",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "motivo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts": {
+      "post": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Crear una nueva publicación (usuario autenticado)",
+        "operationId": "crearPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/{senderUsername}": {
+      "post": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Enviar una invitación de amistad",
+        "operationId": "enviarInvitacion",
+        "parameters": [
+          {
+            "name": "senderUsername",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments": {
+      "post": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Crear un nuevo comentario",
+        "operationId": "crearComentario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "Registrar un nuevo usuario",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "Cierra la sesión del usuario actual (frontend local).",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "Iniciar sesion",
+        "operationId": "authenticateUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Sesion iniciada con exito",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/crear": {
+      "post": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Crear un nuevo usuario desde el panel de administrador",
+        "operationId": "crearUsuarioComoAdmin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateAdminDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente por el administrador",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuarios/{username}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Ver perfil público de otro usuario",
+        "operationId": "obtenerPorUsername",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuarios/me/amigos": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener lista de amigos del usuario",
+        "operationId": "obtenerAmigos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuarios/me/amigos/page": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener lista paginada de amigos",
+        "operationId": "obtenerAmigosPaginados",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/usuario/{username}": {
+      "get": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Listar publicaciones activas de un usuario",
+        "operationId": "obtenerPostsDeUsuario",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/recientes": {
+      "get": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Obtener las 10 publicaciones activas más recientes",
+        "operationId": "obtenerTop10Recientes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PostDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/buscar": {
+      "get": {
+        "tags": [
+          "Publicaciones"
+        ],
+        "summary": "Buscar publicaciones activas por texto en título o contenido",
+        "operationId": "buscarPorTexto",
+        "parameters": [
+          {
+            "name": "texto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePostDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notificaciones": {
+      "get": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Listar todas las notificaciones activas del usuario autenticado",
+        "operationId": "obtenerNotificaciones",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotificationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notificaciones/no-leidas/top": {
+      "get": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Obtener las 10 notificaciones no leídas más recientes",
+        "operationId": "ultimas10NoLeidas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotificationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notificaciones/no-leidas/count": {
+      "get": {
+        "tags": [
+          "Notificaciones"
+        ],
+        "summary": "Contar notificaciones no leídas",
+        "operationId": "contarNoLeidas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/recibidas/{username}": {
+      "get": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Obtener invitaciones recibidas por un usuario",
+        "operationId": "obtenerRecibidas",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/pendientes/recibidas/{username}": {
+      "get": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Obtener invitaciones pendientes recibidas (aún no aceptadas/rechazadas)",
+        "operationId": "obtenerPendientesRecibidas",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/enviadas/{username}": {
+      "get": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Obtener invitaciones enviadas por un usuario",
+        "operationId": "obtenerEnviadas",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invitaciones/activas": {
+      "get": {
+        "tags": [
+          "Invitaciones"
+        ],
+        "summary": "Obtener todas las invitaciones activas (admin)",
+        "operationId": "obtenerTodasActivas",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/usuario/{username}": {
+      "get": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Obtener comentarios activos de un usuario (sin paginación)",
+        "operationId": "obtenerComentariosDeUsuario",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/usuario/{username}/paginado": {
+      "get": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Obtener comentarios activos de un usuario (paginado)",
+        "operationId": "obtenerComentariosDeUsuarioPaginado",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageCommentDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/comments/post/{postId}": {
+      "get": {
+        "tags": [
+          "Comentarios"
+        ],
+        "summary": "Obtener comentarios activos de un post",
+        "operationId": "obtenerComentariosDePost",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/session-info": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "Devuelve información de la sesión actual",
+        "operationId": "getSessionInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/listar": {
+      "get": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Listar todos los usuarios (activos e inactivos)",
+        "operationId": "listarTodosUsuarios",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/buscar": {
+      "get": {
+        "tags": [
+          "Usuarios (Admin)"
+        ],
+        "summary": "Buscar usuarios por nombre, email, rol, estado activo/inactivo, username",
+        "operationId": "buscarPorNombreYCorreo",
+        "parameters": [
+          {
+            "name": "texto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuarios/amigos/{username}": {
+      "delete": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Eliminar una amistad entre dos usuarios",
+        "operationId": "eliminarAmigo",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserUpdateDTO": {
+        "required": [
+          "email",
+          "lastName",
+          "name",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Nombre actualizado del usuario",
+            "example": "Ana"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Apellido actualizado del usuario",
+            "example": "Gómez"
+          },
+          "username": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "description": "Username actualizado del usuario",
+            "example": "ana_g"
+          },
+          "bio": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nueva biografía del usuario",
+            "example": "Estudiante de ingeniería en software"
+          },
+          "career": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Carrera académica actual",
+            "example": "Ingeniería de Sistemas"
+          },
+          "profilePictureUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de la nueva foto de perfil",
+            "example": "https://cdn.miapp.com/perfiles/ana.jpg"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Fecha de nacimiento",
+            "format": "date",
+            "example": "2001-10-12"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "ana.gomez@universidad.edu"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 6,
+            "type": "string",
+            "description": "Contraseña para el acceso",
+            "example": "segura123"
+          },
+          "passwordConfirm": {
+            "type": "string",
+            "description": "Confirmación de contraseña",
+            "example": "segura123"
+          }
+        },
+        "description": "DTO para actualizar los datos del perfil de un usuario"
+      },
+      "UserDTO": {
+        "required": [
+          "email",
+          "lastName",
+          "name",
+          "ru",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único del usuario",
+            "format": "int64",
+            "readOnly": true,
+            "example": 1
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "ana.gomez@universidad.edu"
+          },
+          "username": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "description": "Nombre de usuario único",
+            "example": "ana_gomez"
+          },
+          "ru": {
+            "maxLength": 2147483647,
+            "minLength": 7,
+            "type": "string",
+            "description": "Registro universitario unico",
+            "example": "1822345"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre del usuario",
+            "example": "Ana"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Apellido del usuario",
+            "example": "Gómez"
+          },
+          "profilePictureUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de la foto de perfil del usuario",
+            "example": "https://cdn.misitio.com/perfiles/ana.jpg"
+          },
+          "bio": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Biografía o descripción corta del usuario",
+            "example": "Estudiante de ingeniería apasionada por la IA"
+          },
+          "career": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Carrera o especialización del usuario",
+            "example": "Ingeniería en Sistemas"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Fecha de nacimiento del usuario",
+            "format": "date",
+            "example": "2002-05-14"
+          },
+          "usuarioAlta": {
+            "type": "string",
+            "description": "Usuario que creó este registro",
+            "example": "ana_gomez"
+          },
+          "fechaAlta": {
+            "type": "string",
+            "description": "Fecha de creación del perfil",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-10"
+          },
+          "fechaModificacion": {
+            "type": "string",
+            "description": "Última fecha de modificación del perfil",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-20"
+          },
+          "motivoBaja": {
+            "type": "string",
+            "description": "Motivo de desactivación o baja del usuario",
+            "readOnly": true,
+            "example": "actividad sospechosa"
+          },
+          "fechaBaja": {
+            "type": "string",
+            "description": "Fecha en la que se dio de baja el usuario",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-06-01"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si el usuario está activo o ha sido dado de baja",
+            "readOnly": true,
+            "example": true
+          },
+          "roles": {
+            "type": "array",
+            "description": "Roles asignados al usuario",
+            "example": [
+              "ROLE_PUBLIC"
+            ],
+            "items": {
+              "type": "string",
+              "description": "Roles asignados al usuario",
+              "example": "[\"ROLE_PUBLIC\"]"
+            }
+          }
+        },
+        "description": "DTO para representar el perfil público de un usuario"
+      },
+      "PostUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 150,
+            "minLength": 3,
+            "type": "string",
+            "description": "Título actualizado",
+            "example": "Actualización del taller de Git"
+          },
+          "text": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Contenido actualizado del post",
+            "example": "Se agregó el enlace a los ejercicios."
+          },
+          "imageUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nueva imagen adjunta",
+            "example": "https://miapp.com/img/post-actualizado.jpg"
+          },
+          "resourceUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nuevo recurso adjunto",
+            "example": "https://drive.google.com/nuevo_apunte.pdf"
+          },
+          "eventDate": {
+            "type": "string",
+            "description": "Fecha actualizada del evento",
+            "format": "date",
+            "example": "2025-06-20"
+          }
+        },
+        "description": "DTO para actualizar el contenido de una publicación"
+      },
+      "PostDTO": {
+        "required": [
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único de la publicación",
+            "format": "int64",
+            "readOnly": true,
+            "example": 101
+          },
+          "title": {
+            "maxLength": 150,
+            "minLength": 3,
+            "type": "string",
+            "description": "Título de la publicación",
+            "example": "Conferencia sobre Inteligencia Artificial"
+          },
+          "text": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Texto o contenido principal del post",
+            "example": "Estaremos compartiendo los últimos avances en IA educativa."
+          },
+          "date": {
+            "type": "string",
+            "description": "Fecha y hora de publicación",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-05-24T18:45:00Z"
+          },
+          "imageUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de una imagen adjunta",
+            "example": "https://cdn.misitio.com/images/evento.jpg"
+          },
+          "resourceUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de un recurso adjunto (PDF, documento, etc.)",
+            "example": "https://drive.google.com/apuntesIA.pdf"
+          },
+          "eventDate": {
+            "type": "string",
+            "description": "Fecha del evento, si aplica",
+            "format": "date",
+            "example": "2025-06-15"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "Identificador del autor del post",
+            "format": "int64",
+            "example": 15
+          },
+          "authorFullName": {
+            "type": "string",
+            "description": "Nombre del autor del post",
+            "example": "Ana Gómez"
+          },
+          "fechaAlta": {
+            "type": "string",
+            "description": "Fecha de creación del post",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-24"
+          },
+          "fechaModificacion": {
+            "type": "string",
+            "description": "Fecha de la última modificación",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-25"
+          },
+          "motivoBaja": {
+            "type": "string",
+            "description": "Motivo de baja del post (si aplica)",
+            "readOnly": true,
+            "example": "inapropiado"
+          },
+          "fechaBaja": {
+            "type": "string",
+            "description": "Fecha en que el post fue dado de baja (si aplica)",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-06-01"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si la publicacion esta activa",
+            "readOnly": true,
+            "example": true
+          }
+        },
+        "description": "DTO para representar una publicación en la red social académica"
+      },
+      "NotificationDTO": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único de la notificación",
+            "format": "int64",
+            "readOnly": true,
+            "example": 301
+          },
+          "message": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "description": "Mensaje de la notificación",
+            "example": "Juan comentó en tu publicación."
+          },
+          "read": {
+            "type": "boolean",
+            "description": "Indica si la notificación ha sido leída",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Fecha de creación",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-05-24T21:10:00Z"
+          },
+          "targetUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Ruta destino asociada a la notificación",
+            "example": "/posts/101"
+          },
+          "recipientId": {
+            "type": "integer",
+            "description": "ID del destinatario",
+            "format": "int64",
+            "example": 15
+          },
+          "recipientName": {
+            "type": "string",
+            "description": "Nombre del destinatario",
+            "example": "Ana Gómez"
+          },
+          "fechaAlta": {
+            "type": "string",
+            "description": "Fecha de alta",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-24"
+          },
+          "fechaModificacion": {
+            "type": "string",
+            "description": "Fecha de modificación",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-25"
+          },
+          "motivoBaja": {
+            "type": "string",
+            "description": "Motivo de baja",
+            "readOnly": true,
+            "example": "eliminada por el usuario"
+          },
+          "fechaBaja": {
+            "type": "string",
+            "description": "Fecha de baja",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-06-01"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Estado de la notificación",
+            "readOnly": true,
+            "example": true
+          }
+        },
+        "description": "DTO para representar una notificación en el sistema"
+      },
+      "InvitationDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID unico de la invitacion",
+            "format": "int64",
+            "readOnly": true,
+            "example": 200
+          },
+          "senderId": {
+            "type": "integer",
+            "description": "ID del usuario que envia la invitacion",
+            "format": "int64",
+            "example": 10
+          },
+          "senderName": {
+            "type": "string",
+            "description": "Nombre del remitente",
+            "example": "Carlos Ramirez"
+          },
+          "receiverId": {
+            "type": "integer",
+            "description": "ID del usuario que recibe la invitacion",
+            "format": "int64",
+            "example": 25
+          },
+          "receiverName": {
+            "type": "string",
+            "description": "Nombre del destinatario",
+            "example": "Ana Gomez"
+          },
+          "fechaAlta": {
+            "type": "string",
+            "description": "Fecha de creacion de la invitacion",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-22"
+          },
+          "fechaModificacion": {
+            "type": "string",
+            "description": "Fecha de la ultima modificacion de la invitacion",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-24"
+          },
+          "motivoBaja": {
+            "type": "string",
+            "description": "Motivo de cancelacion o rechazo de la invitacion",
+            "readOnly": true,
+            "example": "rechazada por el destinatario"
+          },
+          "fechaBaja": {
+            "type": "string",
+            "description": "Fecha de cancelacion o eliminacion de la invitacion",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-25"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si la invitacion esta activa",
+            "readOnly": true,
+            "example": true
+          },
+          "senderUsername": {
+            "type": "string",
+            "description": "Nombre de usuario del remitente",
+            "example": "carlos_r"
+          },
+          "receiverUsername": {
+            "type": "string",
+            "description": "Nombre de usuario del que recibe",
+            "example": "carlos_r"
+          }
+        },
+        "description": "DTO para representar una invitacion de amistad"
+      },
+      "CommentUpdateDTO": {
+        "required": [
+          "content"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "maxLength": 500,
+            "minLength": 2,
+            "type": "string",
+            "description": "Nuevo contenido del comentario",
+            "example": "Actualizado: excelente aporte."
+          }
+        },
+        "description": "DTO para actualizar un comentario existente"
+      },
+      "CommentDTO": {
+        "required": [
+          "content"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único del comentario",
+            "format": "int64",
+            "readOnly": true,
+            "example": 500
+          },
+          "content": {
+            "maxLength": 500,
+            "minLength": 2,
+            "type": "string",
+            "description": "Contenido del comentario",
+            "example": "¡Muy interesante, gracias por compartir!"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Fecha de creación del comentario",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2025-05-24T20:15:00Z"
+          },
+          "authorId": {
+            "type": "integer",
+            "description": "ID del autor del comentario",
+            "format": "int64",
+            "example": 42
+          },
+          "authorFullName": {
+            "type": "string",
+            "description": "Nombre completo del autor",
+            "example": "Carlos Fernández"
+          },
+          "authorUsername": {
+            "type": "string",
+            "description": "Nombre de usuario del autor",
+            "example": "carlos123"
+          },
+          "postId": {
+            "type": "integer",
+            "description": "ID de la publicación comentada",
+            "format": "int64",
+            "example": 101
+          },
+          "fechaAlta": {
+            "type": "string",
+            "description": "Fecha de creación del comentario",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-10"
+          },
+          "fechaModificacion": {
+            "type": "string",
+            "description": "Última fecha de modificación del comentario",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-05-20"
+          },
+          "motivoBaja": {
+            "type": "string",
+            "description": "Motivo de baja del comentario (si fue eliminado)",
+            "readOnly": true,
+            "example": "Contenido inapropiado"
+          },
+          "fechaBaja": {
+            "type": "string",
+            "description": "Fecha en la que se dio de baja el comentario",
+            "format": "date",
+            "readOnly": true,
+            "example": "2025-06-01"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si la publicacion esta activa",
+            "readOnly": true,
+            "example": true
+          }
+        },
+        "description": "DTO para representar un comentario en una publicación"
+      },
+      "PostCreateDTO": {
+        "required": [
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 150,
+            "minLength": 3,
+            "type": "string",
+            "description": "Título de la publicación",
+            "example": "Taller de Git y GitHub"
+          },
+          "text": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Contenido del post",
+            "example": "Aquí están los apuntes del taller de Git."
+          },
+          "imageUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de una imagen adjunta",
+            "example": "https://miapp.com/img/post1.jpg"
+          },
+          "resourceUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de un recurso adjunto",
+            "example": "https://drive.google.com/apuntes.pdf"
+          },
+          "eventDate": {
+            "type": "string",
+            "description": "Fecha del evento, si aplica",
+            "format": "date",
+            "example": "2025-06-15"
+          }
+        },
+        "description": "DTO para crear una nueva publicación"
+      },
+      "InvitationCreateDTO": {
+        "required": [
+          "receiverUsername"
+        ],
+        "type": "object",
+        "properties": {
+          "receiverUsername": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "description": "Username del usuario al que se desea enviar la invitacion",
+            "example": "ana_gomez"
+          }
+        },
+        "description": "DTO para enviar una invitacion de amistad"
+      },
+      "CommentCreateDTO": {
+        "required": [
+          "content",
+          "postId"
+        ],
+        "type": "object",
+        "properties": {
+          "postId": {
+            "type": "integer",
+            "description": "ID del post al que se realiza el comentario",
+            "format": "int64",
+            "example": 101
+          },
+          "content": {
+            "maxLength": 500,
+            "minLength": 2,
+            "type": "string",
+            "description": "Contenido del comentario",
+            "example": "Muy interesante, gracias por compartir."
+          }
+        },
+        "description": "DTO para crear un nuevo comentario en una publicación"
+      },
+      "UserCreateDTO": {
+        "required": [
+          "email",
+          "lastName",
+          "name",
+          "password",
+          "passwordConfirm",
+          "ru",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Nombre del usuario",
+            "example": "Ana"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Apellido del usuario",
+            "example": "Gómez"
+          },
+          "username": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "description": "Nombre de usuario único",
+            "example": "ana_gomez"
+          },
+          "ru": {
+            "maxLength": 2147483647,
+            "minLength": 7,
+            "type": "string",
+            "description": "Registro universitario unico",
+            "example": "1822345"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "ana.gomez@universidad.edu"
+          },
+          "profilePictureUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de la foto de perfil del usuario",
+            "example": "https://cdn.misitio.com/perfiles/ana.jpg"
+          },
+          "bio": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Biografía o descripción corta del usuario",
+            "example": "Estudiante de ingeniería apasionada por la IA"
+          },
+          "career": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Carrera o especialización del usuario",
+            "example": "Ingeniería en Sistemas"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Fecha de nacimiento del usuario",
+            "format": "date",
+            "example": "2002-05-14"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 6,
+            "type": "string",
+            "description": "Contraseña para el acceso",
+            "example": "segura123"
+          },
+          "passwordConfirm": {
+            "type": "string",
+            "description": "Confirmación de contraseña",
+            "example": "segura123"
+          }
+        },
+        "description": "DTO para registrar un nuevo usuario"
+      },
+      "LoginRequest": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserCreateAdminDTO": {
+        "required": [
+          "email",
+          "lastName",
+          "name",
+          "password",
+          "passwordConfirm",
+          "rol",
+          "ru",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Nombre del usuario",
+            "example": "Ana"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string",
+            "description": "Apellido del usuario",
+            "example": "Gómez"
+          },
+          "username": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "description": "Nombre de usuario único",
+            "example": "ana_gomez"
+          },
+          "ru": {
+            "maxLength": 2147483647,
+            "minLength": 7,
+            "type": "string",
+            "description": "Registro universitario unico",
+            "example": "1822345"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "ana.gomez@universidad.edu"
+          },
+          "profilePictureUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de la foto de perfil del usuario",
+            "example": "https://cdn.misitio.com/perfiles/ana.jpg"
+          },
+          "bio": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Biografía o descripción corta del usuario",
+            "example": "Estudiante de ingeniería apasionada por la IA"
+          },
+          "career": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Carrera o especialización del usuario",
+            "example": "Ingeniería en Sistemas"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Fecha de nacimiento del usuario",
+            "format": "date",
+            "example": "2002-05-14"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 6,
+            "type": "string",
+            "description": "Contraseña para el acceso",
+            "example": "segura123"
+          },
+          "passwordConfirm": {
+            "type": "string",
+            "description": "Confirmación de contraseña",
+            "example": "segura123"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Rol que se asignará al nuevo usuario",
+            "example": "ROLE_ADMIN",
+            "enum": [
+              "ROLE_ADMIN",
+              "ROLE_PUBLIC"
+            ]
+          }
+        },
+        "description": "DTO para crear un nuevo usuario desde el panel de administrador"
+      },
+      "PageUserDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
+          "paged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PagePostDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageCommentDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
+
