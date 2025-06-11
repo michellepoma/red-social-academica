@@ -215,9 +215,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "friendsCache", key = "#username1"),
-            @CacheEvict(value = "friendsCache", key = "#username2")
+            @CacheEvict(value = "friendsCache", allEntries = true)
     })
+
     public void eliminarAmistad(String username1, String username2) {
         User user1 = userRepository.findByUsernameAndActivoTrue(username1)
                 .orElseThrow(() -> new RuntimeException("Usuario 1 no encontrado o inactivo"));

@@ -73,8 +73,7 @@ public class InvitationServiceImpl implements IInvitationService {
                         @CacheEvict(value = "invitacionesEnviadas", key = "#result.senderUsername"),
                         @CacheEvict(value = "invitacionesPendientes", key = "#receiverUsername"),
                         @CacheEvict(value = "invitacionesRecibidas", key = "#receiverUsername"),
-                        @CacheEvict(value = "friendsCache", key = "#result.senderUsername"),
-                        @CacheEvict(value = "friendsCache", key = "#result.receiverUsername"),
+                        @CacheEvict(value = "friendsCache", allEntries = true),
                         @CacheEvict(value = "todasInvitacionesActivas", allEntries = true)
         })
         public InvitationDTO aceptarInvitacion(Long invitationId, String receiverUsername) {

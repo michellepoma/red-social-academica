@@ -114,11 +114,9 @@ public class UserController {
 
     @Operation(summary = "Eliminar una amistad entre dos usuarios")
     @DeleteMapping("/amigos/{username}")
-    public ResponseEntity<Void> eliminarAmigo(
-            @PathVariable String username,
-            @RequestHeader("username") String actualUsername) {
-
+    public ResponseEntity<Void> eliminarAmigo(@PathVariable String username) {
         long inicio = System.currentTimeMillis();
+        String actualUsername = getCurrentUsername();
         logger.info("[USUARIO] Inicio eliminarAmigo entre {} y {}", actualUsername, username);
 
         userService.eliminarAmistad(actualUsername, username);
