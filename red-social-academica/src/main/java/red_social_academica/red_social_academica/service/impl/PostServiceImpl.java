@@ -1,11 +1,14 @@
 package red_social_academica.red_social_academica.service.impl;
 
 import red_social_academica.red_social_academica.dto.post.*;
+import red_social_academica.red_social_academica.dto.user.UserDTO;
 import red_social_academica.red_social_academica.model.Post;
 import red_social_academica.red_social_academica.model.User;
 import red_social_academica.red_social_academica.repository.PostRepository;
 import red_social_academica.red_social_academica.repository.UserRepository;
+import red_social_academica.red_social_academica.service.INotificationService;
 import red_social_academica.red_social_academica.service.IPostService;
+import red_social_academica.red_social_academica.service.IUserService;
 import red_social_academica.red_social_academica.validation.PostValidator;
 import static red_social_academica.red_social_academica.auth.security.AuthUtils.*;
 
@@ -33,6 +36,12 @@ public class PostServiceImpl implements IPostService {
     @Autowired
     private PostValidator postValidator;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private INotificationService notificationService;
+
     // === CREAR ===
 
     @Override
@@ -44,7 +53,21 @@ public class PostServiceImpl implements IPostService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado o inactivo"));
 
         Post post = mapFromCreateDTO(dto, user);
-        return convertToDTO(postRepository.save(post));
+        Post saved = postRepository.save(post);
+
+        // 🔔 Notificar a los amigos
+        List<UserDTO> amigos = userService.obtenerAmigos(username);
+        for (UserDTO amigo : amigos) {
+            if (!amigo.getUsername().equals(username)) {
+                notificationService.crearNotificacion(
+                        amigo.getUsername(),
+                        user.getName() + " publicó algo nuevo",
+                        "/usuario/publicaciones/amigo/" + username);
+            }
+        }
+
+        return convertToDTO(saved);
+
     }
 
     // === ACTUALIZAR PUBLICO ===

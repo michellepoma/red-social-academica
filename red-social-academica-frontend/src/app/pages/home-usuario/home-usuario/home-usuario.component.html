@@ -3,9 +3,10 @@
 
   <ul class="navbar-nav ms-auto">
     <li class="nav-item dropdown" *ngIf="ultimasNotis.length > 0">
-      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-        🔔 <span class="badge bg-danger">{{ cantidadNoLeidas }}</span>
-      </a>
+      <a class="nav-link" routerLink="/usuario/notificaciones">
+  🔔 <span class="badge bg-danger">{{ cantidadNoLeidas }}</span>
+</a>
+
       <ul class="dropdown-menu dropdown-menu-end">
         <li *ngFor="let noti of ultimasNotis">
           <a class="dropdown-item" [routerLink]="noti.targetUrl || '/usuario/notificaciones'">

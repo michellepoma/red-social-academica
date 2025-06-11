@@ -20,17 +20,11 @@ class CommentServiceImplTest {
     @InjectMocks
     private CommentServiceImpl commentService;
 
-    @Mock
-    private CommentRepository commentRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PostRepository postRepository;
-
-    @Mock
-    private CommentValidator commentValidator;
+    @Mock private CommentRepository commentRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private PostRepository postRepository;
+    @Mock private CommentValidator commentValidator;
+    @Mock private INotificationService notificationService; // <-- FALTABA
 
     @BeforeEach
     void setUp() {
@@ -46,8 +40,6 @@ class CommentServiceImplTest {
                 .build();
 
         User user = User.builder().id(1L).username(username).name("Ana").lastName("Gómez").activo(true).build();
-
-        // Asignar user al post
         Post post = Post.builder().id(101L).title("Post").activo(true).user(user).build();
 
         Comment savedComment = Comment.builder()
@@ -71,5 +63,6 @@ class CommentServiceImplTest {
         assertThat(resultado.getPostId()).isEqualTo(post.getId());
 
         verify(commentValidator).validarCreacion(dto);
+        verify(notificationService, never()).crearNotificacion(any(), any(), any()); // como se comenta sobre su propio post
     }
 }

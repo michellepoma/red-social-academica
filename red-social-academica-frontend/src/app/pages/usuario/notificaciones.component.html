@@ -1,26 +1,42 @@
+<h3 class="mb-4">
+  🔔 Notificaciones 
+  <span class="badge bg-danger ms-2">{{ totalNoLeidas }} sin leer</span>
+</h3>
 
-<h3>🔔 Notificaciones ({{ totalNoLeidas }} sin leer)</h3>
-
-<ul *ngIf="notificaciones.length > 0; else sinNotis" class="list-group">
-  <li *ngFor="let n of notificaciones" class="list-group-item d-flex justify-content-between align-items-start" [ngClass]="{ 'fw-bold': !n.read }">
-
-    <div>
+<ul *ngIf="notificaciones.length > 0; else sinNotis" class="list-group shadow-sm">
+  <li *ngFor="let n of notificaciones"
+      class="list-group-item d-flex justify-content-between align-items-start border-start border-4"
+      [ngClass]="{
+        'fw-bold bg-light border-warning': !n.read,
+        'bg-white border-secondary': n.read
+      }"
+  >
+    <div class="me-3 flex-grow-1">
       <div>{{ n.message }}</div>
       <small class="text-muted">{{ n.createdAt | date: 'short' }}</small><br />
-      <a *ngIf="n.targetUrl" [routerLink]="n.targetUrl">Ver recurso</a>
+      <a *ngIf="n.targetUrl" [routerLink]="n.targetUrl" class="text-decoration-none">
+        👁️‍🗨️ Ver recurso
+      </a>
     </div>
 
-    <div>
-      <button *ngIf="!n.read" (click)="marcarComoLeida(n.id)" class="btn btn-outline-primary btn-sm me-1">
-        Marcar como leída
+    <div class="btn-group btn-group-sm " role="group">
+      <button *ngIf="!n.read"
+              (click)="marcarComoLeida(n.id)"
+              class="btn btn-outline-success me-2"
+              title="Marcar como leída">
+        Marcar como leida ✅
       </button>
-      <button (click)="eliminarNoti(n.id)" class="btn btn-outline-danger btn-sm">
-        Eliminar
+      <button (click)="eliminarNoti(n.id)"
+              class="btn btn-outline-danger"
+              title="Eliminar notificación">
+        Eliminar Notificacion 🗑️
       </button>
     </div>
   </li>
 </ul>
 
 <ng-template #sinNotis>
-  <p>No tenés notificaciones activas.</p>
+  <div class="alert alert-info text-center mt-4">
+    📭 No tienes notificaciones activas.
+  </div>
 </ng-template>

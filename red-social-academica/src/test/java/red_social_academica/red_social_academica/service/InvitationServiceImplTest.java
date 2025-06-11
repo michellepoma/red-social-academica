@@ -2,9 +2,8 @@ package red_social_academica.red_social_academica.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+
 import red_social_academica.red_social_academica.dto.invitation.InvitationCreateDTO;
 import red_social_academica.red_social_academica.dto.invitation.InvitationDTO;
 import red_social_academica.red_social_academica.model.Invitation;
@@ -29,6 +28,9 @@ class InvitationServiceImplTest {
 
     @Mock
     private InvitationValidator invitationValidator;
+
+    @Mock
+    private INotificationService notificationService;
 
     @InjectMocks
     private InvitationServiceImpl invitationService;
@@ -57,6 +59,9 @@ class InvitationServiceImplTest {
         Invitation saved = Invitation.builder().id(100L).sender(sender).receiver(receiver).activo(true).build();
         when(invitationRepository.save(any())).thenReturn(saved);
 
+        when(notificationService.crearNotificacion(anyString(), anyString(), anyString()))
+                .thenReturn(null); // ✅ arreglo aquí
+
         InvitationDTO result = invitationService.enviarInvitacion("juan", dto);
 
         assertThat(result.getSenderId()).isEqualTo(1L);
@@ -68,6 +73,9 @@ class InvitationServiceImplTest {
         Invitation invitation = Invitation.builder().id(100L).sender(sender).receiver(receiver).activo(true).build();
         when(invitationRepository.findById(100L)).thenReturn(Optional.of(invitation));
         when(invitationRepository.save(any())).thenReturn(invitation);
+
+        when(notificationService.crearNotificacion(anyString(), anyString(), anyString()))
+                .thenReturn(null); // ✅ arreglo aquí
 
         InvitationDTO result = invitationService.aceptarInvitacion(100L, "ana");
 

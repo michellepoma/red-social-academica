@@ -18,6 +18,7 @@ import red_social_academica.red_social_academica.model.User;
 import red_social_academica.red_social_academica.repository.InvitationRepository;
 import red_social_academica.red_social_academica.repository.UserRepository;
 import red_social_academica.red_social_academica.service.IInvitationService;
+import red_social_academica.red_social_academica.service.INotificationService;
 import red_social_academica.red_social_academica.validation.InvitationValidator;
 import red_social_academica.red_social_academica.validation.exception.BusinessException;
 
@@ -26,6 +27,9 @@ public class InvitationServiceImpl implements IInvitationService {
 
         @Autowired
         private InvitationRepository invitationRepository;
+
+        @Autowired
+        private INotificationService notificationService;
 
         @Autowired
         private UserRepository userRepository;
@@ -63,6 +67,10 @@ public class InvitationServiceImpl implements IInvitationService {
                                 .usuarioAlta(senderUsername)
                                 .activo(true)
                                 .build();
+                notificationService.crearNotificacion(
+                                receiver.getUsername(),
+                                sender.getUsername() + " te ha enviado una solicitud de amistad",
+                                "/usuario/invitaciones");
 
                 return convertToDTO(invitationRepository.save(invitation));
         }
@@ -100,6 +108,11 @@ public class InvitationServiceImpl implements IInvitationService {
                 // Guardar la amistad
                 userRepository.save(invitation.getSender());
                 userRepository.save(invitation.getReceiver());
+
+                notificationService.crearNotificacion(
+                                senderUsername,
+                                receiverUsername + " aceptó tu solicitud de amistad, ahora son amigos!",
+                                "/usuario/amigos");
 
                 return convertToDTO(invitationRepository.save(invitation));
         }

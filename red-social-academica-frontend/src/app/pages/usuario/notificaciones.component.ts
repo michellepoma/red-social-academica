@@ -32,15 +32,25 @@ constructor(private userService: UserService) {}
     });
   }
 
-  marcarComoLeida(id: number): void {
-    this.userService.marcarNotificacionComoLeida(id).subscribe(() =>
-      this.cargarNotificaciones()
-    );
-  }
+ marcarComoLeida(id: number): void {
+  this.userService.marcarNotificacionComoLeida(id).subscribe(() => {
+    this.cargarNotificaciones(); // actualiza lista
+    this.actualizarResumen();    // actualiza contador
+  });
+}
 
-  eliminarNoti(id: number): void {
-    this.userService.eliminarNotificacion(id).subscribe(() =>
-      this.cargarNotificaciones()
-    );
-  }
+eliminarNoti(id: number): void {
+  this.userService.eliminarNotificacion(id).subscribe(() => {
+    this.cargarNotificaciones(); // actualiza lista
+    this.actualizarResumen();    // actualiza contador
+  });
+}
+
+private actualizarResumen(): void {
+  this.userService.getCantidadNoLeidas().subscribe({
+    next: res => (this.totalNoLeidas = res),
+    error: err => console.error('Error al actualizar cantidad no leídas:', err),
+  });
+}
+
 }

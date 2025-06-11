@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import red_social_academica.red_social_academica.dto.post.PostCreateDTO;
 import red_social_academica.red_social_academica.dto.post.PostDTO;
+import red_social_academica.red_social_academica.dto.user.UserDTO;
 import red_social_academica.red_social_academica.model.Post;
 import red_social_academica.red_social_academica.model.User;
 import red_social_academica.red_social_academica.repository.PostRepository;
@@ -14,8 +16,7 @@ import red_social_academica.red_social_academica.repository.UserRepository;
 import red_social_academica.red_social_academica.service.impl.PostServiceImpl;
 import red_social_academica.red_social_academica.validation.PostValidator;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -23,14 +24,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class PostServiceImplTest {
 
-    @Mock
-    private PostRepository postRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PostValidator postValidator;
+    @Mock private PostRepository postRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private PostValidator postValidator;
+    @Mock private IUserService userService;
+    @Mock private INotificationService notificationService;
 
     @InjectMocks
     private PostServiceImpl postService;
@@ -58,6 +56,7 @@ public class PostServiceImplTest {
         when(userRepository.findByUsernameAndActivoTrue("juanito")).thenReturn(Optional.of(usuario));
         when(postRepository.save(any(Post.class))).thenAnswer(inv -> inv.getArgument(0));
         doNothing().when(postValidator).validarCreacion(any());
+        when(userService.obtenerAmigos("juanito")).thenReturn(List.of()); // evitar NPE
 
         PostDTO resultado = postService.crearPost("juanito", dto);
 

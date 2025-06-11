@@ -69,7 +69,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     @Transactional
-    @CachePut(value = "notificaciones", key = "#username") // actualiza la cache del usuario
+    @CacheEvict(value = "notificaciones", key = "#username")
     public NotificationDTO marcarComoLeida(Long id, String username) {
         Notification notification = notificationRepository.findByIdAndActivoTrue(id)
                 .orElseThrow(() -> new RuntimeException("Notificacion no encontrada o inactiva"));

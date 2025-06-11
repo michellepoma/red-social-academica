@@ -244,17 +244,25 @@ cargarNotificaciones(): void {
 
 marcarComoLeida(id: number): void {
   this.perfilService.marcarNotificacionComoLeida(id).subscribe({
-    next: () => this.cargarNotificaciones(),
+    next: () => {
+      this.cargarNotificaciones();
+      this.cargarResumenNotificaciones(); // <- agrega esto
+    },
     error: err => console.error('Error al marcar como leída:', err)
   });
 }
 
+
 eliminarNoti(id: number): void {
   this.perfilService.eliminarNotificacion(id).subscribe({
-    next: () => this.cargarNotificaciones(),
+    next: () => {
+      this.cargarNotificaciones();
+      this.cargarResumenNotificaciones(); // <- también aquí
+    },
     error: err => console.error('Error al eliminar notificación:', err)
   });
 }
+
 
  cargarResumenNotificaciones(): void {
     this.userService.getUltimasNoLeidas().subscribe({
